@@ -1,0 +1,107 @@
+<?php
+
+namespace FeriaUC\AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Chats
+ *
+ * @ORM\Table(name="chats")
+ * @ORM\Entity(repositoryClass="FeriaUC\AdminBundle\Repository\ChatsRepository")
+ */
+class Chats
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var Estados
+     *
+     * @ORM\ManyToOne(targetEntity="Estados")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estado", referencedColumnName="id")
+     * })
+     */
+    private $idEstado;
+
+     /**
+     * @var Puntos
+     *
+     * @ORM\ManyToOne(targetEntity="Puntos")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_punto", referencedColumnName="id")
+     * })
+     */
+    private $idPunto;
+
+     /**
+     * @var Stands
+     *
+     * @ORM\ManyToOne(targetEntity="Stands")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_stand", referencedColumnName="id")
+     * })
+     */
+    private $idStand;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+    /**
+     * @var json_array
+     *
+     * @ORM\Column(name="dias_funcionamiento", type="json_array")
+     */
+    private $diasFuncionamiento = [];
+
+
+    /**
+     * @var \time
+     *
+     * @ORM\Column(name="hora_apertura", type="time")
+     */
+    private $horaApertura;
+
+    /**
+     * @var \time
+     *
+     * @ORM\Column(name="hora_cierre", type="time")
+     */
+    private $horaCierre;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

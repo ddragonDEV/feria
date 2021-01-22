@@ -1,0 +1,24 @@
+{% for key, chat in aChats %}
+	<!-- Chat link -->
+	<a class="text-reset nav-link p-0 mb-6" onclick="cargarChat(this);return false;" data-nombre="{{ chat.nombre|trim() }}" data-chat="{{ key }}" href="#">
+		<div class="card card-active-listener">
+			<div class="card-body">
+				<div class="media">
+					<div class="avatar mr-5">
+						<img class="avatar-img" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Escudo_de_la_Pontificia_Universidad_Cat%C3%B3lica_de_Chile.svg" alt="Bootstrap Themes">
+					</div>                                                
+					<div class="media-body overflow-hidden">
+						<div class="d-flex align-items-center mb-1">
+							<h6 class="text-truncate mb-0 mr-auto">{{ chat.nombre }}</h6>
+						</div>
+						{# <div class="text-truncate">Anna Bridges: Hey, Maher! How are you? The weather is great isn't it?</div> #} {# ira ? por ahora no #}
+					</div>
+				</div>
+			</div>          
+				<div  data-chat="{{key}}" class="sin-responder sin-responder-usuario-{{id_usuario}}-chat-{{key}} badge badge-circle badge-primary badge-border-light badge-top-right" {% if chat.sin_responder == 0 %} style="display: none;" {% endif %}>
+					<span>{{ chat.sin_responder }}</span> 
+				</div>
+		</div>
+	</a>
+	<!-- Chat link -->
+{% endfor %}

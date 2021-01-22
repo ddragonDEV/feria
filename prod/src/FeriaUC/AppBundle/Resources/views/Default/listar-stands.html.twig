@@ -1,0 +1,18 @@
+{# {% for stand in stands %}
+	<li><button class="btn--popup-normal" data-id="{{ stand.id }}" data-tipo="carreras"><span>{{ stand.nombre }}</span><i class="uc-icon">arrow_right_alt</i></button></li>
+{% endfor %} 
+<li class="back"><button class="popup--close"><i class="uc-icon">arrow_back</i>&nbsp;<span>Regresar al Campus</span></button></li>#}
+
+<div class="p--card">
+	<div class="carreras">
+	    {% for key, stands in arrCarreras %}
+	       <h5>{{ key }}</h5>
+			<ul>
+			   {% for stand in stands %}
+			   	 <li><button class="btn--popup-normal" data-id="{{ stand.id }}" data-tipo="carreras"><span>{{ stand.nombre }}</span><i class="uc-icon">arrow_right_alt</i></button></li>
+			   {% endfor %}
+			</ul>
+	    {% endfor %}
+		<div class="back"><button class="popup--close"><i class="uc-icon">arrow_back</i>&nbsp;<span>Regresar al Campus</span></button></div>
+	</div>
+</div>

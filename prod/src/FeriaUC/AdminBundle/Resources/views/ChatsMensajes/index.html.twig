@@ -1,0 +1,597 @@
+{% extends "::base_chat.html.twig" %}
+{% block body %}	
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<div class="tab-content h-100" role="tablist">
+
+			<div class="tab-pane fade h-100 show active" id="tab-content-dialogs" role="tabpanel">
+				<div class="d-flex flex-column h-100">
+
+					<div class="hide-scrollbar">
+						<div class="container-fluid py-6">
+							<a href="{{ path('admin_chats') }}" class="btn btn-secondary btn-sm mb-3"><span class="fe-arrow-left-circle mr-4"></span>Salir</a>							
+							<!-- Title -->
+							<h2 class="font-bold mb-6">Listado de chats</h2>
+							<!-- Title -->							
+							<!-- Chats -->
+							<nav class="listado-chats nav d-block list-discussions-js mb-n6">
+							</nav>
+								<!-- Chats -->
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Sidebar -->
+	<!-- Main Content -->
+	<div class="main" data-mobile-height="">
+		<!-- Chat -->
+		<div id="chat-{{ id_chat }}" class="chat"> {# el id debe cambiar por el id del chat #}			
+			<!-- Chat: body -->
+			<div class="chat-body">
+				<div class="alerta-chat alert alert-info" role="alert">
+				    No se encontraron chats. Espera unos minutos o click en <a href="{{ path('admin_chats_mensajes', {id_chat: id_chat }) }}" class="alert-link">Actualizar</a> para volver a cargar el listado
+				</div>
+				<!-- Chat: Header -->
+				<div class="chat-header border-bottom py-4 py-lg-6 px-lg-8">
+					<div class="container-xxl">
+						<div class="row align-items-center">
+							<!-- Close chat(mobile) -->
+							<div class="col-3 d-xl-none">
+								<ul class="list-inline mb-0">
+									<li class="list-inline-item">
+										<a class="text-muted px-0" href="#" data-chat="open">
+											<i class="icon-md fe-chevron-left"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<!-- Chat photo -->
+							<div class="col-6 col-xl-6">
+								<div class="media text-center text-xl-left">
+									<div class="avatar avatar-sm d-none d-xl-inline-block mr-5 avatar-usuario">
+									</div>
+
+									<div class="text-nombre-usuario media-body align-self-center text-truncate">
+										
+									</div>
+								</div>
+							</div>
+							<div class="col-3 col-xl-6 text-right">
+								<ul class="nav justify-content-end">
+									<li class="nav-item list-inline-item d-none d-xl-block mr-3">
+										<a href="#" class="btn-bloquear-usuario btn btn-danger btn-sm" style="display: none;"><span class="mr-4 fe-user-x"></span>Bloquear</a>
+										<a href="#" class="btn-habilitar-usuario btn btn-success btn-sm" style="display: none;"><span class="mr-4 fe-user-check"></span>Habilitar</a>
+									</li>
+									<li class="nav-item list-inline-item d-block d-xl-none">											
+										<a class="nav-link text-muted px-0" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="icon-md fe-more-vertical"></i>
+										</a>	                                        
+										<div class="dropdown-menu">
+										   	<a href="#" class="btn-bloquear-usuario dropdown-item  align-items-center" style="display: none;">Bloquear<span class="ml-auto pl-5 fe-user-x"></span></a>
+										   	<a href="#" class="btn-habilitar-usuario dropdown-item align-items-center" style="display: none;">Habilitar<span class="ml-auto pl-5 fe-user-check"></span></a>
+										</div>
+									</li>
+								</ul>	
+							</div>
+						</div><!-- .row -->
+					</div>
+				</div>
+				<!-- Chat: Header -->
+				<!-- Chat: Content-->
+				<div id="chat_content" class="chat-content px-lg-8">
+					<div class="chat-contenido-mensajes container-xxl py-6 py-lg-10"></div>
+					<!-- Scroll to end -->
+					<div class="end-of-chat"></div>
+				</div>
+				<!-- Chat: Content -->
+
+				<!-- Chat: Footer -->
+				<div class="chat-footer border-top py-4 py-lg-6 px-lg-8">
+					<div class="container-xxl">
+						<form id="chat-id-1-form" data-emoji-form="">
+							<input type="hidden" id="id_chat" value="{{ id_chat }}">
+							<input type="hidden" id="id_embajador" value="{{ id_embajador }}">
+							<input type="hidden" id="id_usuario">
+							<div class="form-row align-items-center">
+								<div class="col">
+									<div class="input-group">
+										<!-- Textarea -->
+										<textarea id="chat-input" class="form-control bg-transparent border-0" placeholder="Escribe tu mensaje..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
+										<!-- Emoji button -->
+										<div class="input-group-append">
+											<button class="btn btn-ico btn-secondary btn-minimal bg-transparent border-0" type="button" data-emoji-btn="">
+												<img src="{{ asset('bundles/app/chat/images/smile.svg') }}" data-inject-svg="" alt="">
+											</button>
+										</div>
+									</div>
+								</div>
+
+								<!-- Submit button -->
+								<div class="col-auto">
+									<button id="btn-enviar" class="btn btn-ico btn-primary rounded-circle" type="button">
+										<span class="fe-send"></span>
+									</button>
+								</div>
+
+							</div>
+
+						</form>
+
+					</div>
+				</div>
+				<!-- Chat: Footer -->
+			</div>
+			<!-- Chat: body -->
+		</div>
+		<!-- Chat -->
+	</div>
+	<!-- Main Content -->
+{% endblock %}
+{% block javascripts %}
+	<script>
+		$(document).ready(function() {			
+			cargarContenido();
+		});
+
+		function cargarContenido(){
+			$('body .layout').css('display','none');		
+			$('.loading--text').css('display', 'block');
+
+			setTimeout(function(){
+				firebase.database().ref('mensajes/chat-'+$('#id_chat').val()).on('child_added', function(snapshot) {
+					/*lista los chats*/
+					var html_listado_chat = '';
+					if(usuarios[snapshot.key]){
+						html_listado_chat += '<a class="text-reset nav-link p-0 mb-6"  onclick="cargarChat(this);return false;" data-nombre="'+usuarios[snapshot.key].nombre+'" data-usuario="'+usuarios[snapshot.key].id_usuario+'" href="#">';
+							html_listado_chat += '<div class="card card-active-listener">';
+								html_listado_chat += '<div class="card-body">';
+									html_listado_chat += '<div class="media">';
+										html_listado_chat += '<div class="avatar mr-5">';
+											html_listado_chat += '<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+usuarios[snapshot.key].avatar+'" alt="Bootstrap Themes">';
+										html_listado_chat += '</div>';
+										html_listado_chat += '<div class="media-body overflow-hidden">';
+											html_listado_chat += '<div class="d-flex align-items-center mb-1">';
+												html_listado_chat += '<h6 class="text-truncate mb-0 mr-auto">'+usuarios[snapshot.key].nombre+'</h6>';
+												html_listado_chat += '<p class="small text-muted text-nowrap ml-4">'+obtenerUltimaHora(snapshot.val(), snapshot.key);+'</p>';
+											html_listado_chat += '</div>';
+											html_listado_chat += '<div class="text-truncate">'+formateaRut(usuarios[snapshot.key].rut)+'</div>';
+										html_listado_chat += '</div>';
+									html_listado_chat += '</div>';
+								html_listado_chat += '</div>';
+								var	display = "block";
+								html_listado_chat += '<div  class="sin-responder-'+snapshot.key+'-chat-'+$('#id_chat').val()+' badge badge-circle badge-primary badge-border-light badge-top-right" style="display:'+display+';">';
+									html_listado_chat += '<span>'+1+'</span> ';
+								html_listado_chat += '</div>';
+							html_listado_chat += '</div>';
+						html_listado_chat += '</a>';
+					}
+
+					$('.listado-chats').append(html_listado_chat);
+					/*lista los chats*/
+				});
+
+				firebase.database().ref('mensajes/chat-'+$('#id_chat').val()).once('value').then(function(snapshot) {
+					if(snapshot.val()){
+						$('#chat-{{ id_chat }}').find('.chat-header').css('display', 'block');
+						$('#chat-{{ id_chat }}').find('.chat-footer').css('display', 'block');
+						$('#chat-{{ id_chat }}').find('.alerta-chat').css('display', 'none');
+						/*count sin responder*/					
+						snapshot.forEach(function(record) {	
+							var sin_responder=0;						
+							record.forEach(function(msj) {
+								if(msj.val().tipo == 'novato'){
+									sin_responder++;
+								}
+								if(msj.val().tipo == 'embajador'){
+									sin_responder=0;
+								}
+							});	
+							
+							if(sin_responder == 0){							
+								$('.sin-responder-'+record.key+'-chat-'+$('#id_chat').val()).find('span').text(sin_responder);
+								$('.sin-responder-'+record.key+'-chat-'+$('#id_chat').val()).css('display', 'none');
+							}
+							if(sin_responder > 0){
+								$('.sin-responder-'+record.key+'-chat-'+$('#id_chat').val()).find('span').text(sin_responder);
+								$('.sin-responder-'+record.key+'-chat-'+$('#id_chat').val()).css('display', 'block');
+							}
+						});
+						/*count sin responder*/
+
+						/*carga los mensajes del primer novato */
+						var count = 0;
+						snapshot.forEach(function(record) {
+							if(count == 0){
+								$('#id_usuario').val(usuarios[record.key].id_usuario);
+								$('.chat-contenido-mensajes').addClass('mensajes-'+record.key);
+								$('.btn-bloquear-usuario').addClass('btn-bloquear-chat-'+$('#id_chat').val()+'-'+record.key);
+								$('.btn-habilitar-usuario').addClass('btn-habilitar-chat-'+$('#id_chat').val()+'-'+record.key);
+
+								$('.avatar-usuario').html('<img src="{{ asset('bundles/app/chat/images/avatars/') }}'+usuarios[record.key].avatar+'" class="avatar-img" alt="">');
+								$('.text-nombre-usuario').html('<h6 class="text-truncate mb-n1">'+usuarios[record.key].nombre+'</h6><small class="text-muted">'+formateaRut(usuarios[record.key].rut)+'</small>');
+
+								var html_mensaje = '';
+								record.forEach(function(msj) {
+									if(msj.val().tipo == 'novato'){
+										html_mensaje +='<div class="message">';
+											html_mensaje +='<a class="avatar avatar-sm mr-4 mr-lg-5" href="#" data-chat-sidebar-toggle="#chat-1-user-profile">';
+												html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+usuarios[record.key].avatar+'" alt="">'; //aqui va el avatar del novato
+											html_mensaje +='</a>';
+
+											html_mensaje +='<div class="message-body">';
+												html_mensaje +='<div class="message-row">';
+													html_mensaje +='<div class="d-flex align-items-center">';
+														html_mensaje +='<div class="message-content bg-light">';
+															html_mensaje +='<h6 class="mb-2">'+usuarios[record.key].nombre+'</h6>'; //aqui va el nombre del novato
+															html_mensaje +='<div>'+msj.val().mensaje+'</div>';
+															html_mensaje +='<div class="mt-1">';															
+		                                                       html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(msj.val().timestamp)+'">'+formaterFechaCorta(msj.val().timestamp)+'</time></small>';
+		                                                    html_mensaje +=' </div>';
+														html_mensaje +='</div>';
+													html_mensaje +='</div>';
+												html_mensaje +='</div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									}
+									if(msj.val().tipo == 'embajador'){
+										html_mensaje +='<div class="message message-right">';
+											html_mensaje +='<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">';
+												html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+embajadores['embajador-'+msj.val().id_embajador].avatar+'" alt="">';
+											html_mensaje +='</div>';//falta el avatar del embajador
+
+											html_mensaje +='<div class="message-body">';
+												html_mensaje +='<div class="message-row">';
+													html_mensaje +='<div class="d-flex align-items-center justify-content-end">';
+														html_mensaje +='<div class="message-content bg-primary text-white">';
+															html_mensaje +='<h6 class="mb-2" style="color:white;">'+embajadores['embajador-'+msj.val().id_embajador].nombre+'</h6>';
+															html_mensaje +='<div>'+msj.val().mensaje+'</div>';
+															html_mensaje +='<div class="mt-1">';															
+		                                                       html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(msj.val().timestamp)+'">'+formaterFechaCorta(msj.val().timestamp)+'</time></small>';
+		                                                    html_mensaje +=' </div>';
+														html_mensaje +='</div>';
+													html_mensaje +='</div>';
+												html_mensaje +='</div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									}
+								});
+								$('.mensajes-'+record.key).append(html_mensaje);
+								jQuery("time.timeago").timeago();
+
+								/* cargar la seguridad del usuario */								
+								firebase.database().ref('seguridad/chat-'+$('#id_chat').val()+'/'+record.key).once('value').then(function(snapshot) {
+									if(snapshot.val()){										
+										if(snapshot.val().habilitado){
+											$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'block');
+											$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'none');
+										}else{
+											$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'block');
+											$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'none');
+										}
+									}else{
+										$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'block');
+										$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'none');
+									}
+								});
+								/* cargar la seguridad del usuario */
+
+								$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast");
+							}
+							count++;
+						});
+						/*carga los mensajes del primer novato */
+					}else{
+						$('#chat-{{ id_chat }}').find('.chat-header').css('display', 'none');
+						$('#chat-{{ id_chat }}').find('.chat-footer').css('display', 'none');
+						$('#chat-{{ id_chat }}').find('.alerta-chat').css('display', 'block');
+					}
+				});
+
+				/* escucha los mensajes del chat */
+				firebase.database().ref('mensajes/chat-'+$('#id_chat').val()).on('child_changed', function(snapshot) {
+					var ultimo_item   = Object.keys(snapshot.val()).length-1;
+					var ultimo_values = Object.values(snapshot.val())[ultimo_item];
+					var html_mensaje  = '';
+					if(ultimo_values.tipo == 'novato'){	
+						html_mensaje +='<div class="message">';
+							html_mensaje +='<a class="avatar avatar-sm mr-4 mr-lg-5" href="#">';
+								html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+usuarios[snapshot.key].avatar+'" alt="">'; //aqui va el avatar del novato
+							html_mensaje +='</a>';
+
+							html_mensaje +='<div class="message-body">';
+								html_mensaje +='<div class="message-row">';
+									html_mensaje +='<div class="d-flex align-items-center">';
+										html_mensaje +='<div class="message-content bg-light">';
+											html_mensaje +='<h6 class="mb-2">'+usuarios[snapshot.key].nombre+'</h6>'; //aqui va el nombre del novato
+											html_mensaje +='<div>'+ultimo_values.mensaje+'</div>';
+											html_mensaje +='<div class="mt-1">';															
+                                               html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(ultimo_values.timestamp)+'">'+formaterFechaCorta(ultimo_values.timestamp)+'</time></small>';
+                                            html_mensaje +=' </div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								html_mensaje +='</div>';
+							html_mensaje +='</div>';
+						html_mensaje +='</div>';
+						var snr = parseInt($('.sin-responder-'+snapshot.key+'-chat-'+$('#id_chat').val()).find('span').text());
+						// console.log(snr);
+						$('.sin-responder-'+snapshot.key+'-chat-'+$('#id_chat').val()).find('span').text(snr+1);
+						$('.sin-responder-'+snapshot.key+'-chat-'+$('#id_chat').val()).css('display', 'block');
+					}
+					if(ultimo_values.tipo == 'embajador'){
+						html_mensaje +='<div class="message message-right">';
+							html_mensaje +='<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">';
+								html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+embajadores['embajador-'+ultimo_values.id_embajador].avatar+'" alt="">';
+							html_mensaje +='</div>';
+
+							html_mensaje +='<div class="message-body">';
+								html_mensaje +='<div class="message-row">';
+									html_mensaje +='<div class="d-flex align-items-center justify-content-end">';
+										html_mensaje +='<div class="message-content bg-primary text-white">';
+											html_mensaje +='<h6 class="mb-2" style="color:white;">'+embajadores['embajador-'+ultimo_values.id_embajador].nombre+'</h6>';
+											html_mensaje +='<div>'+ultimo_values.mensaje+'</div>';
+											html_mensaje +='<div class="mt-1">';															
+                                               html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(ultimo_values.timestamp)+'">'+formaterFechaCorta(ultimo_values.timestamp)+'</time></small>';
+                                            html_mensaje +=' </div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								html_mensaje +='</div>';
+							html_mensaje +='</div>';
+						html_mensaje +='</div>';
+					}	
+					$('.mensajes-'+snapshot.key).append(html_mensaje);
+					jQuery("time.timeago").timeago();
+					$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"slow");
+				});
+				/* escucha los mensajes del chat */
+
+				/* escucha la seguridad del chat */
+				firebase.database().ref('seguridad/chat-'+$('#id_chat').val()).on('child_changed', function(snapshot) {
+
+					if(snapshot.val().habilitado){
+						$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'block');
+						$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'none');
+					}else{
+						$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'none');
+						$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'block');
+					}
+				});
+				/* escucha la seguridad del chat */
+
+				$('body .layout').css('display','flex');		
+				$('.loading--text').css('display', 'none');
+			}, 1000);
+		}
+
+		$('#btn-enviar').on('click', function(event) {
+			var id_embajador = $('#id_embajador').val();			
+			var mensaje      = $('#chat-input').val();
+
+			if(mensaje != ''){
+				var d = new Date($.now());
+				
+				var update_mensajes = {id_embajador:id_embajador, mensaje:mensaje, tipo:'embajador', timestamp: d.getTime() };
+				firebase.database().ref('mensajes/chat-'+$('#id_chat').val()+'/usuario-'+$('#id_usuario').val()).push(update_mensajes).then(() => {
+					var path= Routing.generate("admin_guardar_mensaje_embajador");
+					$.ajax({
+						url: path,
+						type: 'POST',
+						data: { idChat: $('#id_chat').val(), idEmbajador:id_embajador, idUsuario:$('#id_usuario').val(), tipo:'embajador', mensaje:mensaje, timestamp: d.getTime() },
+						success: function (results) {
+						   console.log(results);
+						}
+					});
+				}).catch((error) =>{
+
+					var path= Routing.generate("admin_guardar_mensaje_embajador");
+					$.ajax({
+						url: path,
+						type: 'POST',
+						data: { idChat: $('#id_chat').val(), idEmbajador:id_embajador, idUsuario:$('#id_usuario').val(), tipo:'embajador', mensaje:mensaje, timestamp: d.getTime() },
+						success: function (results) {
+						   console.log(results);
+						}
+					});
+					console.log("error");//mostrar error
+				});
+				$('#chat-input').val('');
+
+				$('.sin-responder-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).find('span').text(0);
+				$('.sin-responder-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'none');
+			}
+
+		});
+
+		$('.btn-bloquear-usuario').on('click', function(event) {
+			var id_usuario = $('#id_usuario').val();
+
+			bootbox.dialog({
+				closeButton: false,
+				title: '¿ Seguro que desea bloquear al usuario ?',
+				message:'El usuario recibirá un mensaje y no podrá escribir hasta que vuelva ser habilitado.',
+				buttons: {
+					success: {
+						label: "<i class='fa fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-secondary",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fe-user-x' aria-hidden='true'></i> Bloquear usuario",
+						className: "btn btn-sm btn-danger",
+						callback: function () {
+
+							var update_seguridad = {id_usuario:id_usuario, habilitado:false, timestamp: '{{ "now"|date("U")}}' };
+							firebase.database().ref('seguridad/chat-'+$('#id_chat').val()+'/usuario-'+id_usuario).set(update_seguridad).then(() => {
+								console.log('guardado correctamente');	
+								$('.btn-bloquear-chat-'+$('#id_chat').val()+'-usuario-'+id_usuario).css('display', 'none');
+								$('.btn-habilitar-chat-'+$('#id_chat').val()+'-usuario-'+id_usuario).css('display', 'block');
+							}).catch((error) =>{		                			
+								console.log('se ha producido un error al bloquear');
+							});
+							// $.ajax({
+							// 	url: '',
+							// 	type: 'POST',
+							// 	data: { id_usuario: 1 },
+							// 	success: function (results) {
+									
+							// 	},
+							// 	error: function (e) {
+							// 		console.log(e);
+							// 	}
+							// });
+						}
+					}
+				}
+			});
+		});
+
+		$('.btn-habilitar-usuario').on('click', function(event) {
+			var id_usuario = $('#id_usuario').val();
+
+			bootbox.dialog({
+				closeButton: false,
+				title: '¿ Seguro que desea habilitar al usuario ?',
+				message:'El usuario va ser habilitado para escribir.',
+				buttons: {
+					success: {
+						label: "<i class='fa fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-secondary",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fe-user-check' aria-hidden='true'></i> Habilitar usuario",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+
+							var update_seguridad = {id_usuario:id_usuario, habilitado:true, timestamp: '{{ "now"|date("U")}}' };
+							firebase.database().ref('seguridad/chat-'+$('#id_chat').val()+'/usuario-'+id_usuario).set(update_seguridad).then(() => {
+								console.log('guardado correctamente');								
+								$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+'usuario-'+id_usuario).css('display', 'block');
+								$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+'usuario-'+id_usuario).css('display', 'none');
+							}).catch((error) =>{		                			
+								console.log('se ha producido un error al bloquear');
+							});
+							// $.ajax({
+							// 	url: '',
+							// 	type: 'POST',
+							// 	data: { id_usuario: 1 },
+							// 	success: function (results) {
+									
+							// 	},
+							// 	error: function (e) {
+							// 		console.log(e);
+							// 	}
+							// });
+						}
+					}
+				}
+			});
+		});
+
+		function cargarChat(obj){
+			$('#chat-{{ id_chat }}').find('.chat-header').css('display', 'block');
+			$('#chat-{{ id_chat }}').find('.chat-footer').css('display', 'block');
+
+			$('body .layout').css('display','none');		
+			$('.loading--text').css('display', 'block');
+
+			var id_usuario = $(obj).data('usuario');
+			var nombreChat = $(obj).data('nombre');
+				
+			$('.chat-contenido-mensajes').removeClass('mensajes-usuario-'+$('#id_usuario').val());
+
+			$('.btn-bloquear-usuario').removeClass('btn-bloquear-chat-'+$('#id_chat').val()+'-'+'usuario-'+$('#id_usuario').val());
+			$('.btn-habilitar-usuario').removeClass('btn-habilitar-chat-'+$('#id_chat').val()+'-'+'usuario-'+$('#id_usuario').val());
+
+			$('.btn-bloquear-usuario').addClass('btn-bloquear-chat-'+$('#id_chat').val()+'-'+'usuario-'+id_usuario);
+			$('.btn-habilitar-usuario').addClass('btn-habilitar-chat-'+$('#id_chat').val()+'-'+'usuario-'+id_usuario);
+			
+			$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+'usuario-'+id_usuario).css('display', 'block');
+			$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+'usuario-'+id_usuario).css('display', 'none');
+
+			setTimeout(function(){
+				$('.chat-contenido-mensajes').addClass('mensajes-usuario-'+id_usuario);
+				$('.chat-contenido-mensajes').html('');	
+				$('#id_usuario').val(id_usuario);
+
+				$('.avatar-usuario').html('<img src="{{ asset('bundles/app/chat/images/avatars/') }}'+usuarios['usuario-'+id_usuario].avatar+'" class="avatar-img" alt="">');
+				$('.text-nombre-usuario').html('<h6 class="text-truncate mb-n1">'+nombreChat+'</h6><small class="text-muted">'+formateaRut(usuarios['usuario-'+id_usuario].rut)+'</small>');				
+
+				firebase.database().ref('mensajes/chat-'+$('#id_chat').val()+'/usuario-'+$('#id_usuario').val()).once('value').then(function(snapshot) {
+					var html_mensaje = '';
+					snapshot.forEach(function(record){
+						if(record.val().tipo == 'novato'){
+							html_mensaje +='<div class="message">';
+								html_mensaje +='<a class="avatar avatar-sm mr-4 mr-lg-5" href="#" data-chat-sidebar-toggle="#chat-1-user-profile">';
+									html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+usuarios[snapshot.key].avatar+'" alt="">'; //aqui va el avatar del novato
+								html_mensaje +='</a>';
+
+								html_mensaje +='<div class="message-body">';
+									html_mensaje +='<div class="message-row">';
+										html_mensaje +='<div class="d-flex align-items-center">';
+											html_mensaje +='<div class="message-content bg-light">';
+												html_mensaje +='<h6 class="mb-2">'+usuarios[snapshot.key].nombre+'</h6>'; //aqui va el nombre del novato
+												html_mensaje +='<div>'+record.val().mensaje+'</div>';
+												html_mensaje +='<div class="mt-1">';															
+                                                   html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(record.val().timestamp)+'">'+formaterFechaCorta(record.val().timestamp)+'</time></small>';
+                                                html_mensaje +=' </div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								html_mensaje +='</div>';
+							html_mensaje +='</div>';
+						}
+						if(record.val().tipo == 'embajador'){
+							html_mensaje +='<div class="message message-right">';
+								html_mensaje +='<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">';
+									html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+embajadores['embajador-'+record.val().id_embajador].avatar+'" alt="">';
+								html_mensaje +='</div>';//falta el avatar del embajador
+
+								html_mensaje +='<div class="message-body">';
+									html_mensaje +='<div class="message-row">';
+										html_mensaje +='<div class="d-flex align-items-center justify-content-end">';
+											html_mensaje +='<div class="message-content bg-primary text-white">';
+												html_mensaje +='<h6 class="mb-2" style="color:white;">'+embajadores['embajador-'+record.val().id_embajador].nombre+'</h6>';
+												html_mensaje +='<div>'+record.val().mensaje+'</div>';
+												html_mensaje +='<div class="mt-1">';															
+                                                   html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(record.val().timestamp)+'">'+formaterFechaCorta(record.val().timestamp)+'</time></small>';
+                                                html_mensaje +=' </div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								html_mensaje +='</div>';
+							html_mensaje +='</div>';
+						}
+					});
+
+					$('.chat-contenido-mensajes').append(html_mensaje);
+					jQuery("time.timeago").timeago();
+
+					$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast");
+				});
+
+				/* cargar la seguridad del usuario */								
+				firebase.database().ref('seguridad/chat-'+$('#id_chat').val()+'/usuario-'+id_usuario).once('value').then(function(snapshot) {
+					if(snapshot.val().habilitado){
+						$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'block');
+						$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'none');
+					}else{
+						$('.btn-bloquear-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'none');
+						$('.btn-habilitar-chat-'+$('#id_chat').val()+'-'+snapshot.key).css('display', 'block');
+					}
+				});
+				/* cargar la seguridad del usuario */
+
+				$('body .layout').css('display','flex');		
+				$('.loading--text').css('display', 'none');
+				
+			}, 1000);
+
+			$('.main').addClass('main-visible');
+		}
+	</script>
+{% endblock %}

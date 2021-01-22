@@ -1,0 +1,55 @@
+<style>
+	.embed-container {
+	   	position: relative;
+		width: 100%;
+		/*padding-bottom: calc(165% - var(--footerheight));*/
+	}
+	.embed-container iframe, .embed-container object, .embed-container embed{		
+		display: block;
+		overflow: auto;
+		position: fixed;
+		left: 0;
+		width: 100%;
+		height: calc(100% - var(--footerheight));
+		bottom: var(--footerheight);
+	}
+
+	@media all and (orientation: portrait) {
+		.embed-container iframe, .embed-container object, .embed-container embed{		
+			height: 100%;
+			bottom: 0;
+		}
+		#popup--normal .content {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+		.embed-container {
+			padding-bottom: calc(165% - var(--footerheight));
+		}
+
+	}
+
+	@media all and (orientation: landscape) {
+		#popup--normal{
+			overflow: hidden;
+		}
+		#popup--normal .content {
+			width: 80%;
+			padding-bottom: 0;
+		}
+		#popup--menu{
+			width: 20%;
+		}
+
+	}
+	/*#popup--menu {
+    	width: 30%!important;
+	}*/
+
+</style>
+<div class="content" style="">
+	<div class="loading--text" data-aria-hidden="true"><i class="fas fa-spinner fa-spin color--azul"></i><span class="h6">Cargando&hellip;</span></div>
+	<div class="content_in embed-container">		
+		<iframe id="iframechat"  src="{{ path('mapa_marker_cargar_chat', {id_stand: id }) }}" frameborder="0" ></iframe>		
+	</div>
+</div>

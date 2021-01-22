@@ -1,0 +1,550 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script>
+		$(document).ready(function(){
+
+          
+          $('#fecha_inicio').daterangepicker({
+	    	singleDatePicker: true,
+	    	showDropdowns: true,
+	    	minYear: 1901,
+	    	maxYear: parseInt(moment().format('YYYY'),10),
+    	 	"locale": {
+            	"format": "DD-MM-YYYY",
+	            "separator": " - ",
+	            "applyLabel": "Guardar",
+	            "cancelLabel": "Cancelar",
+	            "fromLabel": "Desde",
+	            "toLabel": "Hasta",
+	            "customRangeLabel": "Personalizar",
+	            "daysOfWeek": [
+	                "Do",
+	                "Lu",
+	                "Ma",
+	                "Mi",
+	                "Ju",
+	                "Vi",
+	                "Sa"
+	            ],
+	            "monthNames": [
+	                "Enero",
+	                "Febrero",
+	                "Marzo",
+	                "Abril",
+	                "Mayo",
+	                "Junio",
+	                "Julio",
+	                "Agosto",
+	                "Setiembre",
+	                "Octubre",
+	                "Noviembre",
+	                "Diciembre"
+	            ],
+	            "firstDay": 1
+	        } 
+		  });
+		
+		$('#fecha_termino').daterangepicker({
+	    	singleDatePicker: true,
+	    	showDropdowns: true,
+	    	minYear: 1901,
+	    	maxYear: parseInt(moment().format('YYYY'),10),
+    	 	"locale": {
+            	"format": "DD-MM-YYYY",
+	            "separator": " - ",
+	            "applyLabel": "Guardar",
+	            "cancelLabel": "Cancelar",
+	            "fromLabel": "Desde",
+	            "toLabel": "Hasta",
+	            "customRangeLabel": "Personalizar",
+	            "daysOfWeek": [
+	                "Do",
+	                "Lu",
+	                "Ma",
+	                "Mi",
+	                "Ju",
+	                "Vi",
+	                "Sa"
+	            ],
+	            "monthNames": [
+	                "Enero",
+	                "Febrero",
+	                "Marzo",
+	                "Abril",
+	                "Mayo",
+	                "Junio",
+	                "Julio",
+	                "Agosto",
+	                "Setiembre",
+	                "Octubre",
+	                "Noviembre",
+	                "Diciembre"
+	            ],
+	            "firstDay": 1
+	        } 
+		  });
+
+			var path = Routing.generate("admin_usuarios_datatables");
+
+			$("#usuarios").DataTable({
+				"ajax": path,
+				"serverSide": true,
+				"processing": true,
+				"responsive": true,
+				"columns": [
+					{ "data": "nombre_completo" },
+					{ "data": "rut" },
+					{ "data": "email" },
+					{ "data": "fecha_creacion" },
+					{ "data": "fecha_actualizacion"},
+					{"data": "acciones", render: function (data, type, row, meta){
+
+                            if(row.idEstado == 1){
+                            	var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-secondary" onclick="bloquear_usuario('+row.id+')"><i class="fe-lock"></i> Bloquear</button>';
+							}else if(row.idEstado == 2){
+								var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-success" onclick="activar_usuario('+row.id+')"><i class="fe-unlock"></i> Activar</button>';
+							}
+
+							html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-warning" onclick="editar_usuario('+row.id+')"><i class="fe-edit"></i> Editar</button>';
+
+							html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-danger" onclick="eliminar_usuario('+row.id+')"> <i class="fe-trash-2"></i> Eliminar</button>';
+
+							html += '<button type="button" class="btn btn-icon waves-effect waves-light btn-info" onclick="ver_usuario('+row.id+')"><i class="fe-eye"></i> Ver</button>';
+
+							return html;
+						}
+					},
+				],
+				"order": [[ 5, "desc" ]],
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+				}
+			});
+		});
+
+         let accion = "";
+         let title  = "";
+
+		 $('#agregar_usuario').on('click', function() {
+	            accion = 'agregar';
+	            title  = 'Agregar usuario';
+	            let path = Routing.generate("admin_usuarios_agregar");
+
+		            $.ajax({
+		                url: path,
+		                type: 'GET',
+		                success: function (results) {
+		                    let options = {
+		                        title: title,
+		                        message: results,
+		                        accion: accion
+		                    }
+		                    generateBootboxForm(options);
+		                },
+		                error: function (e) {
+		                    console.log(e);
+		                }
+		            });
+	       });
+
+		 function editar_usuario(id_usuario){
+		 	accion   = "editar";
+			title    = 'Editar usuario';
+
+			let path  = Routing.generate("admin_usuarios_editar");
+		
+			$.ajax({
+				url: path,
+				type: 'GET',
+				data: { id_usuario: id_usuario },
+				success: function (results) {
+					let options = {
+						title: title,
+						message: results,
+						accion: accion
+					}
+					generateBootboxForm(options);
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		 }
+		function eliminar_usuario(id_usuario){
+
+			let path = Routing.generate("admin_usuarios_eliminar");
+	
+			let messageSuccess = "<h5>¿ Seguro desea eliminar el usuario ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_usuario: id_usuario },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_usuarios");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});	
+		}
+
+		function bloquear_usuario(id_usuario){
+
+			let path = Routing.generate("admin_usuarios_bloquear");
+
+            let messageSuccess = "<h5>¿ Seguro desea bloquear el usuario ?</h5>";
+
+            let titulo = '<div class="titulo-bbx">';
+            titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+            titulo += '</div>';
+
+            bootbox.dialog({
+                closeButton: false,
+                title: titulo,
+                message: messageSuccess,
+                buttons: {          
+                    success: {
+                        label: "<i class='fas fa-ban' aria-hidden='true'></i> Cancelar",
+                        className: "btn btn-sm btn-warning",
+                        callback: function () {
+                        }
+                    },
+                    main: {
+                        label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                        className: "btn btn-sm btn-success",
+                        callback: function () {
+                            $.ajax({
+                                url: path,
+                                type: 'POST',
+                                data: { id_usuario: id_usuario },
+                                success: function (results) {
+                                    if(results['estado'] == "success"){
+                                        let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+                                        let titulo = '<div class="titulo-bbx">';
+                                        titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+                                        titulo += '</div>';
+
+                                        bootbox.dialog({
+                                            closeButton: false,
+                                            title: titulo,
+                                            message: messageSuccess,
+                                            buttons: {
+                                                success: {
+                                                    label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                                    className: "btn btn-sm btn-success",
+                                                    callback: function () {    
+                                                        window.onbeforeunload = null;
+
+                                                        let path_show = Routing.generate("admin_usuarios");
+                                                        window.location.href = path_show;    
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+		}
+
+		function activar_usuario(id_usuario){
+
+			let path = Routing.generate("admin_usuarios_activar");
+   
+            let messageSuccess = "<h5>¿ Seguro desea activar el usuario ?</h5>";
+
+            let titulo = '<div class="titulo-bbx">';
+            titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+            titulo += '</div>';
+
+            bootbox.dialog({
+                closeButton: false,
+                title: titulo,
+                message: messageSuccess,
+                buttons: {              
+                    success: {
+                        label: "<i class='fa fa-ban' aria-hidden='true'></i> Cancelar",
+                        className: "btn btn-sm btn-warning",
+                        callback: function () {
+                        }
+                    },
+                    main: {
+                        label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                        className: "btn btn-sm btn-success",
+                        callback: function () {
+                            $.ajax({
+                                url: path,
+                                type: 'POST',
+                                data: { id_usuario: id_usuario },
+                                success: function (results) {
+                                    if(results['estado'] == "success"){
+                                        let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+                                        let titulo = '<div class="titulo-bbx">';
+                                        titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+                                        titulo += '</div>';
+
+                                        bootbox.dialog({
+                                            closeButton: false,
+                                            title: titulo,
+                                            message: messageSuccess,
+                                            buttons: {
+                                                success: {
+                                                    label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                                    className: "btn btn-sm btn-success",
+                                                    callback: function () {    
+                                                        window.onbeforeunload = null;
+
+                                                        let path_show = Routing.generate("admin_usuarios");
+                                                        window.location.href = path_show;    
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+		}
+
+		function ver_usuario(id_usuario){
+
+			let path  = Routing.generate("admin_usuarios_ver");
+        
+            $.ajax({
+                url: path,
+                type: 'POST',
+                data: { id_usuario: id_usuario },
+                success: function (results) {
+                    bootbox.dialog({
+                        size: "large",
+                        closeButton: false,
+                        title: 'Ver usuario',
+                        message: results,
+                        buttons: {
+                            success: {
+                                label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                className: "btn btn-sm btn-success",
+                                callback: function () {    
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+		}
+
+		// $('#csv_usuarios').on('click', function() {
+		//      let path_show = Routing.generate("admin_usuarios_descargar_csv");
+		//      window.location.href = path_show;
+		// });
+
+		function generateBootboxForm(options){
+			bootbox.dialog({
+				closeButton: false,
+				title: options.title,
+				message: options.message,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "Guardar",
+						className: "btn btn-sm btn-success",
+						callback: function() {
+							
+							let form  = $('#form_admin')[0];
+							form      = new FormData(form);
+
+							let path  = Routing.generate("admin_usuarios_agregar");
+
+							if(accion == 'editar'){
+
+								path  = Routing.generate("admin_usuarios_editar");
+							}
+
+							$.ajax({
+								url: path,
+                                type: 'POST',
+                                enctype: 'multipart/form-data',
+                                data: form,
+                                processData: false,
+                                contentType: false,
+								success: function (results) {
+									if(results['estado'] == "OK"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () { 
+														var d = new Date($.now());
+														
+														var update_usuario = {id_usuario:results.datos.id_usuario, rut:results.datos.rut, nombre:results.datos.nombre, avatar: results.datos.avatar, habilitado:true, timestamp: d.getTime() };
+								                		firebase.database().ref('usuarios/usuario-'+results.datos.id_usuario).set(update_usuario).then(() => {
+															window.onbeforeunload = null;
+
+							                            	let path_show = Routing.generate("admin_usuarios");
+							                            	window.location.href = path_show;
+								                		}).catch((error) =>{		                			
+															window.onbeforeunload = null;
+
+								                            let path_show = Routing.generate("admin_usuarios");
+								                            window.location.href = path_show;
+														});     
+													}
+												}
+											}
+										});
+									}else if(results['estado'] == "ERROR"){
+									}else{
+										let options = {
+											title: title,
+											message: results,
+											accion: accion
+										}
+
+										generateBootboxForm(options);
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}                                       
+							});
+						}
+					}
+				}
+			});
+		}
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Usuarios</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Usuarios</h4>
+			</div>
+		</div>
+	</div>
+
+
+  <div class="row">
+		<div class="col-md-12">
+		    <form class="form-inline" action="{{ path('admin_usuarios_descargar_csv') }}" method="POST">
+		    	 <div class="form-group">
+                	<label for="fecha_inicio" class="sr-only">Fecha inicio</label>
+                    <input type="text" class="form-control" id="fecha_inicio" name="fecha_inicio">
+                </div>
+                <div class="form-group mx-sm-3">
+                    <label for="fecha_termino" class="sr-only">Fecha termino</label>
+                    <input type="text" class="form-control" id="fecha_termino" name="fecha_termino">
+                </div>
+                <button type="submit" id="csv_usuarios" class="btn btn-primary"><i class="fe-download"></i> Descargar usuarios</button> 
+		    </form>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-12">
+			<div class="form-group text-right mb-2">      
+               <button type="button" id="agregar_usuario" class="btn btn-success"><i class="fe-user-plus"></i> Agregar usuario</button>
+            </div>
+			<div class="card-box table-responsive">    
+				<table id="usuarios" class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Rut</th>
+							<th>Email</th>
+							<th>Fecha de creación</th>
+							<th>Fecha de actualización</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+				</table>                
+			</div>
+		</div>
+	</div>
+{% endblock %}

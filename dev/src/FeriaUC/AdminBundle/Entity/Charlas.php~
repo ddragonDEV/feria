@@ -1,0 +1,172 @@
+<?php
+
+namespace FeriaUC\AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Charlas
+ *
+ * @ORM\Table(name="charlas")
+ * @ORM\Entity(repositoryClass="FeriaUC\AdminBundle\Repository\CharlasRepository")
+ */
+class Charlas
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var Estados
+     *
+     * @ORM\ManyToOne(targetEntity="Estados")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_estado", referencedColumnName="id")
+     * })
+     */
+    private $idEstado;
+
+     /**
+     * @var Puntos
+     *
+     * @ORM\ManyToOne(targetEntity="Puntos")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_punto", referencedColumnName="id")
+     * })
+     */
+    private $idPunto;
+
+     /**
+     * @var Stands
+     *
+     * @ORM\ManyToOne(targetEntity="Stands")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_stand", referencedColumnName="id")
+     * })
+     */
+    private $idStand;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="expositor", type="string", length=255)
+     */
+    private $expositor;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="datetime")
+     */
+    private $fecha;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="codigo_youtube", type="string", length=255)
+     */
+    private $codigoYoutube;
+
+     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set expositor
+     *
+     * @param string $expositor
+     *
+     * @return Charlas
+     */
+    public function setExpositor($expositor)
+    {
+        $this->expositor = $expositor;
+
+        return $this;
+    }
+
+    /**
+     * Get expositor
+     *
+     * @return string
+     */
+    public function getExpositor()
+    {
+        return $this->expositor;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return Charlas
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set codigoYoutube
+     *
+     * @param string $codigoYoutube
+     *
+     * @return Charlas
+     */
+    public function setCodigoYoutube($codigoYoutube)
+    {
+        $this->codigoYoutube = $codigoYoutube;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoYoutube
+     *
+     * @return string
+     */
+    public function getCodigoYoutube()
+    {
+        return $this->codigoYoutube;
+    }
+}
+

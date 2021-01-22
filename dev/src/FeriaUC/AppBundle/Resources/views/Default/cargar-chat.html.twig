@@ -1,0 +1,423 @@
+{% extends "::base_chat.html.twig" %}
+{% block body %}
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<div class="tab-content h-100" role="tablist">
+
+			<div class="tab-pane fade h-100 show active" id="tab-content-dialogs" role="tabpanel">
+				<div class="d-flex flex-column h-100">
+
+					<div class="hide-scrollbar">
+						<div class="container-fluid py-6">
+							<!-- Title -->
+							<h2 class="font-bold mb-6">Chats</h2>
+							<!-- Title -->
+
+							<!-- Chats -->
+							<nav class="listado-chats nav d-block list-discussions-js mb-n6">
+								{% for key, chat in aChats %}
+									<!-- Chat link -->
+									<a class="text-reset nav-link p-0 mb-6" onclick="cargarChat(this);return false;" data-nombre="{{ chat.nombre }}" data-chat="{{ key }}" href="#">
+										<div class="card card-active-listener">
+											<div class="card-body">
+												<div class="media">
+													<div class="avatar mr-5">
+														<img class="avatar-img" src="https://upload.wikimedia.org/wikipedia/commons/8/84/Escudo_de_la_Pontificia_Universidad_Cat%C3%B3lica_de_Chile.svg" alt="Bootstrap Themes">
+													</div>                                                
+													<div class="media-body overflow-hidden">
+														<div class="d-flex align-items-center mb-1">
+															<h6 class="text-truncate mb-0 mr-auto">{{ chat.nombre }}</h6>
+														</div>
+														{# <div class="text-truncate">Anna Bridges: Hey, Maher! How are you? The weather is great isn't it?</div> #} {# ira ? por ahora no #}
+													</div>
+												</div>
+											</div>           
+											<div data-chat="{{key}}" class="sin-responder sin-responder-usuario-{{id_usuario}}-chat-{{key}} badge badge-circle badge-primary badge-border-light badge-top-right {{ chat.sin_responder }}" {% if chat.sin_responder == 0 %} style="display: none;" {% endif %} >
+												<span>{{ chat.sin_responder }}</span> 
+											</div>                            
+										</div>
+									</a>
+									<!-- Chat link -->
+								{% endfor %}
+							</nav>
+							<!-- Chats -->
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Sidebar -->
+	<!-- Main Content -->
+	<div class="main" data-mobile-height="">
+		<!-- Chat -->
+		<div class="chat">
+			<!-- Chat: body -->
+			<div class="chat-body">
+				<!-- Chat: Header -->
+				<div class="chat-header border-bottom py-4 py-lg-6 px-lg-8">
+					<div class="container-xxl">
+						<div class="row align-items-center">
+							<!-- Close chat(mobile) -->
+							<div class="col-3 d-xl-none">
+								<ul class="list-inline mb-0">
+									<li class="list-inline-item">
+										<a class="text-muted px-0" href="#" data-chat="open">
+											<i class="icon-md fe-chevron-left"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<!-- Chat photo -->
+							<div class="col-6 col-xl-6">
+								<div class="media text-center text-xl-left">
+									<div class="avatar avatar-sm d-none d-xl-inline-block mr-5">
+										<img src="https://upload.wikimedia.org/wikipedia/commons/8/84/Escudo_de_la_Pontificia_Universidad_Cat%C3%B3lica_de_Chile.svg" class="avatar-img" alt="">
+									</div>
+
+									<div class="media-body align-self-center text-truncate">
+										<h6 class="header-nombre-chat text-truncate mb-n1">{{ aChats[id_chat].nombre }}</h6>
+									</div>
+								</div>
+							</div>
+						</div><!-- .row -->
+
+					</div>
+				</div>
+				<!-- Chat: Header -->
+				<!-- Chat: Content-->
+				<div id="chat_content" class="chat-content px-lg-8">
+					<div class="chat-contenido-mensajes chat-contenido-mensajes-{{ id_chat }} container-xxl py-6 py-lg-10">
+					</div>
+					<!-- Scroll to end -->
+					<div class="end-of-chat"></div>
+				</div>
+				<!-- Chat: Content -->
+
+				<!-- Chat: Footer -->
+				<div class="chat-footer border-top py-4 py-lg-6 px-lg-8">
+					<div class="container-xxl">
+						<form data-emoji-form="">
+							<input type ="hidden" id="id_chat" value="{{ id_chat }}">
+							<input type ="hidden" id="id_usuario" value="{{ id_usuario }}">
+							{% if "now"|date('H:i') >= "19:00" %}
+								<div class="alert alert-info" role="alert">
+								    El horario de atención de nuestro chat es de 09:00 am a 19:00 pm de Lunes a Viernes.
+								</div>
+							{% endif %}
+							<div class="alert alert-usuario-{{ id_usuario }}-chat-{{ id_chat }} alert-danger" role="alert" style="display: none;">
+							    <small>Haz sido bloqueado para enviar mensajes. Comunícate con el área de soporte soporte@feriauc.cl</small>
+							</div>
+							<div class="chat-footer-input chat-footer-usuario-{{ id_usuario }}-chat-{{ id_chat }} form-row align-items-center">
+								<div class="col">
+									<div class="input-group">
+										<!-- Textarea -->
+										<textarea id="chat-input" class="form-control bg-transparent border-0" placeholder="Escribe tu mensaje..." rows="1" data-emoji-input="" data-autosize="true"></textarea>
+										<!-- Emoji button -->
+										<div class="input-group-append">
+											<button class="btn btn-ico btn-secondary btn-minimal bg-transparent border-0" type="button" data-emoji-btn="">
+												<img src="{{ asset('bundles/app/chat/images/smile.svg') }}" data-inject-svg="" alt="">
+											</button>
+										</div>
+									</div>
+								</div>
+
+								<!-- Submit button -->
+								<div class="col-auto">
+									<button id="btn-enviar" class="btn btn-ico btn-primary rounded-circle" type="button">
+										<span class="fe-send"></span>
+									</button>
+								</div>
+
+							</div>
+
+						</form>
+
+					</div>
+				</div>
+				<!-- Chat: Footer -->
+			</div>
+			<!-- Chat: body -->
+		</div>
+		<!-- Chat -->
+
+	</div>
+	<!-- Main Content -->
+{% endblock %}
+{% block javascripts %}
+	<script>
+		// le deberiamos agregar un opcity a los que nos estan seleccionado
+		// un hover para los que nos estan seleccionados, que pase como a seleccionado si pasa el mouse		
+		var avatar_usuario = '';
+		$(document).ready(function() {
+			cargarContenido();
+		});
+
+		$('#btn-enviar').on('click', function(event) {
+			event.preventDefault();
+
+			var mensaje   = $('#chat-input').val();
+			var idChat    = $('#id_chat').val();
+			var idUsuario = $('#id_usuario').val();
+
+			if(mensaje != ''){
+				var d = new Date($.now());
+
+				var update_mensajes = {mensaje:mensaje, tipo:'novato', timestamp: d.getTime() };
+				firebase.database().ref('mensajes/chat-'+$('#id_chat').val()+'/usuario-'+$('#id_usuario').val()).push(update_mensajes).then(() => {
+					$('.sin-responder-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).find('span').text(0);
+					$('.sin-responder-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'none');
+
+					var path= Routing.generate("mapa_marker_guardar_mensaje");
+					$.ajax({
+						url: path,
+						type: 'POST',
+						data: { idChat: idChat, idUsuario:idUsuario, tipo:'novato', mensaje:mensaje, timestamp: d.getTime() },
+						success: function (results) {
+						  	console.log(results);
+						}
+					});
+				}).catch((error) =>{
+					var path= Routing.generate("mapa_marker_guardar_mensaje");
+					$.ajax({
+						url: path,
+						type: 'POST',
+						data: { idChat: idChat, idUsuario:idUsuario, tipo:'novato', mensaje:mensaje, timestamp: d.getTime() },
+						success: function (results) {
+							console.log(results);
+						   // aqui deberia tomar el valor del results para mostrar el chat
+						}
+					});
+					console.log("error");//mostrar error
+				});
+
+				$('#chat-input').val('');
+			}
+		});
+
+		function cargarContenido(){			
+			firebase.database().ref('usuarios/usuario-'+$('#id_usuario').val()).once('value').then(function(snapshot) { //podriamos cambiarlo a un child_changed o agregar
+				avatar_usuario=snapshot.val().avatar;
+			});
+
+			setTimeout(function(){	
+				$('.listado-chats').find('a').each(function(index, el) {
+					var sin_responder = 0;
+					firebase.database().ref('mensajes/chat-'+$(el).data('chat')+'/usuario-'+$('#id_usuario').val()).on('child_added', function(snapshot) {
+						if(snapshot.val().tipo == 'embajador'){
+							sin_responder++;
+						}
+						if(snapshot.val().tipo == 'novato'){
+							sin_responder=0;
+						}
+						$('.sin-responder-usuario-'+$('#id_usuario').val()+'-chat-'+$(el).data('chat')).find('span').text(sin_responder);
+						
+						if(sin_responder > 0){
+							$('.sin-responder-usuario-'+$('#id_usuario').val()+'-chat-'+$(el).data('chat')).css('display', 'block');
+						}else{
+							$('.sin-responder-usuario-'+$('#id_usuario').val()+'-chat-'+$(el).data('chat')).css('display', 'none');
+						}
+							
+						var html_mensaje = '';	
+						if(snapshot.val().tipo == 'embajador'){
+							html_mensaje +='<div class="message">';
+								html_mensaje +='<a class="avatar avatar-sm mr-4 mr-lg-5" href="#" data-chat-sidebar-toggle="#chat-1-user-profile">';
+									html_mensaje += '<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+embajadores['embajador-'+snapshot.val().id_embajador].avatar+'" alt="">';
+								html_mensaje +='</a>';
+
+								html_mensaje +='<div class="message-body">';
+									html_mensaje +='<div class="message-row">';
+										html_mensaje +='<div class="d-flex align-items-center">';
+											html_mensaje +='<div class="message-content bg-light">';
+												html_mensaje +='<h6 class="mb-2">'+embajadores['embajador-'+snapshot.val().id_embajador].nombre+'</h6>'; //aqui va el nombre del novato
+												html_mensaje +='<div>'+snapshot.val().mensaje+'</div>';
+												html_mensaje +='<div class="mt-1">';															
+                                               		html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(snapshot.val().timestamp)+'">'+formaterFechaCorta(snapshot.val().timestamp)+'</time></small>';
+                                                html_mensaje +=' </div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								html_mensaje +='</div>';
+							html_mensaje +='</div>';
+						}
+						if(snapshot.val().tipo == 'novato'){
+							html_mensaje +='<div class="message message-right">';
+								html_mensaje +='<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">';
+									html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+avatar_usuario+'" alt="">';
+								html_mensaje +='</div>';
+
+								html_mensaje +='<div class="message-body">';
+									html_mensaje +='<div class="message-row">';
+										html_mensaje +='<div class="d-flex align-items-center justify-content-end">';
+											html_mensaje +='<div class="message-content bg-primary text-white">';
+												html_mensaje +='<div>'+snapshot.val().mensaje+'</div>';
+												html_mensaje +='<div class="mt-1">';															
+                                               		html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(snapshot.val().timestamp)+'">'+formaterFechaCorta(snapshot.val().timestamp)+'</time></small>';
+                                                html_mensaje +=' </div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								html_mensaje +='</div>';
+							html_mensaje +='</div>';
+						}
+						$('.chat-contenido-mensajes-'+$(el).data('chat')).append(html_mensaje);	
+						jQuery("time.timeago").timeago();
+
+						setTimeout(function(){	$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast"); }, 650 );
+					});
+
+					/* escucha la seguridad del usuario */ 
+					firebase.database().ref('seguridad/chat-'+$(el).data('chat')+'/usuario-'+$('#id_usuario').val()).on('child_changed', function(snapshot) {
+						if(snapshot.key == 'habilitado'){
+							if(snapshot.val()){
+								$('.chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$(el).data('chat')).css('display', 'flex');
+								$('.alert-usuario-'+$('#id_usuario').val()+'-chat-'+$(el).data('chat')).css('display', 'none');
+							}else{
+								$('.chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$(el).data('chat')).css('display', 'none');
+								$('.alert-usuario-'+$('#id_usuario').val()+'-chat-'+$(el).data('chat')).css('display', 'flex');	
+							}
+						}
+					});
+					/* escucha la seguridad del usuario */
+				});
+				
+				/* carga la seguridad del usuario del chat */
+				firebase.database().ref('seguridad/chat-'+$('#id_chat').val()+'/usuario-'+$('#id_usuario').val()).once('value').then(function(snapshot) {
+					if(snapshot.val()){						
+						if(snapshot.val().habilitado){
+							$('.chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'flex');
+							$('.alert-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'none');
+						}else{
+							$('.chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'none');	
+							$('.alert-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'flex');					
+						}
+					}
+				});
+				/* carga la seguridad del usuario del chat */
+							
+
+				$('body .layout').css('display','flex');		
+				$('.loading--text').css('display', 'none');
+
+				// setTimeout(function(){	$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast"); }, 250 );
+				// setTimeout(function(){	$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast"); }, 700 );
+				// setTimeout(function(){	$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast"); }, 1000 );
+
+			}, 1000);
+		}
+
+		function cargarChat(obj){//por favor un loading	
+			$('body .layout').css('display','none');		
+			$('.loading--text').css('display', 'block');			
+
+			var id_chat    = $(obj).data('chat');
+			var nombreChat = $(obj).data('nombre');
+
+			$('.alert').removeClass('alert-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val());
+			$('.alert').addClass('alert-usuario-'+$('#id_usuario').val()+'-chat-'+id_chat);
+
+			$('.chat-footer-input').removeClass('chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val());
+			$('.chat-footer-input').addClass('chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+id_chat);
+
+
+			$('.chat-contenido-mensajes').removeClass('chat-contenido-mensajes-'+$('#id_chat').val());	
+			$('.chat-contenido-mensajes').addClass('chat-contenido-mensajes-'+id_chat);	
+			$('#id_chat').val(id_chat);
+
+			$('.header-nombre-chat').text(nombreChat);
+
+			var path= Routing.generate("mapa_marker_obtener_chats");
+			$.ajax({
+				url: path,
+				type: 'POST',
+				data:{id_chat:id_chat},
+				success: function (results) {
+					$('.listado-chats').html(results);
+
+					setTimeout(function(){	
+				   		firebase.database().ref('mensajes/chat-'+$('#id_chat').val()+'/usuario-'+$('#id_usuario').val()).once('value').then(function(snapshot) {
+				   			var str_usuario = 'usuario-'+$('#id_usuario').val();
+							var html_mensaje = '';	
+							snapshot.forEach(function(mens){
+								if(mens.val().tipo == 'embajador'){
+									html_mensaje +='<div class="message">';
+										html_mensaje +='<a class="avatar avatar-sm mr-4 mr-lg-5" href="#" data-chat-sidebar-toggle="#chat-1-user-profile">';
+											html_mensaje += '<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+embajadores['embajador-'+mens.val().id_embajador].avatar+'" alt="">';
+										html_mensaje +='</a>';
+
+										html_mensaje +='<div class="message-body">';
+											html_mensaje +='<div class="message-row">';
+												html_mensaje +='<div class="d-flex align-items-center">';
+													html_mensaje +='<div class="message-content bg-light">';
+														html_mensaje +='<h6 class="mb-2">'+embajadores['embajador-'+mens.val().id_embajador].nombre+'</h6>'; //aqui va el nombre del novato
+														html_mensaje +='<div>'+mens.val().mensaje+'</div>';
+														html_mensaje +='<div class="mt-1">';															
+		                                               		html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(mens.val().timestamp)+'">'+formaterFechaCorta(mens.val().timestamp)+'</time></small>';
+		                                                html_mensaje +=' </div>';
+													html_mensaje +='</div>';
+												html_mensaje +='</div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								}
+								if(mens.val().tipo == 'novato'){
+									html_mensaje +='<div class="message message-right">';
+										html_mensaje +='<div class="avatar avatar-sm ml-4 ml-lg-5 d-none d-lg-block">';
+											html_mensaje +='<img class="avatar-img" src="{{ asset('bundles/app/chat/images/avatars/') }}'+avatar_usuario+'" alt="">';
+										html_mensaje +='</div>';
+
+										html_mensaje +='<div class="message-body">';
+											html_mensaje +='<div class="message-row">';
+												html_mensaje +='<div class="d-flex align-items-center justify-content-end">';
+													html_mensaje +='<div class="message-content bg-primary text-white">';
+														html_mensaje +='<div>'+mens.val().mensaje+'</div>';
+														html_mensaje +='<div class="mt-1">';															
+		                                               		html_mensaje +='<small class="opacity-65"><time class="timeago" datetime="'+formaterTiempo(mens.val().timestamp)+'">'+formaterFechaCorta(mens.val().timestamp)+'</time></small>';
+		                                                html_mensaje +=' </div>';
+													html_mensaje +='</div>';
+												html_mensaje +='</div>';
+											html_mensaje +='</div>';
+										html_mensaje +='</div>';
+									html_mensaje +='</div>';
+								}
+							});
+							$('.chat-contenido-mensajes-'+id_chat).html(html_mensaje);	
+							jQuery("time.timeago").timeago();
+
+							setTimeout(function(){	$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast"); }, 250 );
+							setTimeout(function(){	$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast"); }, 500 );
+							// setTimeout(function(){	$('.chat-content').animate({scrollTop: document.getElementById('chat_content').scrollHeight},"fast"); }, 1000 );
+
+					   		$('body .layout').css('display','flex');		
+							$('.loading--text').css('display', 'none');
+						});
+				
+						/* carga la seguridad del usuario del chat */
+						firebase.database().ref('seguridad/chat-'+$('#id_chat').val()+'/usuario-'+$('#id_usuario').val()).once('value').then(function(snapshot) {
+							if(snapshot.val()){						
+								if(snapshot.val().habilitado){
+									$('.chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'flex');
+									$('.alert-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'none');
+								}else{
+									$('.chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'none');	
+									$('.alert-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'flex');					
+								}
+							}else{
+								$('.chat-footer-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'flex');	
+								$('.alert-usuario-'+$('#id_usuario').val()+'-chat-'+$('#id_chat').val()).css('display', 'none');		
+							}
+						});
+						/* carga la seguridad del usuario del chat */
+			   		}, 1000);
+
+					$('.main').addClass('main-visible');
+				}
+			});			
+		}
+
+		//nos falta el escuchar para cuando venga uno desde el admin 
+
+	</script>
+{% endblock %}

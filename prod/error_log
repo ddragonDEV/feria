@@ -1,0 +1,1 @@
+[17-Jan-2021 19:41:13 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/feriadeorientaci/public_html/src/FeriaUC/AppBundle/Controller/__DefaultController.php on line 926

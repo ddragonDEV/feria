@@ -1,0 +1,82 @@
+{% extends "::base_login.html.twig" %}
+{% block javascripts %}
+	<script>
+		const giro = 40;
+		var clockwise = false,
+			$w = window.innerWidth,
+			$h = window.innerHeight;
+
+		function resizable() {
+			if (window.innerWidth != $w || window.innerHeight != $h) {
+				if ($w > $h) {
+					$('#bg').css({
+						'width': ($w * .9) + 'px',
+						'height': ($w * .9) + 'px',
+						'padding-bottom': '0'
+					});
+				} else {
+					$('#bg').css({
+						'width': ($h * 1.05) + 'px',
+						'height': ($h * 1.05) + 'px',
+						'padding-bottom': '0'
+					});
+				}
+				$w = window.innerWidth;
+				$h = window.innerHeight;
+			}
+		}
+
+		$(document).ready(function() {
+			var spread = giro / $('.orbit.is_el').length;
+
+			$('.orbit.is_el').each(function() {
+				$('.rotating', this).css('animation-delay', '-' + (spread * $(this).parent().children('.orbit.is_el').index(this)) + 's');
+			});
+
+			$('.orbit.is_el.rotates').each(function() {
+				if (!clockwise) {
+					$('.el', this).addClass('reverse');
+					$('.el_inn.rotating', this).removeClass('reverse');
+					clockwise = true;
+				} else {
+					$('.el', this).removeClass('reverse');
+					$('.el_inn.rotating', this).addClass('reverse');
+					clockwise = false;
+				}
+			});
+
+			$('.app--loading').removeClass('app--loading');
+		});
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="app--loading">
+		<div id="bg">
+			{# <div id="bg_in">{{ bg_in|raw }}</div> #}
+		</div>
+		<div id="front">
+			<div id="puc">{{ puc|raw }}</div>
+			<div id="logo" style="box-shadow:0 0 BLACK;">{{ logo|raw }}</div>
+			<div id="formulario" class="col-md-8 offset-md-2">
+				<form id="formulario_registro" action="{{ path('login') }}" method="POST">
+					{# <h2 class="h3 text-center">Iniciar sesión</h2>					 #}
+					<div class="uc-form-group">
+						<label for="_username"><i class="uc-icon">account_circle</i> RUT (*)</label>
+						<input id="_username" name="_username" type="text" class="uc-input-style" placeholder="Sin puntos ni guion">
+					</div>
+					<div class="uc-form-group">
+						<label for="_password"><i class="uc-icon">vpn_key</i> Contraseña (*)</label>
+						<input id="_password" name="_password" type="password" class="uc-input-style">
+						<small  class="form-text">Tu contraseña son los 4 primeros dígitos del RUT.</small>
+					</div>
+					<div class="col-md-12">						
+						<a href="{{ path('formulario_registro') }}" class="link-inline">Registrarme</a>
+					</div>
+					<div class="text-right mb-2">
+						<button class="uc-btn btn-primary btn-inline" style="cursor: pointer;">Ingresar <i class="uc-icon">login</i></button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

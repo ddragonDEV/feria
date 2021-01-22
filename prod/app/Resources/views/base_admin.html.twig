@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<title>ADMIN</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+		<meta content="Coderthemes" name="author" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<link rel="shortcut icon" href="{{ asset('bundles/admin/images/favicon.ico') }}">
+
+		<link href="{{ asset('bundles/admin/libs/datatables/dataTables.bootstrap4.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('bundles/admin/libs/datatables/buttons.bootstrap4.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('bundles/admin/libs/datatables/responsive.bootstrap4.css') }}" rel="stylesheet" type="text/css" />
+
+		<link href="{{ asset('bundles/admin/libs/bootstrap-timepicker/bootstrap-timepicker.min.css') }}" rel="stylesheet" />
+		<link href="{{ asset('bundles/admin/libs/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
+		<link href="{{ asset('bundles/admin/libs/bootstrap-select/bootstrap-select.min.css') }}" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="{{ asset('bundles/admin/libs/summernote/summernote-bs4.css') }}">
+
+		<link href="{{ asset('bundles/admin/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('bundles/admin/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
+		<link href="{{ asset('bundles/admin/css/app.min.css') }}" rel="stylesheet" type="text/css" />
+	</head>
+
+
+		<style>
+
+			.modal-header{
+				justify-content: center;
+			}
+
+            /*#rb3-global-menu .rb3-menu-header__navigation-item {
+                font-size: 1.6rem !important;
+            }
+            .modal-body{
+                text-align: center;
+            }
+            .titulo-bbx{
+                font-size: 58px !important;
+            }
+
+            .titulo-bbx .alerta{
+                color: #D3023B !important;
+            }
+
+            .titulo-bbx .success{
+                color: #1EC745 !important;
+            }
+
+            .modal-footer .btn-bx-success{
+                background-color: #183E89 !important;
+                border-color: #183E89 !important;
+                color: white !important; 
+            }
+
+            .modal-title {
+                margin: 0 auto !important;
+            }*/
+        </style>
+	<body>
+		<div id="wrapper">
+			<div class="navbar-custom">
+				<ul class="list-unstyled topnav-menu float-right mb-0">
+					<li class="dropdown notification-list">
+						<a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+							{% if app.user.imagenPerfil %} 
+								<img src="{{ asset('bundles/admin/embajadores/avatar/' ~ app.user.imagenPerfil) }}" alt="user-image" class="rounded-circle">
+							 {% else %} 
+								<img src="{{ asset('uploads/user.png') }}" alt="user-image" class="rounded-circle">
+							 {% endif %}   
+							<span class="ml-1">{{ app.user.nombre }} {{ app.user.apellidos }}<i class="mdi mdi-chevron-down"></i> </span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right profile-dropdown">
+						   <a href="{{ path('admin_perfil') }}" class="dropdown-item notify-item">
+								<i class="fe-settings"></i>
+								<span>Perfil</span>
+							</a>
+							<a href="{{ path('admin_logout') }}" class="dropdown-item notify-item">
+								<i class="fe-log-out"></i>
+								<span>Logout</span>
+							</a>
+						</div>
+					</li>
+				</ul>
+
+				<!-- LOGO -->
+				<div class="logo-box">
+					<a href="index.html" class="logo text-center">
+						<span class="logo-lg">
+							{# <img src="{{ asset('bundles/app/admin/images/logo-light.png') }}" alt="" height="16"> #}
+							<!-- <span class="logo-lg-text-light">UBold</span> -->
+						</span>
+						<span class="logo-sm">
+							<!-- <span class="logo-sm-text-dark">U</span> -->
+							{# <img src="{{ asset('bundles/app/admin/images/logo-sm.png') }}" alt="" height="28"> #}
+						</span>
+					</a>
+				</div>
+
+				<ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+					<li>
+						<button class="button-menu-mobile waves-effect waves-light">
+							<i class="fe-menu"></i>
+						</button>
+					</li>
+				</ul>
+			</div>
+		   {% if app.user.idEstadoUsuario.id == 1 %} 
+				<div class="left-side-menu">
+					<div class="slimscroll-menu">
+						<div id="sidebar-menu">
+							<ul class="metismenu" id="side-menu">
+								<li>
+									<a href="{{ path('admin') }}">
+										<i class="fe-home"></i>
+										<span> Inicio </span>
+									</a>
+								</li>
+									{% if is_granted('ROLE_FERIA_UC_SUPER_ADMIN') %}
+										 <li>
+											<a href="{{ path('admin_administradores') }}">
+												<i class="fe-shield"></i>
+												<span> Administradores </span>
+											</a>
+										</li>
+										 <li>
+											<a href="{{ path('admin_usuarios') }}">
+												<i class="fe-user"></i>
+												<span> Usuarios </span>
+											</a>
+										</li>
+										 <li>
+											<a href="{{ path('admin_puntos') }}">
+												<i class="fe-map-pin"></i>
+												<span> Puntos </span>
+											</a>
+										</li>
+										 <li>
+											<a href="{{ path('admin_charlas') }}">
+												<i class="fe-video"></i>
+												<span> Charlas </span>
+											</a>
+										</li>
+									{% endif %}      
+								<li>
+									<a href="{{ path('admin_chats') }}">
+										<i class="fe-message-circle"></i>
+										<span> Chats </span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+		{% endif %}
+			<div class="content-page">
+				<div class="content">
+					<div class="container-fluid">
+						{% if app.user.idEstadoUsuario.id == 1 %}
+							{% block body %}{% endblock %}
+						{% else %}
+								<div class="row">
+									<div class="col-12">
+										<div class="page-title-box">
+											<div class="page-title-right">
+												<ol class="breadcrumb m-0">
+													<li class="breadcrumb-item"><a href="javascript: void(0);">USUARIO BLOQUEADO</a></li>
+												</ol>
+											</div>
+											<h4 class="page-title">USUARIO BLOQUEADO</h4>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-12">
+										<div class="card">
+											<div class="card-body">
+												USUARIO BLOQUEADO
+											</div>
+										</div>
+									</div>
+								</div>        
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="rightbar-overlay"></div>
+		<script src="{{ asset('bundles/admin/js/vendor.min.js') }}"></script>
+		
+
+		<script src="{{ asset('bundles/admin/libs/moment/moment.min.js') }}"></script>
+		
+
+		<script src="{{ asset('bundles/admin/libs/datatables/jquery.dataTables.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/datatables/dataTables.bootstrap4.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/datatables/dataTables.buttons.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/datatables/buttons.bootstrap4.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/datatables/dataTables.responsive.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/datatables/responsive.bootstrap4.min.js') }}"></script>
+
+		<script src="{{ asset('bundles/admin/libs/moment/moment.min.js') }}"></script>
+
+		<script src="{{ asset('bundles/admin/libs/bootstrap-timepicker/bootstrap-timepicker.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/bootstrap-select/bootstrap-select.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/libs/summernote/summernote-bs4.min.js') }}"></script>
+
+		<script src="{{ asset('bundles/admin/js/bootbox.min.js') }}"></script>
+
+		<script src="{{ asset('bundles/admin/js/jquery.rut.js') }}"></script>
+
+		<script src="{{ asset('bundles/admin/js/app.min.js') }}"></script>
+
+		<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+		<script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script> 
+
+		{# firebase #}
+		<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-database.js"></script>
+		<script>
+			// Your web app's Firebase configuration
+			var firebaseConfig = {
+			    apiKey: "AIzaSyC1P-tZNdCnU-kjf_WVDKEeBX-mNXxLHTI",
+			    authDomain: "feriauc-1c24a.firebaseapp.com",
+			    databaseURL: "https://feriauc-1c24a.firebaseio.com",
+			    projectId: "feriauc-1c24a",
+			    storageBucket: "feriauc-1c24a.appspot.com",
+			    messagingSenderId: "973914428245",
+			    appId: "1:973914428245:web:defd014f60e2d832c815dc",
+			    measurementId: "G-D1KWSL4FC6"
+		  	};
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+
+			$('body').addClass('sidebar-enable enlarged');
+		</script>
+
+		{% block javascripts %}{% endblock %}
+	</body>
+</html>

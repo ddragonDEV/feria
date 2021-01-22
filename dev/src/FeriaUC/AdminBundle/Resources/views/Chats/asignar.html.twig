@@ -1,0 +1,96 @@
+<link href="{{ asset('bundles/admin/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+
+<script src="{{ asset('bundles/admin/libs/select2/select2.min.js') }}"></script>
+
+<script type="text/javascript">
+ 
+ $('#administradores').select2();
+
+	$('.permiso_eliminar').on('click',  function(event) {
+
+			let path                          = Routing.generate("admin_chats_eliminar_permisos");
+			let id_permiso_chat_administrador = $(this).data('permiso');
+
+			let message   = confirm("Desea eliminar  la asignacion del embajador ?");
+			if(message){
+				$.ajax({
+					url: path,
+					type: 'POST',
+					data: { id_permiso_chat_administrador: id_permiso_chat_administrador },
+					success: function (results) {
+						if(results.estado == 'OK'){
+							 alert(results.mensaje);
+							 
+							let path_show = Routing.generate("admin_chats");
+							window.location.href = path_show; 
+						}
+					}
+				 });     
+			}
+	 });
+</script>
+
+<div class="row mb-2">    
+	<div class="col-md-12">
+			<form id="form_admin"  method="POST">
+				<input type="hidden" name="id_chat" id="id_chat" value="{{ id_chat }}">
+				<div class="form-group">
+					<label for="embajadores">Embajadores (*)</label>
+					<select class="form-control {% if errores.administradores %} is-invalid {% endif %}" name="administradores[]" 
+					id="administradores" 
+					multiple="" style="width:100%">
+					{% for key, administrador in aAdministradores %}
+							<option value="{{ key }}">
+							{{ administrador.nombre }} ({{ administrador.username }})
+						</option>
+					{% endfor %}
+						{# {% for admin in arrAdmis %}
+							<option value="{{ admin.id }}">
+								{{ admin.nombre }}
+							</option>
+						{% endfor %} #}
+					</select>
+					<small class="form-text text-muted">Seleccionar por lo a uno</small>
+					{% if errores.administradores %}
+					<div class="invalid-feedback">
+							{{ errores.administradores }}
+					</div>
+					{% endif %}  
+				</div>            
+			</form>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="card-box">
+			<h4 class="header-title">Embajadores asignados</h4>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="table-responsive">
+						<table class="table table-striped" id="datatable2">
+							<thead>
+								<tr>
+									<th>Nombre</th>
+									<th>Email</th>
+									<th>Accion</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for administrador in aObtenerAdministradoresConPermisos %}
+									<tr>
+										<td>{{ administrador.nombreAdministrador }}  {{ administrador.apellidosAdministrador }}</td>
+										<td>{{ administrador.usernameAdministrador }}</td>
+										<td>
+											 <button type="button" class="permiso_eliminar btn btn-sm btn-icon waves-effect waves-light btn-danger" 
+											 data-permiso="{{ administrador.idPermiso }}">Eliminar</button>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

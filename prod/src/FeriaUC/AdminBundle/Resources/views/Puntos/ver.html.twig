@@ -1,0 +1,99 @@
+<style type="text/css">
+	table th {
+		text-align: center; 
+	}
+</style>
+
+<div class="row text-center">
+	<div class="col-md-12">
+		<div class="card-box table-responsive">
+			{% if oInfoPuntos %}
+				<table class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+				   <tr>
+					  <th>Tipo:</th>
+					  <td>{{ oInfoPuntos.idPunto.idTipoPunto.nombre }}</td>	
+					</tr>
+					<tr>
+					  <th>Titulo:</th>
+					  <td>{{ oInfoPuntos.idPunto.titulo }}</td>	
+					</tr>
+					<tr>
+					  <th>Subtitulo:</th>
+					  <td>{{ oInfoPuntos.idPunto.subtitulo }}</td>	
+					</tr>
+					<tr>
+					  <th>Dirección:</th>
+					  <td>{{ oInfoPuntos.idPunto.direccion }}</td>	
+					</tr>
+					<tr>
+					  <th>Left:</th>
+					  <td>{{ oInfoPuntos.idPunto.left }}</td>	
+					</tr>
+					<tr>
+					  <th>Top:</th>
+					  <td>{{ oInfoPuntos.idPunto.top }}</td>	
+					</tr>
+					<tr>
+					  <th>Imagen Principal:</th>
+					  <td>
+					   {% if oInfoPuntos.idPunto.imagenPrincipal  %}
+						  	<a href="{{ asset('uploads/puntos/imagen_principal/' ~ oInfoPuntos.idPunto.imagenPrincipal) }}" target="_blank">
+								<center><img width="100" src="{{ asset('uploads/puntos/imagen_principal/' ~  oInfoPuntos.idPunto.imagenPrincipal) }}"></center>
+							</a>
+						{%  else %} Sin imagen princiapal  disponible
+						{% endif %} 
+					  </td>	
+					</tr>
+					<tr>
+					  <th>Redes sociales;</th>
+					  <td>
+					  	 {% if oInfoPuntos.urlInstagram  %}
+					  	 	<a href="{{ oInfoPuntos.urlInstagram  }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+					  	 	target="_blank">
+						  	  <i class="fab fa-instagram fa-lg" aria-hidden="true" title="Instagram" style="color:#808080"></i>	
+						  	</a>
+					  	 {% endif %}
+					  	 {% if oInfoPuntos.urlFacebook  %}
+					  	 	<a href="{{ oInfoPuntos.urlFacebook }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+					  	 	target="_blank">
+						  	  <i class="fab fa-facebook fa-lg" aria-hidden="true" title="Facebook" style="color:#2d88ff"></i>
+						  	</a>
+					  	 {% endif %}
+					  	 {% if oInfoPuntos.urlYoutube  %}
+				  	 		<a href="{{ oInfoPuntos.urlYoutube }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+				  	 		target="_blank">
+						  	  <i class="fab fa-youtube fa-lg" aria-hidden="true" title="Youtube" style="color:#FF0000"></i>		
+						  	</a>
+					  	 {% endif %}
+					  	 {% if oInfoPuntos.urlWeb %}
+					  	 	<a href="{{ oInfoPuntos.urlWeb  }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+					  	 	target="_blank">
+						  	  <i class="fas fa-globe fa-lg" aria-hidden="true" title="Web" style="color:#808080"></i>	
+						  	</a>
+					  	 {% endif %}
+					  </td>	
+					</tr>
+					<tr>
+					 <th>Fecha de creación</th>
+					 <td>{{ oInfoPuntos.idPunto.createdAt|date('d-m-Y H:i') }}</td>	
+					</tr>
+					<tr>
+					 <th>Fecha de actualización</th>
+					 <td>
+					 	{{ oInfoPuntos.idPunto.updatedAt ? oInfoPuntos.idPunto.updatedAt|date('d-m-Y H:i'):"-" }}
+					 </td>	
+					</tr>
+					<tr>
+					  <th>Información general:</th>
+						  <td>
+							  {% if oInfoPuntos.infoGeneral %} {{ oInfoPuntos.infoGeneral|raw }}
+							  {% else %} Sin información disponible
+							  {% endif %}
+						  </td>	
+					</tr>
+			   </table>
+			 {% else %} Sin información disponible
+		     {% endif %}
+		</div>
+	</div>
+</div>

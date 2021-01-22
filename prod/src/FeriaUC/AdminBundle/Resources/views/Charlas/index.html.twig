@@ -1,0 +1,436 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script type="text/javascript">
+
+	$(document).ready(function(){
+	  var path = Routing.generate("admin_charlas_datatables");
+
+			$("#charlas").DataTable({
+				"ajax": path,
+				"serverSide": true,
+				"processing": true,
+				"responsive": false,
+				"columns": [
+					{ "data": "titulo" },
+					{ "data": "expositor" },
+					{ "data": "carrera" },
+					{ "data": "fecha" },
+					{ "data": "fecha_creacion" },
+					{ "data": "fecha_actualizacion"},
+					{"data": "acciones", render: function (data, type, row, meta){
+
+                            if(row.idEstado == 1){
+                            	var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-secondary" onclick="bloquear_charla('+row.id+')"><i class="fe-lock"></i> Bloquear</button>';
+							}else if(row.idEstado == 2){
+								var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-success" onclick="activar_charla('+row.id+')"><i class="fe-unlock"></i> Activar</button>';
+							}
+
+							html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-warning" onclick="editar_charla('+row.id+')"><i class="fe-edit"></i> Editar</button>';
+
+							html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-danger" onclick="eliminar_charla('+row.id+')"> <i class="fe-trash-2"></i> Eliminar</button>';
+
+							html += '<button type="button" class="btn btn-icon waves-effect waves-light btn-info" onclick="ver_video('+row.id+')"><i class="fe-eye"></i> Ver Video</button>';
+
+							return html;
+						}
+					},
+				],
+				"order": [[ 3, "desc" ]],
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+				}
+			});
+		});
+		
+
+		let accion = "";
+		let title  = "";
+
+		$('#agregar_charla').on('click', function() {
+				accion = 'agregar';
+				title  = 'Agregar charla';
+				let path = Routing.generate("admin_charlas_agregar");
+
+				$.ajax({
+					url: path,
+					type: 'GET',
+					success: function (results) {
+						let options = {
+							title:    title,
+							message: results,
+							accion:  accion
+						}
+						generateBootboxForm(options);
+					},
+					error: function (e) {
+						console.log(e);
+					}
+				});
+		 });
+
+		function editar_charla(id_charla){
+			accion  = "editar";
+
+			title   = 'Editar charla';
+			
+			let path  = Routing.generate("admin_charlas_editar");
+
+			$.ajax({
+				url: path,
+				type: 'GET',
+				data: { id_charla: id_charla },
+				success: function (results) {
+					let options = {
+						title: title,
+						message: results,
+						accion: accion
+					}
+					generateBootboxForm(options);
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		}
+
+		function eliminar_charla(id_charla){
+
+			let path  = Routing.generate("admin_charlas_eliminar");
+	
+			let messageSuccess = "<h5>¿ Seguro desea eliminar la charla ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_charla: id_charla },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_charlas");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});
+		}
+
+		function bloquear_charla(id_charla){
+
+			let path  = Routing.generate("admin_charlas_bloquear");
+
+			let messageSuccess = "<h5>¿ Seguro desea bloquear la charla ?</h5>";
+
+			let titulo = '<div class="titulo-bbx">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {          
+					success: {
+						label: "<i class='fas fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_charla: id_charla },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="titulo-bbx">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_charlas");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});
+		}
+
+		function activar_charla(id_charla){
+
+			let path   = Routing.generate("admin_charlas_activar");
+	
+			let messageSuccess = "<h5>¿ Seguro desea activar la charla ?</h5>";
+
+			let titulo = '<div class="titulo-bbx">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {              
+					success: {
+						label: "<i class='fa fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_charla: id_charla },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="titulo-bbx">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_charlas");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			}); 
+		}
+
+		function ver_video(id_charla){
+
+			let path  = Routing.generate("admin_charlas_ver");
+        
+            $.ajax({
+                url: path,
+                type: 'POST',
+                data: { id_charla: id_charla },
+                success: function (results) {
+                    bootbox.dialog({
+                        size: "large",
+                        closeButton: false,
+                        title: 'Ver Video',
+                        message: results,
+                        buttons: {
+                            success: {
+                                label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                className: "btn btn-sm btn-success",
+                                callback: function () {    
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+		}
+
+		function generateBootboxForm(options){
+			bootbox.dialog({
+				size: "large",
+				closeButton: false,
+				title: options.title,
+				message: options.message,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "Guardar",
+						className: "btn btn-sm btn-success",
+						callback: function() {
+							
+							let form = $('#form_admin').serialize();
+
+							let path  = Routing.generate("admin_charlas_agregar");
+
+							if(accion == 'editar'){
+								path  = Routing.generate("admin_charlas_editar");
+							}
+
+							$.ajax({
+								url:  path,
+								type: 'POST',
+								data: form,
+								success: function (results) {
+									if(results['estado'] == "OK"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_charlas");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}else if(results['estado'] == "ERROR"){
+									}else{
+										let options = {
+											title:   title,
+											message: results,
+											accion: accion
+										}
+
+										generateBootboxForm(options);
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}                                       
+							});
+						}
+					}
+				}
+			});
+		}
+	</script>
+{% endblock %}
+{% block body %}
+   <div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Charlas</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Charlas</h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="form-group text-right mb-2">
+				<button type="button" id="agregar_charla" class="btn btn-success"><i class="fe-plus"></i> Agregar charla</button>
+			</div>
+			<div class="card-box table-responsive">
+				<table id="charlas" class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<thead>
+							<tr>
+							    <th>Nombre</th>
+								<th>Expositor</th>
+								<th>Carrera</th>
+								<th>Fecha</th>
+								<th>Fecha de creación</th>
+								<th>Fecha actualización</th>
+								<th>Acciones</th>
+							</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}	

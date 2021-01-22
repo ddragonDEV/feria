@@ -1,0 +1,77 @@
+<style type="text/css">
+	table th {
+		text-align: center; 
+	}
+</style>
+
+
+<div class="row text-center">    
+	<div class="col-md-12">
+		<h4 class="header-title mb-2">información general</h4>
+		<div class="card-box table-responsive">
+			<table class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; 
+			width: 100%;">
+			{% if oChats.idStand %}
+				<tr>
+				  <th>Stand</th>
+				  <td>{{ oChats.idStand.nombre }}</td>	
+			   </tr>
+			{% endif %}
+			<tr>
+			  <th>Nombre:</th>
+			  <td>{{ oChats.nombre }}</td>	
+			</tr>
+			<tr>
+			  <th>Dias:</th>
+			  <td>{{ oChats.diasFuncionamiento }}</td>	
+			</tr>
+			<tr>
+			  <th>Hora apentura:</th>
+			  <td>{{ oChats.horaApertura|date('H:i') }}</td>	
+			</tr>
+			<tr>
+			  <th>Hora de cierre:</th>
+			  <td>{{ oChats.horaCierre|date('H:i') }}</td>	
+			</tr>
+			  <tr>
+				  <th>Fecha de creación</th>
+				  <td>{{ oChats.createdAt|date('d-m-Y H:i') }}</td>	
+			   </tr>
+			   <tr>
+			   <th>Fecha de actualización</th>
+				 <td>
+				 	{{ oChats.updatedAt ? oChats.updatedAt|date('d-m-Y H:i'):"-" }}
+				 </td>	
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% if is_granted('ROLE_FERIA_UC_SUPER_ADMIN') or is_granted('ROLE_FERIA_UC_ADMIN') %}
+	<div class="row text-center">    
+		<div class="col-md-12">
+			<h4 class="header-title mb-2">Embajadores asignados</h4>
+			<div class="card-box table-responsive">
+				{% if oPermisosChatsAdministradores %}
+					<table class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; 
+					width: 100%;">
+					<thead>
+						<th>Nombre</th>
+						<th>Email</th>
+					</thead>
+					<tbody>
+						{% for permiso in oPermisosChatsAdministradores %}
+						   <tr>
+						   	<td>{{ permiso.idAdministrador.nombre }}  {{ permiso.idAdministrador.apellidos }}</td>
+						   	<td>{{ permiso.idAdministrador.username }}</td>
+						   </tr>	
+						{% endfor %}
+					</tbody>
+					</table>
+				{% else %}Sin emjadores asignados
+				{% endif %}	
+			</div>
+		</div>
+	</div>
+{% endif %}

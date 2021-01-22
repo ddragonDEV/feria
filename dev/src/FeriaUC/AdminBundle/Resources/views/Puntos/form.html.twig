@@ -1,0 +1,270 @@
+<style type="text/css">
+	[type=radio] { 
+	  position: absolute;
+	  opacity: 0;
+	  width: 0;
+	  height: 0;
+	}
+
+	/* IMAGE STYLES */
+	[type=radio] + img {
+	  cursor: pointer;
+	}
+
+	/* CHECKED STYLES */
+	[type=radio]:checked + img {
+	  outline: 2px solid #0A77DF;
+	}
+</style>		
+
+{% if mensaje %}
+	<div class="alert alert-success" role="alert">
+	  <i class='fa fa-check' aria-hidden='true'></i> Los datos se han guardado correctamente
+	</div>
+{% endif %}
+
+<div class="text-right">
+  <a href="{{  path('admin_puntos') }}" class="btn btn-secondary" role="button" aria-disabled="true">
+  <i class="fe-arrow-left"></i> Volver</a>
+</div>
+
+<div class="form-row">
+	<div class="form-group col-md-4">
+	  <label for="inputEmail4">Tipo de punto (*)</label>
+	  <select class="form-control {% if errores.id_tipo_punto %} is-invalid {% endif %}" id="id_tipo_punto" name="id_tipo_punto">
+		<option value="">Seleccionar</option>
+		{% for tipo in oTiposPunto %}
+			<option value="{{ tipo.id }}"{{ valores.id_tipo_punto == tipo.id ? "selected":"" }}>
+				{{ tipo.nombre }}
+			</option>
+		{% endfor %}
+		</select>
+		{% if errores.id_tipo_punto %}
+			<div class="invalid-feedback">
+			  {{ errores.id_tipo_punto }}
+			</div>
+	 {% endif %}
+	</div>
+	<div class="form-group col-md-4">
+	  <label for="nombre">Titulo (*)</label>
+	  <input type="text" id="titulo" name="titulo" class="form-control {% if errores.titulo %} is-invalid {% endif %}" 
+		 value="{{ valores.titulo }}" placeholder="Ingrese el titulo">
+	   {% if errores.titulo %}
+		 <div class="invalid-feedback">
+		   {{ errores.titulo }}
+		 </div>
+	   {% endif %}
+	</div>
+	<div class="form-group col-md-4">
+	  <label for="nombre">Subtitulo</label>
+	  <input type="text" id="subtitulo" name="subtitulo" class="form-control" 
+	 value="{{ valores.subtitulo }}" placeholder="Ingrese el subtitulo">
+	</div>
+</div>
+<div class="form-row">
+ 	<div class="form-group col-md-3">
+	    <label for="tipo">Dirección (*)</label>
+		<select class="form-control {% if errores.direccion %} is-invalid {% endif %}" id="direccion" name="direccion">
+			<option value="">Seleccionar</option>
+			<option value="left"{{ valores.direccion == 'left' ? "selected":"" }}>izquierda</option>
+			<option value="right"{{ valores.direccion == 'right' ? "selected":"" }}>derecha</option>
+		</select>
+		{% if errores.direccion %}
+			<div class="invalid-feedback">
+			  {{ errores.direccion }}
+			</div>
+	     {% endif %}
+	</div>
+	<div class="form-group col-md-3">
+	   <label for="tipo">Left (*)</label>
+	   <input type="number" id="letf" name="left" class="form-control {% if errores.left %} is-invalid {% endif %}" 
+	   value="{{ valores.left }}" placeholder="Ingrese el letf" min="0" max="100">
+		{% if errores.left %}
+			<div class="invalid-feedback">
+			  {{ errores.left }}
+			</div>
+	 {% endif %}
+	</div>
+	<div class="form-group col-md-3">
+	   <label for="tipo">Top (*)</label>
+	   <input type="number" id="top" name="top" class="form-control {% if errores.top %} is-invalid {% endif %}" 
+	   value="{{ valores.top }}" placeholder="Ingrese el top" min="0" max="100">
+		{% if errores.top %}
+			<div class="invalid-feedback">
+			  {{ errores.top }}
+			</div>
+	 {% endif %}
+	</div>
+	<div class="form-group col-md-3">
+	   <label for="tipo">Slug o keyword (*)</label>
+	   <input type="text" id="slug" name="slug" class="form-control {% if errores.slug %} is-invalid {% endif %}" 
+	   value="{{ valores.slug }}" placeholder="Ingrese el keyword">
+		{% if errores.slug %}
+			<div class="invalid-feedback">
+			  {{ errores.slug }}
+			</div>
+	 {% endif %}
+	</div>
+ </div>
+
+	{# <div class="form-group">
+	     <label for="menu">Menu (*)</label>
+		 <div class="form-check form-check-inline">
+		   <input class="form-check-input" type="radio" id="menu_si" value="1" name="menu"  {{ valores.menu == '1' ? "checked":""  }}>
+		   <label class="form-check-label" for="menu_si">Si</label>
+		</div>
+		<div class="form-check form-check-inline">
+		   <input class="form-check-input" type="radio" id="menu_no" value="0" name="menu" {{ valores.menu == '2' ? "checked":""  }}>
+		   <label class="form-check-label" for="menu_no">No</label>
+		</div>
+		{% if errores.menu %}
+			<div class="invalid-feedback">
+			  {{ errores.menu }}
+			</div>
+	    {% endif %}
+	</div> #}
+
+<div class="form-group">
+   <label for="password">Selecciona icono</label>
+   <div class="row text-center">
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-almacenuc.png"  {{ valores.icono == 'icon-almacenuc.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-almacenuc.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-artificalauc.png"  {{ valores.icono == 'icon-artificalauc.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-artificalauc.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-biblioteca.png"  {{ valores.icono == 'icon-biblioteca.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-biblioteca.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-camino-formativo.png"  {{ valores.icono == 'icon-camino-formativo.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-camino-formativo.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-cientificalauc.png"  {{ valores.icono == 'icon-cientificalauc.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-cientificalauc.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-deportesuc.png"  {{ valores.icono == 'icon-deportesuc.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-deportesuc.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-edificio.png"  {{ valores.icono == 'icon-edificio.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-edificio.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-equidaddegenero.png"  {{ valores.icono == 'icon-equidaddegenero.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-equidaddegenero.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-equidadgenero.png"  {{ valores.icono == 'icon-equidadgenero.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-equidadgenero.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-federacion-estudiantes.png"  {{ valores.icono == 'icon-federacion-estudiantes.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-federacion-estudiantes.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-logouc.png"  {{ valores.icono == 'icon-logouc.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-logouc.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-piane.png"  {{ valores.icono == 'icon-piane.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-piane.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-reddeapyocomunicdad.png"  {{ valores.icono == 'icon-reddeapyocomunicdad.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-reddeapyocomunicdad.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-salud.png"  {{ valores.icono == 'icon-salud.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-salud.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-sustantabilidad.png"  {{ valores.icono == 'icon-sustantabilidad.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-sustantabilidad.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	     <div class="col-md-3">
+	     	<label>
+	     		<input  type="radio" name="icono" value="icon-expo.png"  {{ valores.icono == 'icon-expo.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{ asset('bundles/app/mapa/iconos-mapa/icon-expo.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	</div>
+</div>  	
+
+<div id="div_info" {% if valores.id_tipo_punto == 2 %}hidden{% endif %}>
+	 <div class="form-group">
+	      <label for="tipo">Imagen principal (*)</label>
+	      <input type="file" id="imagen_principal" name="imagen_principal" class="form-control {% if errores.imagen_principal %} is-invalid {% endif %}"  placeholder="Ingrese imagen" accept="image/*">
+	      <small  class="form-text text-muted">Tamaño maximo 1MB</small>
+		  <small  class="form-text text-danger" id="imagen_principal_error"></small>
+	      {% if errores.imagen_principal %}
+			<div class="invalid-feedback">
+			  {{ errores.imagen_principal }}
+			</div>
+	    {% endif %}
+	 </div>
+	<div class="form-row">
+		<div class="form-group col-md-3">
+			<label for="urlInstagram">Instagram</label>
+			<input type="text" id="urlInstagram" name="urlInstagram" class="form-control" value="{{ valores.urlInstagram }}" 
+			 placeholder="Ingrese el Instagram">                    
+		</div>
+		<div class="form-group col-md-3">
+			<label for="urlFacebook">Facebook</label>
+			<input type="text" id="urlFacebook" name="urlFacebook" class="form-control" value="{{ valores.urlFacebook }}" 
+			 placeholder="Ingrese el Facebook">                    
+		</div>
+		<div class="form-group col-md-3">
+			<label for="urlYoutube">Youtube</label>
+			<input type="text" id="urlYoutube" name="urlYoutube" class="form-control" value="{{ valores.urlYoutube }}" 
+			 placeholder="Ingrese el Youtube">                    
+		</div>
+			<div class="form-group col-md-3">
+			<label for="urlYoutube">Web</label>
+				<input type="text" id="urlWeb" name="urlWeb" class="form-control" value="{{ valores.urlWeb }}" 
+			 placeholder="Ingrese web">                    
+	     </div>
+	</div>
+	<div class="form-group">
+		<label for="infoGeneral">Información general</label>
+		<textarea id="infoGeneral" name="infoGeneral" class="form-control"  rows="4" cols="50">
+			{{ valores.infoGeneral }}
+		</textarea>                 
+	</div>
+</div>
+<button type="submit" class="btn btn-success"><i class='fa fa-save' aria-hidden='true'></i> Guardar</button>

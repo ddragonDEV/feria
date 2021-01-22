@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+	<script type="text/javascript">
+		loadedImgs = false;
+		loadedCanvas = false;
+		conGTag = false;
+
+	</script>
+	<!--	<link href="./img/favicon.ico" rel="shortcut icon" />-->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Futuro Novato UC 2022</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<script src="{{ asset('bundles/app/mapa/js/modernizr.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/jquery.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/jquery.easing.1.3.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/pep.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/taphold.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/imagesloaded.pkgd.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/prefixfree.vars.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/prefixfree.viewport-units.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/prefixfree.dynamic-dom.min.js') }}"></script>
+	<script src="https://kit.fontawesome.com/b21743e745.js" crossorigin="anonymous"></script>
+
+	<link rel="stylesheet" href="https://kit-digital-uc-prod.s3.amazonaws.com/uc-kitdigital/css/uc-kitdigital.css">
+
+	<link href="{{ asset('bundles/app/mapa/css/style.css') }}" rel="stylesheet" />
+
+	<link rel="canonical" href="" />
+	<meta property="og:url" content="" />
+	<meta name="twitter:card" content="summary_large_image">
+	<meta property="fb:app_id" content="" />
+	<meta property="og:site_name" content="" />
+	<meta name="twitter:card" content="summary_large_image">
+	<meta property="og:title" content="" />
+	<meta name="twitter:title" content="">
+	<meta name="title" content="">
+	<link rel="image_src" href="" />
+	<meta property="og:image" content="" />
+	<meta name="twitter:image" content="">
+	<meta name="description" content="" />
+	<meta property="og:description" content="" />
+	<meta name="twitter:description" content="">
+	<meta property="og:type" content="website" />
+
+</head>
+
+<body class="{{ bodyclasss }}">
+
+	<header id="main_header">
+	</header>
+
+	<button id="to--top" data-aria-hidden="true"><i class="uc-icon">arrow_upward</i></button>
+	<div id="popup--bg" class="popup" data-aria-hidden="true"></div>
+
+	<aside id="popup--menu" class="popup" data-aria-hidden="true"><b class="popup--close">&times;</b>
+		<div>
+			<div class="pop_in">
+				<div class="holder">
+				</div>
+			</div>
+		</div>
+	</aside>
+
+	<aside id="popup--carreras" class="popup" data-aria-hidden="true">
+		<div><i class="popup--close"></i>
+			<div class="pop_in"><b class="popup--close">&times;</b>
+				<div class="holder">
+					<h3 class="h2">Selecciona una carrera y comienza el recorrido</h3>
+					<div class="p--card">
+						<ul class="carreras">
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li><button class="btn--popup-normal"><span>Lorem ipsum</span><i class="uc-icon">arrow_right_alt</i></button></li>
+							<li class="back"><button class="popup--close"><i class="uc-icon">arrow_back</i>&nbsp;<span>Regresar al Campus</span></button></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</aside>
+
+	<aside id="popup--normal" class="popup" data-aria-hidden="true">
+		<div><i class="popup--close"></i>
+			<div class="pop_in"><b class="popup--close">&times;</b>
+				<div class="holder">
+					<div class="menu">
+						<h3><span class="carrera--name">Medicina veterinaria</span></h3>
+						<nav>
+							<ul>
+								<li><button>
+										<div><span>Información<br />general</span><i class="uc-icon">arrow_right_alt</i></div>
+									</button></li>
+								<li><button>
+										<div><span>Cronograma<br />charlas</span><i class="uc-icon">arrow_right_alt</i></div>
+									</button></li>
+								<li><button>
+										<div><span>Chat</span><i class="uc-icon">arrow_right_alt</i></div>
+									</button></li>
+							</ul>
+						</nav>
+					</div>
+					<div class="content">
+
+						<div class="bloque media imagen">
+							<div class="in">
+								<figure>
+									<img src="{{ asset('bundles/app/mapa/img/test1.jpg') }}" alt="" />
+								</figure>
+							</div>
+						</div>
+
+						<div class="bloque texto">
+							<div class="in">
+								<ul>
+									<li><strong>Grado Académico:</strong> Bachiller / Licenciado en Ciencias Veterinarias</li>
+									<li><strong>Título Profesional:</strong> Médico Veterinario</li>
+									<li><strong>Vacantes ofrecidas Admisión 2020:</strong> 80</li>
+									<li><strong>Código DEMRE:</strong> 12033</li>
+								</ul>
+								<h3>¿Cómo ingresar?</h3>
+								<p>Admisión Centralizada 2021<br />
+									<strong>Otras vías de admisión a la UC:</strong> Admisión Equidad / Admisión Especial
+								</p>
+							</div>
+						</div>
+
+						<div class="bloque texto requisitos">
+							<div class="in">
+								<h3>Ponderaciones y Requisitos</h3>
+								<ul class="requisitos-ul">
+									<li><div><span>20%</span> Promedio Enseñanza Media</div></li>
+									<li><div><span>20%</span> Lorem ipsum</div></li>
+									<li><div><span>20%</span> Lorem ipsum</div></li>
+									<li><div><span>20%</span> Lorem ipsum</div></li>
+									<li><div><span>20%</span> Lorem ipsum</div></li>
+									<li><div>Lorem ipsum</div></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="bloque texto">
+							<div class="in">
+								<h3>¿Qué significa ser Médico Veterinario?</h3>
+								<p>Los médicos veterinarios son responsables de la salud y el bienestar de los animales en todos los ámbitos de su relación con el ser humano. También, es parte de su quehacer la preservación de ecosistemas y conservación de fauna libre de enfermedades. Asimismo, contribuyen a garantizar la inocuidad de los alimentos para el consumo humano, protegiendo su integridad y calidad desde el campo a la mesa.</p>
+								<h3>Perfil de egreso</h3>
+								<p>El médico veterinario de la UC tendrá una sólida formación ética y científico– tecnológica. Será capaz de diagnosticar el estado de salud y bienestar de los animales a su cargo. Aplicará la medicina para prevenir y tratar enfermedades en los animales, proteger la biodiversidad y el medio ambiente, y contribuir a la adecuada producción de alimentos de origen animal. Este profesional tendrá un especial énfasis en la medicina animal, con foco en caninos y felinos, o equinos.<br />
+									Será capaz de investigar, analizar y sintetizar conocimientos. Participará en la planificación, desarrollo y evaluación de proyectos y programas relacionados con las ciencias veterinarias: salud y bienestar animal, salud pública, producción animal, calidad e inocuidad de los alimentos y biodiversidad.</p>
+							</div>
+						</div>
+
+						<div class="bloque media galeria">
+							<div class="in">
+								<h3>Galería</h3>
+								<div class="slider_holder">
+								</div>
+							</div>
+						</div>
+
+						<div class="bloque media videos">
+							<div class="in">
+								<h3>Videos</h3>
+								<div class="video_holder"></div>
+								<ul>
+									<li><div><button data-youtube="cjm5pBvaWTI"><img src="{{ asset('bundles/app/mapa/img/test1.jpg') }}" alt="" /></button></div></li>
+									<li><div><button data-youtube="JwMIo45vMvM"><img src="{{ asset('bundles/app/mapa/img/test2.jpg') }}" alt="" /></button></div></li>
+									<li><div><button data-youtube="cjm5pBvaWTI"><img src="{{ asset('bundles/app/mapa/img/test3.jpg') }}" alt="" /></button></div></li>
+									<li><div><button data-youtube="JwMIo45vMvM"><img src="{{ asset('bundles/app/mapa/img/test4.jpg') }}" alt="" /></button></div></li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="bloque texto social">
+							<div class="in">
+								<h3>Síguenos</h3>
+								<ul>
+									<li><a href="#" target="_blank"><i class="fab fa-facebook"></i></a></li>
+									<li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+									<li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+								</ul>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</aside>
+
+	<div id="cursor-a" class="cursor">
+		<div class="a">{{ cursor_a|raw }}</div>
+	</div>
+
+	<div id="cursor-b" class="cursor">
+		<div class="b">{{ cursor_b|raw }}</div>
+	</div>
+
+	<section id="preloader">
+		<div>
+			<div class="logo_uc">{{ logo_uc|raw }}</div>
+			<div class="logo_feria">{{ logo_feria|raw }}</div>
+			<div class="text">
+				<i class="fas fa-spinner fa-spin color--azul"></i><span class="h6">Cargando&hellip;</span>
+			</div>
+		</div>
+	</section>
+
+	<section id="instrucciones">
+		<div>
+			<div class="cursor">
+				<div class="a">{{ cursor_a|raw }}</div>
+				<div class="b">{{ cursor_b|raw }}</div>
+			</div>
+			<p>Haz clic y mantén presionado el mouse para <strong>moverte por el mapa</strong> y conocer las diferentes actividades de la Expo Virtual Futuro Novato.</p>
+			<button class="uc-btn btn-cta">
+				Comenzar&nbsp;<i class="uc-icon">arrow_forward</i>
+			</button>
+		</div>
+	</section>
+
+	<section id="map">
+		<div id="markers">
+			{{ markers|raw }}
+		</div>
+	</section>
+
+	<script src="https://kit-digital-uc-prod.s3.amazonaws.com/uc-kitdigital/js/uc-kitdigital.js"></script>
+
+	<script src="{{ asset('bundles/app/mapa/js/jquery.ba-throttle-debounce.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/howler.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/gsap.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/pixi.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/pixi-viewport.js') }}"></script>
+	<script src="{{ asset('bundles/app/mapa/js/PixiPlugin.min.js') }}"></script>
+	<script type="text/javascript">
+		const duration = 250,
+			largoinicial = 27,
+			loader = PIXI.Loader.shared,
+			sprites = {},
+			cursor = $('#cursor-a'),
+			cursorb = $('#cursor-b'),
+			cursorSpeed = .5,
+			mapaRatio = .6;
+
+		var canvasCreated = false,
+			app,
+			viewport,
+			vid1Controller,
+			mouseMoving = false,
+			activeMarkerOffset = 0,
+			headerHeight = 120;
+		if (window.innerWidth > window.innerHeight) {
+			var mapaWidth = window.innerWidth * 2,
+				mapaStartZoom = mapaWidth * .2;
+		} else {
+			var mapaWidth = ((window.innerHeight * 2) / (mapaRatio * 10)) * 10,
+				mapaStartZoom = mapaWidth * .1;
+		}
+
+		let cursorX = 0,
+			cursorY = 0,
+			distX = 0,
+			distY = 0,
+			mouseX = 0,
+			mouseY = 0;
+
+		function rand(n) {
+			return Math.round(Math.random() * n)
+		}
+
+		function checkScroll(val) {
+			if ($('body').hasClass('has--popup-carreras') || $('body').hasClass('has--popup-normal')) {
+				if ($('body').hasClass('has--popup-carreras')) {
+					var nS = parseInt($('#popup--carreras').scrollTop());
+					var tope = parseInt($('#popup--carreras > div').outerHeight()) - $h + (headerHeight * 2);
+				} else if ($('body').hasClass('has--popup-normal')) {
+					var nS = parseInt($('#popup--normal').scrollTop());
+					var tope = parseInt($('#popup--normal > div').outerHeight()) - $h + (headerHeight * 2);
+				}
+				if (nS < tope) {
+					$('.popup i.popup--close').css('transform', 'translateY(' + nS + 'px)');
+				}
+				if (nS > $h) {
+					$('body').addClass('scrolled');
+				} else {
+					$('body').removeClass('scrolled');
+				}
+			} else {
+				$('.popup i.popup--close').css('transform', '');
+			}
+		}
+
+		function resizable() {
+			$w = window.innerWidth;
+			$h = window.innerHeight;
+			document.body.height = $h;
+			$('html, body, .win--width, canvas').css('width', $w + 'px');
+			$('html, body, .win--height, canvas').css('height', $h + 'px');
+			if ($h > $w) {
+				activeMarkerOffset = 0;
+			} else {
+				activeMarkerOffset = $w / 5;
+			}
+		}
+
+		function cargandoimagenes() {
+			var postss = document.querySelectorAll('.loadable');
+			var imagesloaded = imagesLoaded(postss);
+			var totalimagenes = imagesloaded.images.length;
+			var cadaimagen = (100 - largoinicial) / totalimagenes;
+			var avance = 0;
+			progreso = largoinicial;
+			imagesloaded.on('progress', function(instance, image) {
+				avance++;
+				progreso = largoinicial + (cadaimagen * avance);
+			}).on('always', function(instance) {
+				loadedImgs = true;
+				//				console.log('Images checked');
+				if (loadedCanvas) {
+					//					reveal(false);
+				}
+			});
+		}
+
+		function markersMove(x, y, clearInitial = false) {
+			$('body').removeClass('markers--hidden');
+			$('#markers').css('transform', 'translate3d(' + x + 'px, ' + y + 'px, 0)');
+			if (clearInitial) {
+				$('#preloader, #instrucciones').remove();
+			}
+		}
+		
+		function setVideos() {
+			$('#popup--normal .bloque.videos').each(function() {
+				$('ul li:first-of-type', this).addClass('active');
+				$('.video_holder', this).html('<iframe src="https://www.youtube.com/embed/' + $('ul li:first-of-type button', this).attr('data-youtube') + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
+			});
+		}
+
+		function setMenu() {
+			$('#popup--menu .holder').append('<div class="menu" />');
+			$('#popup--menu .menu').html($('#popup--normal .menu').html())
+			$('.menu li:first-of-type').addClass('active');
+		}
+
+		function mapCreation() {
+			if (!canvasCreated) {
+				PIXI.utils.skipHello();
+				app = new PIXI.Application({
+					transparent: true,
+					width: window.innerWidth,
+					height: window.innerHeight - headerHeight,
+					resizeTo: window,
+					autoResize: true,
+					resolution: window.devicePixelRatio
+				});
+				$('#map').append(app.view);
+				$('#markers').css({
+					'width': mapaWidth,
+					'height': mapaWidth * mapaRatio
+				});
+				viewport = app.stage.addChild(new Viewport.Viewport({
+						screenWidth: window.innerWidth,
+						screenHeight: window.innerHeight - headerHeight,
+						worldWidth: mapaWidth,
+						worldHeight: mapaWidth * mapaRatio
+					}))
+					.zoom(mapaStartZoom)
+					.moveCenter(mapaWidth / 2, (mapaWidth / 2) * mapaRatio)
+					.drag({
+						clampWheel: true,
+						wheelScroll: .3
+					})
+					//					.pinch()
+					.decelerate({
+						friction: .8
+					})
+					.clamp({
+						direction: 'all',
+						underflow: 'center'
+					})
+					.on('moved', (data) => markersMove(data.viewport.x, data.viewport.y))
+					.on('zoomed-end', (data) => markersMove(viewport.x, viewport.y, true));
+				//				viewport.findCover(window.innerWidth, window.innerHeight);
+				viewport.pause = true;
+				app.renderer.interactive = true;
+				assetsBase();
+				canvasCreated = true;
+			}
+		}
+
+		function assetsBase() {
+			loader.add('mapa', '{{ asset('bundles/app/mapa/img/map.jpg') }}')
+				//				.add('vid1', './vid/vid1.mp4')
+				.load((loader, resources) => {
+					sprites.mapa = new PIXI.Sprite(resources.mapa.texture);
+					//					sprites.vid1 = new PIXI.Sprite(resources.vid1.texture);
+				});
+			loader.onComplete.add(() => {
+				var mapa = sprites.mapa;
+				mapa.width = mapaWidth;
+				mapa.height = mapaWidth * mapaRatio;
+				viewport.addChild(mapa);
+				//				rollMapVids();
+				$('body').removeClass('loading');
+			});
+		}
+
+		function rollMapVids() {
+			const vid = PIXI.Texture.from(loader.resources.vid1.url);
+			const vid1 = new PIXI.Sprite(vid);
+			vid1Controller = vid1.texture.baseTexture.resource.source;
+			vid1Controller.autoplay = false;
+			vid1Controller.setAttribute('autoplay', false);
+			vid1.width = mapaWidth * .3;
+			vid1.height = mapaWidth * .3 * .5625;
+			vid1.x = mapaWidth * .2;
+			vid1.y = 150;
+			vid1Controller.setAttribute('loop', true);
+			vid1Controller.setAttribute('muted', true);
+			viewport.addChild(vid1);
+		}
+
+		function todoeljs() {
+
+			if ($('body').hasClass('debug')) {
+				$('body').append('<div id="centercheck" />');
+			}
+
+			if ($('body').hasClass('desktop')) {
+				$(document).mousemove(function(e) {
+					if (!mouseMoving) {
+						cursor.css('opacity', 1);
+						cursorb.css('opacity', 1);
+					}
+					if (!$('body').hasClass('has--popup-carreras') && !$('body').hasClass('has--popup-normal')) {
+						mouseMoving = true;
+						mouseX = e.pageX;
+						mouseY = e.pageY;
+					}
+				});
+			}
+
+			var ofst = 0;
+			$('.marker').each(function() {
+				$(this).css('transition-delay', ofst + 'ms');
+				$('.curva', this).css('transition-delay', ofst + 'ms');
+				$('.sign', this).css('transition-delay', ofst + 150 + 'ms');
+				ofst += 50;
+			});
+
+			setMenu();
+			setVideos();
+
+			resizable();
+			mapCreation();
+			cargandoimagenes();
+		}
+
+		function cursorAnimate(event) {
+			distX = mouseX - cursorX;
+			distY = mouseY - cursorY;
+			cursorX = cursorX + (distX * cursorSpeed);
+			cursorY = cursorY + (distY * cursorSpeed);
+			if ((distX < -.01 || distX > .01 || distY < -.01 || distY > .01)) {
+				gsap.to(cursor, {
+					x: cursorX,
+					y: cursorY,
+					'overwrite': 'auto',
+					duration: 0.0,
+				});
+				gsap.to(cursorb, {
+					x: mouseX,
+					y: mouseY,
+					'overwrite': 'auto',
+					duration: 0.0,
+				});
+			}
+			requestAnimationFrame(cursorAnimate);
+		}
+
+		function rollCursors() {
+			cursorAnimate();
+			mouseX = window.innerWidth / 2;
+			mouseY = window.innerHeight / 2;
+		}
+
+		$(document).ready(function() {
+
+			if ($('body').hasClass('desktop')) {
+				rollCursors();
+				//				$(document).mousedown(function(e) {
+				//					$('body').addClass('cursor--pressed');
+				//				});
+				//				$(document).mouseup(function(e) {
+				//					$('body').removeClass('cursor--pressed');
+				//				});
+			}
+
+			$('.marker button').hover(function(e) {
+				$('body').addClass('marker--hovered');
+			}, function(e) {
+				if (!$(this).hasClass('active')) {
+					$('body').removeClass('marker--hovered');
+				}
+			});
+			$(document).on('click', '.marker button', function(e) {
+				$('body').addClass('marker--hovered');
+				$('.marker, .marker .curva, .marker .sign').css('transition-delay', '');
+				$(this).parent().addClass('active');
+				$(this).parent().siblings('.active').removeClass('active');
+				$('body').addClass('popup--delay');
+				setTimeout(function() {
+					$('body').removeClass('popup--delay');
+				}, duration * 4);
+				viewport.animate({
+					position: new PIXI.Point(parseInt($(this).parent().css('left')) + activeMarkerOffset, parseInt($(this).parent().css('top'))),
+					time: duration * 4,
+					ease: 'easeInOutQuart'
+				});
+				$('body').addClass('map--opening map--opened');
+				e.preventDefault();
+			});
+			$(document).on('pointerdown', '#instrucciones', function() {
+				$('body').removeClass('has--instrucciones');
+				if (vid1Controller) {
+					vid1Controller.play();
+				}
+				viewport.pause = false;
+				viewport.snapZoom({
+					width: window.innerWidth,
+					time: duration * 6,
+					ease: 'easeInOutQuart'
+				});
+			});
+
+			$(document).on('click', '.btn--popup-carreras', function(e) {
+				e.preventDefault();
+				setTimeout(function() {
+					viewport.pause = true;
+				}, duration * 4);
+				$('body').addClass('has--popup-carreras');
+			});
+
+			$(document).on('click', '.btn--popup-normal', function(e) {
+				e.preventDefault();
+				setTimeout(function() {
+					viewport.pause = true;
+				}, duration * 4);
+				var thiss = $(this);
+				if (thiss.attr('data-menu')) {
+					$('body').addClass('no--menu');
+				} else {
+					$('body').removeClass('no--menu');
+				}
+				$('body').addClass('has--popup-normal');
+				if ($('body').hasClass('has--popup-carreras')) {
+					$('body').removeClass('has--popup-carreras');
+					$('body').addClass('popup--delay2');
+				}
+				setTimeout(function() {
+					$('body').removeClass('popup--delay2');
+				}, duration * 2);
+			});
+
+			$(document).on('click', '.popup--close', function(e) {
+				$('body').removeClass('has--popup-carreras has--popup-normal map--opening map--opened scrolled');
+				viewport.pause = false;
+				setTimeout(function() {
+					$('.popup').removeClass('rolled--in');
+					$('.popup').animate({
+						scrollTop: 0
+					}, 0);
+				}, duration);
+			});
+
+			$(document).on('click', '.bloque.videos button', function(e) {
+				$(this).parent().parent().addClass('active');
+				$(this).parent().parent().siblings('.active').removeClass('active');
+				$(this).parent().parent().parent().siblings('.video_holder').html('<iframe src="https://www.youtube.com/embed/' + $(this).attr('data-youtube') + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
+				console.log($(this).parent().parent().parent().parent().parent().offset().top * -1);
+				$('#popup--normal').animate({
+					scrollTop: ($(this).parent().parent().parent().parent().parent().offset().top - $('#popup--normal').scrollTop() * -1) - headerHeight
+				}, duration * 4, 'easeInOutQuart');
+			});
+
+			$(document).on('click', '.menu button', function(e) {
+				$(this).parent().addClass('active');
+				$(this).parent().siblings('.active').removeClass('active');
+				$('#popup--normal').animate({
+					scrollTop: 0
+				}, 0);
+			});
+
+			$(document).on('click', '#to--top', function(e) {
+				$('#popup--normal').animate({
+					scrollTop: 0
+				}, duration * 4, 'easeInOutQuart');
+			});
+
+			if ($('body').hasClass('desktop')) {
+				$(document).on('taphold', '#map canvas', {
+						delay: 200
+					}, function() {
+						$('body').addClass('map--grabbing');
+					})
+					.on('pointerup', function() {
+						$('body').removeClass('map--grabbing');
+					});
+			}
+
+			todoeljs();
+		});
+
+		$(window).resize($.debounce(duration, resizable));
+		$('#popup--normal').scroll($.throttle(100 / 60, checkScroll));
+		$('#popup--carreras').scroll($.throttle(100 / 60, checkScroll));
+
+	</script>
+
+</body>
+
+</html>

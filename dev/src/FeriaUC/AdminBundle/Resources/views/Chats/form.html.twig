@@ -1,0 +1,88 @@
+<link href="{{ asset('bundles/admin/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+
+<script src="{{ asset('bundles/admin/libs/select2/select2.min.js') }}"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		 $('#diasFuncionamiento').select2();
+
+		 $('.timepicker').timepicker({
+				showMeridian: false,
+				icons: {
+					up: 'mdi mdi-chevron-up',
+					down: 'mdi mdi-chevron-down'
+				}
+		});
+	});
+</script>
+<div class="form-group">
+	 <label for="id_stand">Stand</label>
+	 <select class="form-control {% if errores.id_stand %} is-invalid {% endif %}" id="id_stand" name="id_stand">
+	 	<option value="">seleccionar</option>
+	 	{% for stand in oStands %}
+	 		<option value="{{ stand.id }}" {{ valores.id_stand == stand.id ? "selected":"" }}>{{ stand.nombre }}</option>
+	 	{% endfor %}
+	 </select>
+	 {% if errores.id_stand  %}
+		<div class="invalid-feedback">
+			{{ errores.id_stand  }}
+		</div>
+	{% endif %} 
+</div>
+<div class="form-group">
+	<label for="nombre">Nombre (*)</label>
+	<input type="text" id="nombre" name="nombre" class="form-control {% if errores.nombre %} is-invalid {% endif %}" 
+	 value="{{ valores.nombre }}" placeholder="Ingrese el nombre">
+	{% if errores.nombre %}
+		<div class="invalid-feedback">
+			{{ errores.nombre }}
+		</div>
+	{% endif %}                    
+</div>
+<div class="form-group">
+	<label for="satand">dias de funcionamiento (*)</label>
+	<select class="form-control {% if errores.diasFuncionamiento %} is-invalid {% endif %}" id="diasFuncionamiento" 
+		name="diasFuncionamiento[]" multiple style="width:100%">
+		{% for dias in arrDias %}
+			 <option value="{{ dias }}" {% if valores.diasFuncionamiento  %}{% for idDias in valores.diasFuncionamiento if dias == idDias %} selected {% endfor %} {% else %} {{ dias != 'Sábado'  and dias != 'Domingo' ? "selected":"" }} {% endif %}>
+				{{ dias }}
+			</option>
+		{% endfor %}
+	</select>
+	<small  class="form-text text-muted">Seleccionar días</small>
+	{% if errores.diasFuncionamiento %}
+		<div class="invalid-feedback">
+			{{ errores.diasFuncionamiento }}
+		</div>
+	 {% endif %}  
+</div>
+<div class="form-group">
+	 <label for="fecha">Hora de apertura (*)</label>
+	  <div class="input-group">
+			<input type="text" id="horaApertura" name="horaApertura" class="timepicker form-control {% if errores.horaApertura %} is-invalid {% endif %}" value="{{ valores.horaApertura }}">
+		    <div class="input-group-append">
+			   <span class="input-group-text"><i class="fe-calendar"></i></i></span>
+		    </div>
+		</div>
+		{% if errores.horaApertura %}
+			<div class="invalid-feedback">
+			   {{ errores.horaApertura }}
+			</div>
+		{% endif %}
+</div>
+<div class="form-group">
+	 <label for="fecha">Hora de cierre (*)</label>
+	<div class="input-group">
+		<input type="text" id="horaCierre" name="horaCierre" 
+			 class="timepicker form-control {% if errores.horaCierre %} is-invalid {% endif %}" 
+			 value="{{ valores.horaCierre }}">
+			 <div class="input-group-append">
+		      <span class="input-group-text"><i class="fe-calendar"></i></i></span>
+	        </div>
+	 </div>
+	{% if errores.horaCierre %}
+		<div class="invalid-feedback">
+			{{ errores.horaCierre }}
+		</div>
+	{% endif %}
+</div>

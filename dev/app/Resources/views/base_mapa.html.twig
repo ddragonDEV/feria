@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Futuro Novato UC 2021</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+		<link rel="stylesheet" href="https://kit-digital-uc-prod.s3.amazonaws.com/uc-kitdigital/css/uc-kitdigital.css">
+		<link href="{{ asset('bundles/app/mapa/css/slick.css') }}" rel="stylesheet"  media="all" />
+		<link href="{{ asset('bundles/app/mapa/css/style.css') }}" rel="stylesheet" />
+
+		<link rel="canonical" href="" />
+		<meta property="og:url" content="" />
+		<meta name="twitter:card" content="summary_large_image">
+		<meta property="fb:app_id" content="" />
+		<meta property="og:site_name" content="" />
+		<meta name="twitter:card" content="summary_large_image">
+		<meta property="og:title" content="" />
+		<meta name="twitter:title" content="">
+		<meta name="title" content="">
+		<link rel="image_src" href="" />
+		<meta property="og:image" content="" />
+		<meta name="twitter:image" content="">
+		<meta name="description" content="" />
+		<meta property="og:description" content="" />
+		<meta name="twitter:description" content="">
+		<meta property="og:type" content="website" />
+		{% block stylesheets %}{% endblock %}
+	</head>
+	<body class="{% block bodyclass %}{% endblock %}">
+		{% block body %}{% endblock %}
+		<script type="text/javascript">
+			loadedImgs   = false;
+			loadedCanvas = false;
+			conGTag      = false;
+		</script>
+
+		<script src="{{ asset('bundles/app/mapa/js/modernizr.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/jquery.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/jquery.easing.1.3.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/pep.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/taphold.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/imagesloaded.pkgd.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/prefixfree.vars.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/prefixfree.viewport-units.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/prefixfree.dynamic-dom.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/prefixfree.dynamic-dom.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/slick.min.js') }}"></script>
+		<script src="https://kit.fontawesome.com/b21743e745.js" crossorigin="anonymous"></script>
+
+		<script src="https://kit-digital-uc-prod.s3.amazonaws.com/uc-kitdigital/js/uc-kitdigital.js"></script>
+
+		<script src="{{ asset('bundles/app/mapa/js/jquery.ba-throttle-debounce.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/howler.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/gsap.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/pixi.min.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/pixi-viewport.js') }}"></script>
+		<script src="{{ asset('bundles/app/mapa/js/PixiPlugin.min.js') }}"></script>
+
+		<script src="{{ asset('bundles/admin/js/bootbox.min.js') }}"></script>
+
+		<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+		<script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script> 
+		{% block javascripts %}{% endblock %}
+	</body>
+</html>

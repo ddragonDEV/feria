@@ -1,0 +1,502 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	 <script type="text/javascript">
+		$(document).ready(function(){
+			$("#datatable").DataTable({
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+				},
+				responsive: false
+			});
+		});
+
+		let accion = "";
+		let title  = "";
+
+		$('#agregar_chats').on('click', function(event) {
+			accion = 'agregar';
+			title  = 'Agregar chat';
+			let path = Routing.generate("admin_chats_agregar");
+
+			$.ajax({
+				url: path,
+				type: 'GET',
+				success: function (results) {
+					let options = {
+						title: title,
+						message: results,
+						accion: accion
+					}
+					generateBootboxForm(options);
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		});
+
+		$('.editar_chats').on('click', function(event) {
+			accion                 = "editar";
+			
+			let path               = Routing.generate("admin_chats_editar");
+			let id_chat            = $(this).data('chat');
+			let nombre             = $(this).data('nombre');
+
+
+			title                  = 'Editar chat'+ ' '+nombre;
+
+			$.ajax({
+				url: path,
+				type: 'GET',
+				data: { id_chat: id_chat },
+				success: function (results) {
+					let options = {
+						title: title,
+						message: results,
+						accion: accion
+					}
+					generateBootboxForm(options);
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		});
+
+		$('.eliminar_chats').on('click', function(event) {
+			let path              = Routing.generate("admin_chats_eliminar");
+			let id_chat           = $(this).data('chat');
+			let nombre            = $(this).data('nombre');
+
+			let messageSuccess = "<h5>¿ Seguro desea elimniar el chat "+ nombre+ "?</h5>"
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_chat: id_chat },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_chats");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});			
+		});
+
+		$('.bloquear_chats').on('click', function(event) {
+			let path              = Routing.generate("admin_chats_bloquear");
+			let id_chat           = $(this).data('chat');
+			let nombre            = $(this).data('nombre');
+
+
+			let messageSuccess = "<h5>¿ Seguro desea bloquear el chat  "+ nombre+ "?</h5>";
+
+			let titulo = '<div class="titulo-bbx">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {          
+					success: {
+						label: "<i class='fas fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_chat: id_chat },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="titulo-bbx">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_chats");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});
+		});
+
+	   $('.activar_chats').on('click', function(event) {
+			let path             = Routing.generate("admin_chats_activar");
+			let id_chat          = $(this).data('chat');
+			let nombre           = $(this).data('nombre');
+
+			let messageSuccess = "<h5>¿ Seguro desea activar el chat "+ nombre+ "?</h5>";
+
+			let titulo = '<div class="titulo-bbx">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {              
+					success: {
+						label: "<i class='fa fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_chat: id_chat },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="titulo-bbx">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_chats");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});         
+		});
+
+	  
+		$('.permiso_chat').on('click', function(event) {
+
+			accion = 'permisos';
+	
+			let path               = Routing.generate("admin_chats_asignar_permisos");
+			let id_chat            = $(this).data('chat');
+			let nombre             = $(this).data('nombre');
+
+			title                  = 'Asignar permisos al chat '+ ' '+nombre; 
+			
+			$.ajax({
+				url: path,
+				type: 'GET',
+				data: { id_chat: id_chat },
+				success: function (results) {
+
+				   let options = {
+						title: title,
+						message: results,
+						accion: accion,
+						size: "large"
+					}
+					generateBootboxForm(options);					
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		});
+
+		$('.ver_chat').on('click', function(event) {
+			let path             = Routing.generate("admin_chats_ver");
+			let id_chat          = $(this).data('chat');
+			let nombre           = $(this).data('nombre');
+
+			$.ajax({
+				url: path,
+				type: 'POST',
+				data: { id_chat: id_chat },
+				success: function (results) {
+					bootbox.dialog({
+						size: "large",
+						closeButton: false,
+						title: 'Ver chat '+nombre,
+						message: results,
+						buttons: {
+							success: {
+								label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+								className: "btn btn-sm btn-success",
+								callback: function () {    
+								}
+							}
+						}
+					});
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		});
+
+		function generateBootboxForm(options){
+			bootbox.dialog({
+				size: options.size,
+				closeButton: false,
+				title: options.title,
+				message: options.message,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "Guardar",
+						className: "btn btn-sm btn-success",
+						callback: function() {
+							
+							let form = $('#form_admin').serialize();
+
+							let path  = Routing.generate("admin_chats_agregar");
+
+							if(accion == 'editar'){
+								path  = Routing.generate("admin_chats_editar");
+							}
+							if(accion == 'permisos'){
+							   path  = Routing.generate("admin_chats_asignar_permisos");
+							}
+
+							$.ajax({
+								url:  path,
+								type: 'POST',
+								data: form,
+								success: function (results) {
+									if(results['estado'] == "OK"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_chats");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}else if(results['estado'] == "ERROR"){
+									}else{
+										let options = {
+											title:   title,
+											message: results,
+											accion: accion
+										}
+										if(accion == 'permisos'){
+											   options = {
+												title: title,
+												message: results,
+												accion: accion,
+												size: "large"
+											}
+										}
+
+										generateBootboxForm(options);
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}                                       
+							});
+						}
+					}
+				}
+			});
+		}
+
+	 </script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Chats</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Chats</h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			{% if is_granted('ROLE_FERIA_UC_SUPER_ADMIN') or is_granted('ROLE_FERIA_UC_ADMIN') %}
+			  <div class="form-group text-right mb-2">
+			   <button type="button" id="agregar_chats" class="btn btn-success"><i class="fe-plus"></i> Agregar chat</button>
+			  </div> 
+			{% endif %}
+			<div class="card-box table-responsive">
+				{% if aChats %}
+					  <table id="datatable" class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+						<thead>
+							<tr>
+								<th>Nombre</th>
+								<th>Dias</th>
+								<th>Hora apentura</th>
+								<th>Hora de cierre</th>
+								<th>Estado</th>
+								<th>Fecha de creación</th>
+								<th>Fecha actualización</th>
+								<th>Acciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for chat in aChats %}							
+								<tr>
+								   <td>{{ chat.nombre }}</td>
+								   <td>{{ chat.diasFuncionamiento }}</td>
+								   <td>{{ chat.horaApertura|date('H:i') }}</td>
+								   <td>{{ chat.horaCierre|date('H:i') }}</td>
+								   <td>{{ chat.esatadoNombre }}</td>
+								   <td>{{ chat.createdAt|date('d-m-Y H:i') }}</td>
+								   <td>{% if chat.updatedAt is empty  %} - 
+								   {% else %} {{ chat.updatedAt|date('d-m-Y H:i') }} {% endif %}</td>
+								   <td>
+									{% if is_granted('ROLE_FERIA_UC_SUPER_ADMIN') or is_granted('ROLE_FERIA_UC_ADMIN') %}	
+										<div class="btn-group">
+										   <button type="button" class="btn btn-primary dropdown-toggle waves-effect" data-toggle="dropdown" aria-expanded="false">
+											<i class="fe-more-horizontal"></i> <i class="mdi mdi-chevron-down"></i> </button>
+											 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+											   <a style="cursor:pointer;" class="editar_chats dropdown-item" data-chat="{{ chat.id }}" data-nombre="{{ chat.nombre }}"><i class="fe-edit"></i> Editar</a>
+											   {# {% if chat.idEstado == 1 %}
+													<a style="cursor:pointer;" class="bloquear_chats dropdown-item" 
+													data-chat="{{ chat.id }}" data-nombre="{{ chat.nombre }}"><i class="fe-lock"></i> Bloquear</a>
+												{% elseif chat.idEstado == 2 %}
+													<a style="cursor:pointer;" class="activar_chats dropdown-item" 
+													data-chat="{{ chat.id }}" data-nombre="{{ chat.nombre }}"><i class="fe-unlock"></i> Activar</a>
+											   {% endif %} #}
+												<a style="cursor:pointer;" class="permiso_chat dropdown-item" 
+												data-chat="{{ chat.id }}" data-nombre="{{ chat.nombre }}"><i class="fe-users"></i> Asignar permisos</a>
+
+											   <a style="cursor:pointer;" href="{{ path('admin_chats_mensajes', {id_chat: chat.id }) }}" class="dropdown-item"><i class="fe-send"></i> Contestar mensajes</a>
+											{#    <a style="cursor:pointer;" class="eliminar_chats dropdown-item" data-chat="{{ chat.id }}" data-nombre="{{ chat.nombre }}"><i class="fe-trash-2"></i> Eliminar</a> #}
+											 <a style="cursor:pointer;" class="ver_chat dropdown-item" data-chat="{{ chat.id }}" data-nombre="{{ chat.nombre }}"><i class="fe-eye"></i> Ver Información</a>
+											 </div> 
+										</div>
+								 {% else  %}
+									<a href="{{ path('admin_chats_mensajes',{id_chat: chat.id }) }}" class="btn btn-icon waves-effect waves-light btn-success" role="button" aria-pressed="true"><i class="fe-send"></i> Contestar mensajes</a> 
+									<button type="button" class="ver_chat btn btn-icon waves-effect waves-light btn-info" 
+									data-chat="{{ chat.id }}" data-nombre="{{ chat.nombre }}"><i class="fe-eye"></i> Ver Información</button>      
+								{% endif %}
+									 </td> 
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>   	
+				{% else %}<h3 class="font-weight-bold text-center">Sin Chats asignados</h3>
+				{% endif %}                 
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+<?php
+
+namespace FeriaUC\AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PermisosChatsAdministradores
+ *
+ * @ORM\Table(name="permisos_chats_administradores")
+ * @ORM\Entity(repositoryClass="FeriaUC\AdminBundle\Repository\PermisosChatsAdministradoresRepository")
+ */
+class PermisosChatsAdministradores
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var Administradores
+     *
+     * @ORM\ManyToOne(targetEntity="Administradores")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_administrador", referencedColumnName="id")
+     * })
+     */
+    private $idAdministrador;
+
+     /**
+     * @var Chats
+     *
+     * @ORM\ManyToOne(targetEntity="Chats")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_chat", referencedColumnName="id")
+     * })
+     */
+    private $idChat;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

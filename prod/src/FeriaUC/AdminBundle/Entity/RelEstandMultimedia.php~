@@ -1,0 +1,56 @@
+<?php
+
+namespace FeriaUC\AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * relEstandMultimedia
+ *
+ * @ORM\Table(name="rel_estand_multimedia")
+ * @ORM\Entity(repositoryClass="FeriaUC\AdminBundle\Repository\relEstandMultimediaRepository")
+ */
+class relEstandMultimedia
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+   /**
+     * @var Stands
+     *
+     * @ORM\ManyToOne(targetEntity="Stands")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_stand", referencedColumnName="id")
+     * })
+     */
+    private $idStand;
+
+    /**
+     * @var ContenidoMultimedia
+     *
+     * @ORM\ManyToOne(targetEntity="ContenidoMultimedia")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_contenido_multimedia", referencedColumnName="id")
+     * })
+     */
+    private $idContenidoMultimedia;
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+

@@ -1,0 +1,263 @@
+<link href="{{ asset('bundles/admin/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+
+<script src="{{ asset('bundles/admin/libs/select2/select2.min.js') }}"></script>
+
+<script src="{{ asset('bundles/admin/js/jquery.mask.js') }}"></script>
+
+<script type="text/javascript">
+ $(document).ready(function() {
+
+	 $('#telefono').mask('(+56) 0 0000-0000');
+
+	 $('#rut').rut().on('rutInvalido', function() {
+	 	    $(this).val('');
+			$('#text_rut_invalido').attr('hidden', false);
+	   }).on('rutValido', function(){ 
+			$('#text_rut_invalido').attr('hidden', true);
+	  });
+
+	   $('#id_colegio').select2();
+	   $('#carreras').select2();
+
+	  {% if valores.id_region %}
+	    let id_region = '{{ valores.id_region }}';
+	    cargarComuna(id_region);
+	  {% endif %}
+
+	  {% if valores.option_visitante %}
+	      $('#div_option_visitante').attr('hidden', false);
+	  {% endif %}
+
+	  {% if valores.option_colegio %}
+	      $('#div_option_colegio').attr('hidden', false);
+	  {% endif %}
+
+	  {% if valores.rut %}
+	       let rut = '{{ valores.rut }}';
+	       let rut_fomt = $.formatRut(rut);
+	       $('#rut').val(rut_fomt);
+	  {% endif %}
+ });
+
+ $('#id_visitante').change(function() {
+	$('#div_option_visitante').attr('hidden', true);
+	$('#option_visitante').val('');
+
+	let id_visitante = $(this).val();
+	if(id_visitante == '12'){
+       $('#div_option_visitante').attr('hidden', false);
+	}
+ });
+
+ $('#id_colegio').change(function() {
+	$('#div_option_colegio').attr('hidden', true);
+	$('#option_colegio').val('');
+
+	let id_colegio = $(this).val();
+	if(id_colegio == '3623'){
+       $('#div_option_colegio').attr('hidden', false);
+	}
+});
+
+ $('#id_region').change(function() {
+ 	let id_region = $(this).val();
+	cargarComuna(id_region);
+ });
+
+ function cargarComuna(id_region){
+    $('#id_comuna').attr('disabled', true);
+    let path     = Routing.generate("admin_usuarios_obtener_comunas");
+    let id_comuna = '{{ valores.id_comuna }}';
+
+    $.ajax({
+        url: path,
+        type: 'POST',
+        data: {id_region: id_region},
+    }).done(function(result) {
+    	$('#id_comuna').html('');
+    	$('#id_comuna').html('<option value="">Seleccionar</option>');
+        $.each(result, function(index, val) {
+            $('#id_comuna').append('<option value="'+val.id+'">'+val.nombre+'</option>');
+        });
+        $('#id_comuna option[value="'+id_comuna+'"]').attr("selected", true);
+        $('#id_comuna').attr('disabled', false);
+    });  
+ }
+</script>
+
+<style type="text/css">
+	.select2-container .select2-selection--single {
+        height: 39px;
+   }
+   .select2-container--default .select2-selection--single .select2-selection__rendered {
+     line-height: 37px;
+   }
+   .avatar { 
+	  position: absolute;
+	  opacity: 0;
+	  width: 0;
+	  height: 0;
+	}
+
+	/* IMAGE STYLES */
+	.avatar + img {
+	  cursor: pointer;
+	}
+
+	/* CHECKED STYLES */
+	.avatar:checked + img {
+	  outline: 2px solid #0A77DF;
+	}
+</style>
+
+<div class="form-group">
+	<label for="nombre_completo">Nombre (*)</label>
+	<input type="text" id="nombre" name="nombre" class="form-control {% if errores.nombre %} is-invalid {% endif %}" 
+	value="{{ valores.nombre }}" placeholder="Ingrese el nombre completo">
+	{% if errores.nombre %}
+		<div class="invalid-feedback">
+			{{ errores.nombre }}
+		</div>
+	{% endif %}                    
+</div>
+<div class="form-group">
+	<label for="apellidos">Apellidos (*)</label>
+	<input type="text" id="apellidos" name="apellidos" class="form-control {% if errores.apellidos %} is-invalid {% endif %}" value="{{ valores.apellidos }}" placeholder="Ingrese los apellidos">
+	{% if errores.apellidos %}
+		<div class="invalid-feedback">
+			{{ errores.apellidos }}
+		</div>
+	{% endif %}                    
+</div>
+
+<div class="form-group">
+	<label for="rut">Rut (*)</label>
+	<input type="text" id="rut" name="rut" class="form-control {% if errores.rut %} is-invalid {% endif %}" value="{{ valores.rut }}" placeholder="Ingrese el rut" {{ readonly_rut  ? "readonly": "" }}>
+	<small  class="form-text text-danger" id="text_rut_invalido" hidden>El rut es inválido</small>
+	{% if errores.rut %}
+		<div class="invalid-feedback">
+			{{ errores.rut }}
+		</div>
+	{% endif %}                     
+</div>
+
+<div class="form-group">
+	<label for="email">Email (*)</label>
+	<input type="text" id="username" name="username" class="form-control {% if errores.username %} is-invalid {% endif %}" value="{{ valores.username }}" placeholder="Ingrese el email">
+	{% if errores.username %}
+		<div class="invalid-feedback">
+			{{ errores.username }}
+		</div>
+	{% endif %}  
+</div>
+<div class="form-group">
+	<label for="telefono">Teléfono (*)</label>
+	<input type="text" id="telefono" name="telefono" class="form-control {% if errores.telefono %} is-invalid {% endif %}" value="{{ valores.telefono }}" placeholder="Ingrese el teléfono">
+	{% if errores.telefono %}
+		<div class="invalid-feedback">
+			{{ errores.telefono }}
+		</div>
+	{% endif %} 
+</div>
+<div class="form-group">
+	<label for="id_visitante">Visitante (*)</label>
+	<select id="id_visitante" name="id_visitante" class="form-control {% if errores.id_visitante %} is-invalid {% endif %}">
+		<option value="">Seleccionar</option>
+		{% for visitante in oVisitantes %}
+			<option value="{{ visitante.id }}" {{ visitante.id == valores.id_visitante ? "selected":"" }}>{{ visitante.nombre }}</option>
+		{% endfor %}
+	</select>
+	{% if errores.id_visitante %}
+		<div class="invalid-feedback">
+			{{ errores.id_visitante }}
+		</div>
+	{% endif %} 
+</div>
+<div class="form-group" id="div_option_visitante" hidden>
+	<label for="option_visitante">Otra opción</label>
+	<input type="text" id="option_visitante" name="option_visitante" class="form-control" value="{{ valores.option_visitante }}" placeholder="Otra Opción para el visitante">                     
+</div>
+<div class="form-group">
+	<label for="id_region">Región (*)</label>
+	<select id="id_region" name="id_region" class="form-control {% if errores.id_region %} is-invalid {% endif %}">
+		<option value="">Seleccionar</option>
+		{% for region in oRegiones %}
+			<option value="{{ region.id }}" {{ region.id == valores.id_region ? "selected":"" }}>{{ region.nombre }}</option>
+		{% endfor %}
+	</select>
+	{% if errores.id_region %}
+		<div class="invalid-feedback">
+			{{ errores.id_region }}
+		</div>
+	{% endif %} 
+</div>
+<div class="form-group">
+	<label for="id_comuna">Comuna(*)</label>
+	<select id="id_comuna" name="id_comuna" class="form-control {% if errores.id_comuna %} is-invalid {% endif %}" disabled>
+	</select>
+	{% if errores.id_comuna %}
+		<div class="invalid-feedback">
+			{{ errores.id_comuna }}
+		</div>
+	{% endif %} 
+</div>
+<div class="form-group">
+	<label for="id_colegio">Colegio (*)</label>
+	<select id="id_colegio" name="id_colegio" class="form-control {% if errores.id_colegio %} is-invalid {% endif %}" style="width:100%">
+		<option value="">Seleccionar</option>
+		{% for colegio in oColegios %}
+			<option value="{{ colegio.id }}" {{ colegio.id == valores.id_colegio ? "selected":"" }}>{{ colegio.nombre }}</option>
+		{% endfor %}
+	</select>
+	{% if errores.id_colegio %}
+		<div class="invalid-feedback">
+			{{ errores.id_colegio }}
+		</div>
+	{% endif %} 
+</div>
+<div class="form-group" id="div_option_colegio" hidden>
+	<label for="option_colegio">Otra opción</label>
+	<input type="text" id="option_colegio" name="option_colegio" class="form-control" value="{{ valores.option_colegio }}" placeholder="Otra Opción para el colegio">                     
+</div>
+<div class="form-group">
+	<label for="carreras">Carreras (*)</label>
+	<select id="carreras" name="carreras[]" class="form-control {% if errores.carreras %} is-invalid {% endif %}" multiple style="width:100%">
+		{% for carrera in oCarreras %}
+			<option value="{{ carrera.id }}"{% for id_carrera in valores.carreras if id_carrera == carrera.id %}selected
+			{% endfor %}>{{ carrera.nombre }}</option>
+		{% endfor %}
+	</select>
+	<small  class="form-text text-muted">Selecionar por lo menos una carrera</small>
+	{% if errores.carreras %}
+		<div class="invalid-feedback">
+			{{ errores.carreras }}
+		</div>
+	{% endif %} 
+</div>
+<div class="form-group">
+	<label for="carreras">Ensayo (*)</label>
+	<div class="form-check-inline">
+		  <label class="form-check-label">
+		    <input type="radio" class="radio_ensayo form-check-input" name="ensayo" value="si" {% if valores.ensayo == 'si' %} checked {% endif %}> Si
+		    <input type="radio" class="radio_ensayo form-check-input" name="ensayo" value="no" {% if valores.ensayo == 'no' %} checked {% endif %}> No
+		  </label>  
+	</div>
+	{% if errores.ensayo %}
+		<small  class="form-text text-danger">{{ errores.ensayo }}</small>
+	{% endif %} 	
+</div>	
+<div class="form-group">
+   <label for="password">Selecciona a tu avatar (*)</label>
+   {% if errores.avatar %}<small  class="form-text text-danger">{{ errores.avatar }}</small>{% endif %}
+   <div class="row text-center">
+	   {% for i in 1..22 %}
+	        <div class="col-md-4">
+	     	<label>
+	     		<input class="avatar" type="radio" name="avatar" value="foto-perfil-{{ i }}.png"  
+	     		  {{ valores.avatar == 'foto-perfil-'~i~'.png' ?  'checked': '' }}>
+		        <img class="img-fluid" src="{{  asset('bundles/app/novato/avatars/foto-perfil-'~i~'.png') }}" style="width: 80px;">
+	     	</label>
+	     </div>
+	   {% endfor %}	
+    </div>
+</div>    

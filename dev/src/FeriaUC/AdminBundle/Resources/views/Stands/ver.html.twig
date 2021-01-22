@@ -1,0 +1,96 @@
+<style type="text/css">
+	table th {
+		text-align: center; 
+	}
+</style>
+
+<div class="row text-center">    
+	<div class="col-md-12">
+		<div class="card-box table-responsive">
+			<table class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; 
+			width: 100%;">
+				<tr>
+				  <th>Punto:</th>
+				  <td>{{ oStands.idPunto.titulo }}</td>	
+				</tr>
+				<tr>
+				  <th>Nombre:</th>
+				  <td>{{ oStands.nombre }}</td>	
+				</tr>
+				<tr>
+				  <th>Categoría:</th>
+				  <td>{{ oStands.idCategoria ? oStands.idCategoria.nombre : "Sin categoría disponible" }}</td>	
+				</tr>
+				<tr>
+				  <th>Redes sociales</th>
+				  <td>
+				  	 {% if oStands.urlInstagram  %}
+				  	 	<a href="{{ oStands.urlInstagram  }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+				  	 	target="_blank">
+					  	  <i class="fab fa-instagram fa-lg" aria-hidden="true" title="Instagram" style="color:#808080"></i>		
+					  	</a>
+				  	 {% endif %}
+				  	 {% if oStands.urlFacebook  %}
+				  	 	<a href="{{ oStands.urlFacebook }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+				  	 	target="_blank">
+					  	  <i class="fab fa-facebook fa-lg" aria-hidden="true" title="Facebook" style="color:#2d88ff"></i>		
+					  	</a>
+				  	 {% endif %}
+				  	 {% if oStands.urlYoutube  %}
+			  	 		<a href="{{ oStands.urlYoutube }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+			  	 		target="_blank">
+					  	  <i class="fab fa-youtube fa-lg" aria-hidden="true" title="Youtube" style="color:#FF0000"></i>		
+					  	</a>
+				  	 {% endif %}
+				  	 {% if oStands.urlWeb %}
+				  	 	<a href="{{ oStands.urlWeb  }}" class="btn btn-link btn-lg" role="button" aria-pressed="true" 
+				  	 	target="_blank">
+					  	  <i class="fas fa-globe fa-lg" aria-hidden="true" title="Web" style="color:#808080"></i>	
+					  	</a>
+					  {% endif %}
+				  </td>	
+				</tr>
+				<tr>
+				 <th>Malla Curricular</th>
+				 <td>
+				  {% if oStands.mallaCurricular %}
+				    <a href="{{ asset('uploads/stands/malla_curricular/' ~ oStands.mallaCurricular) }}" download>
+				  	  <i class="fa fa-download" aria-hidden="true"> Descargar a aqui</i>		
+				  	</a> 
+				  {% else %} Sin malla curricular disponible	
+				  {% endif %}	
+				 </td>	
+				</tr>
+				<tr>
+				  <th>Imagen Principal:</th>
+				  <td>
+				  {% if oStands.imagenPrincipal %}
+				  	<a href="{{ asset('uploads/stands/imagen_principal/' ~ oStands.imagenPrincipal) }}" target="_blank">
+						<center><img width="100" src="{{ asset('uploads/stands/imagen_principal/' ~  oStands.imagenPrincipal) }}"></center>
+					</a>
+					{% else %} Sin imagen princiapal  disponible	
+			        {% endif %}
+				  </td>	
+				 </tr>
+				<tr>
+				 <th>Fecha de creación</th>
+				 <td>{{ oStands.createdAt|date('d-m-Y H:i') }}</td>	
+				</tr>
+				<tr>
+				 <th>Fecha de actualización</th>
+				 <td>
+				 	{{ oStands.updatedAt ? oStands.updatedAt|date('d-m-Y H:i'):"-" }}
+				 </td>	
+				</tr>
+				<tr>
+				  <th>Información general:</th>
+					  <td>
+						  {% if oStands.infoGeneral %} {{ oStands.infoGeneral|raw }} 
+						  {% else %} Sin información disponible
+						  {% endif %}
+					  </td>	
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>

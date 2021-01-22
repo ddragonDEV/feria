@@ -1,0 +1,17 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	{% if flat %}
+       timeOut();
+	{%  endif %}
+});
+function timeOut() {
+  setTimeout(function(){
+  	let path_show = Routing.generate("chat");
+    window.location.href = path_show;  
+  }, 1000);
+}
+</script>
+
+<div class="alert alert-warning" role="alert">
+   <p>El embajador te bloqueo temporalmente para el chat de esta carrera.</p>
+</div>

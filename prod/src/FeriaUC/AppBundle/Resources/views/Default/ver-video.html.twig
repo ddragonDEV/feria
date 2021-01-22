@@ -1,0 +1,201 @@
+{% extends "::base_mapa.html.twig" %}
+{% block stylesheets %}
+	<style>
+		.btn-header{
+			position: absolute;
+    		top: calc(var(--headerheight) + 10px);
+    		width: 100%;    
+    		padding: 0 15px;
+		}
+		.btn-volver{
+			float: left;
+		    line-height: 4.8rem;
+		    height: 5rem;
+		    padding: 0 2rem;
+		    transition: var(--duration) ease-out;
+		    transition-property: background, color;
+		    z-index: 20;
+		    cursor: pointer;
+		    pointer-events: auto;
+		    background-color: var(--celeste);
+		    border-radius: 2.5rem;
+		    font-size: 1.4rem;
+		    font-weight: 400;
+		}
+
+		.btn-volver a{
+		    color: var(--blanco);
+		    text-decoration: none;
+		}
+
+
+		.btn-youtube{
+			float: right;
+		    line-height: 4.8rem;
+		    height: 5rem;
+		    padding: 0 2rem;
+		    transition: var(--duration) ease-out;
+		    transition-property: background, color;
+		    z-index: 20;
+		    cursor: pointer;
+		    pointer-events: auto;
+		    background-color: var(--error);
+		    border-radius: 2.5rem;
+		    font-size: 1.4rem;
+		    font-weight: 400;
+		    display: none;
+		}
+
+		.btn-youtube a{
+		    color: var(--blanco);
+		    text-decoration: none;
+		}
+
+		.contenido-iframes{
+		    width: 100%;
+		    position: absolute;
+		    top: calc(var(--headerheight) + 70px);
+		    padding: 0 5px;
+		}
+
+		.video {
+			width: 74.5%;
+			float: left;
+			position: fixed;
+    		height: calc(100% - ( calc(var(--headerheight) + 70px) + var(--footerheight)));
+    		padding-bottom: 5px;
+		}
+		.chat {
+			float: right;
+			width: 24.5%;
+			position: fixed;
+    		height: calc(100% - ( calc(var(--headerheight) + 70px) + var(--footerheight)));
+    		padding-bottom: 5px;
+    		left: 75.2%;
+	   	}
+
+		@media all and (orientation: portrait) {
+			.btn-youtube{
+				display: block;
+			}
+			.chat {
+				display: none;
+			}
+			.video {
+				width: 98%;
+			}
+		}
+	</style>
+{% endblock %}
+{% block body %}
+	<header id="main_header" class="uc-header">
+		<nav class="uc-navbar">
+			<!-- Menú para versión Escritorio -->
+			<div class="container d-none d-lg-block">
+				<div class="row align-items-center">
+					<div class="col-lg-3 col-xl-2">
+						<img src="https://kit-digital-uc-prod.s3.amazonaws.com/assets/logo-uc-color.svg" alt="Logo de Facultad" class="img-fluid">
+					</div>
+					<div class="col-lg-8 col-xl-9">
+						<div class="h2 text-font--serif text-color--blue mt-24">Expo Virtual Futuro Novato UC 2021</div>
+						<div class="text-color--gray p-size--lg">Toda la información del proceso de Admisión 2021 de la UC</div>
+					</div>
+					<a class="uc-navbar_mobile-button" data-collapse="collapseMobileNav3">
+						<span class="uc-icon"></span>
+						<!--						Menú-->
+					</a>
+				</div>
+			</div>
+			<!-- Menú para versión Móvil -->
+			<div class="uc-navbar_mobile d-block d-lg-none">
+				<div class="uc-navbar_mobile-bar navbar-brand">
+					<div class="uc-navbar_mobile-logo navbar-light">
+						<div class="h2 text-font--serif text-color--blue">Expo Virtual Futuro Novato UC 2021</div>
+					</div>
+					<a class="uc-navbar_mobile-button" data-collapse="collapseMobileNav3">
+						<span class="uc-icon"></span>
+						Menú
+					</a>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<div id="sltr_menu">
+		<ul>
+		   <li>
+				<a style="cursor: pointer;" href="{{ path('perfil') }}">Perfil</a>
+			</li>
+			<li>
+				<a style="cursor: pointer;" href="{{ path('logout') }}">Cerrar sesión</a>
+			</li>
+		</ul>
+	</div>
+	<div class="btn-header">
+		<div class="btn-volver">
+			<a href="{{ path('inicio') }}"><i class="uc-icon" style="color: white">arrow_back</i>&nbsp;Volver al mapa</a>
+		</div>	
+		<div class="btn-youtube">
+			<a href="#" onclick="irYoutube();return false;"><i class="uc-icon" style="color: white">slideshow</i>&nbsp;ir a youtube</a>
+		</div>
+	</div>
+	<div class="contenido-iframes">
+		<div class="div-iframe-video">
+			<iframe  class="video" src="https://www.youtube.com/embed/{{ codigo_youtube }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		</div>
+		<div class="div-iframe-chat">
+			<iframe  class="chat" allowfullscreen frameborder="0" src="https://www.youtube.com/live_chat?is_popout=1&v={{ codigo_youtube }}&is&embed_domain={{ domain }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"></iframe>
+		</div>
+	</div>
+	<footer id="main_footer" class="uc-footer">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="logo">
+					<a href="/">
+						<img src="{{ asset('bundles/app/mapa/svg/Acreditación - gratuidad.svg') }}" alt="" class="img-fluid">
+					</a>
+				</div>
+				<div class="social">
+					<ul class="uc-footer_social">
+						<li>
+							<a href="https://www.facebook.com/admisionenlauc/" target="_blank">
+								<img src="https://kit-digital-uc-prod.s3.amazonaws.com/assets/social-icon-facebook.svg" alt="Facebook">
+							</a>
+						</li>
+						<li>
+							<a href="https://www.instagram.com/admisionuc/?hl=es-la"  target="_blank">
+								<img src="https://kit-digital-uc-prod.s3.amazonaws.com/assets/social-icon-instagram.svg" alt="Instagram">
+							</a>
+						</li>
+						<li>
+							<a href="https://www.youtube.com/channel/UCwpok7_Wf2xLAmVKaskUPvg" target="_blank">
+								<img src="https://kit-digital-uc-prod.s3.amazonaws.com/assets/social-icon-youtube.svg" alt="Youtube">
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+{% endblock %}
+{% block javascripts %}
+	<script type="text/javascript">
+		headerHeight = parseInt($('#main_header').outerHeight());
+		footerHeight = parseInt($('#main_footer').outerHeight());
+		$(':root').css({
+			'--headerheight': headerHeight + 'px',
+			'--footerheight': footerHeight + 'px'
+		});
+		$(document).on('click', '.uc-navbar_mobile-button', function (e) {
+			$('body').toggleClass('open--menu');
+		});
+		
+		function irYoutube() {
+			var r = confirm("Estas dejando la feria, vuelve tan pronto termine la charla para que no pierdas nada de la UC");
+			if (r == true) {
+				var patch = 'vnd.youtube:{{ codigo_youtube }}';
+				window.open(patch, '_blank');
+			}
+		}
+		
+	</script>
+{% endblock %}

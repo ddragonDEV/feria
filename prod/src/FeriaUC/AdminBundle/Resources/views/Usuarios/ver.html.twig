@@ -1,0 +1,102 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+		let rut = $('#td_rut_fomt').text();
+		let rut_fomt = $.formatRut(rut);
+		$('#td_rut_fomt').text(rut_fomt);
+	});
+</script>
+
+<style type="text/css">
+	table th {
+		text-align: center; 
+	}
+</style>
+
+<div class="row text-center">    
+	<div class="col-md-12">
+		<div class="card-box table-responsive">
+			<table class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; 
+			width: 100%;">
+			 <tr>
+			 	<th>Nombre Completo</th>
+			 	<td>{{ oUsuarios.nombre }} {{ oUsuarios.apellidos }}</td>
+			 </tr>
+			 <tr>
+			 	<th>Rut</th>
+			 	<td id="td_rut_fomt">{{ oUsuarios.rut }}</td>
+			 </tr>
+			 <tr>
+			 	<th>Email</th>
+			 	<td>{{ oUsuarios.username }}</td>
+			 </tr>
+			 <tr>
+			 	<th>Visitante</th>
+			 	<td>{{ oUsuarios.idVisitante.nombre }}</td>
+			 </tr>
+			 {% if oUsuarios.opcionVisitante  %}
+			 	<tr>
+			 	<th>Otra Opción</th>
+			 	<td>{{ oUsuarios.opcionVisitante }}</td>
+			 </tr>
+			 {% endif %}
+			 <tr>
+			 	<th>Región</th>
+			 	<td>{{ oUsuarios.idRegion.nombre }}</td>
+			 </tr>
+			 <tr>
+			 	<th>Comuna</th>
+			 	<td>{{ oUsuarios.idComuna.nombre }}</td>
+			 </tr>
+			  <tr>
+			 	<th>Colegio</th>
+			 	<td>{{ oUsuarios.idColegio.nombre }}</td>
+			 </tr>
+			 {% if oUsuarios.opcionColegio  %}
+			 	<tr>
+				 	<th>Otra Opción</th>
+				 	<td>{{ oUsuarios.opcionColegio }}</td>
+			    </tr>
+			 {% endif %}
+			 <tr>
+			 	<th>Carreras</th>
+			 	<td>
+			 		<ul>
+			 			{% for carrera in oCarreras %}
+			 				<li style="list-style:none;">{{ carrera.nombre }}</li>
+			 			{% endfor %}
+			 		</ul>
+			 	</td>
+			 </tr>
+			 <tr>
+			 	<th>Ensayo</th>
+			 	<td>{{ oUsuarios.ensayo }}</td>
+			 </tr>
+			 <tr>
+			 	<th>términos y condiciones</th>
+			 	<td>{{ oUsuarios.condiciones ? 'acepto':'No acepto' }}</td>
+			 </tr>
+			 <tr>
+			 	<th>Fecha de creación</th>
+			 	<td>{{ oUsuarios.createdAt|date('d-m-Y H:i') }}</td>
+			 </tr>
+			 <tr>
+				 <th>Fecha de actualización</th>
+				 <td>
+				 	{{ oUsuarios.updatedAt ? oUsuarios.updatedAt|date('d-m-Y H:i'):"-" }}
+				 </td>	
+			</tr>
+			<tr>
+			   <th>Avatar</th>
+			   <td>
+			   	{% if oUsuarios.imagenPerfil  %} 
+			   		<a href="{{ asset('bundles/app/novato/avatars/' ~ oUsuarios.imagenPerfil) }}" target="_blank">
+					<center><img width="85" src="{{ asset('bundles/app/novato/avatars/' ~ oUsuarios.imagenPerfil) }}"></center>
+					</a> 
+			   	{% else %} Sin imagen disponible
+			   	{% endif %}	
+			   </td>	
+			</tr>
+			</table>
+		</div>
+	</div>
+</div>

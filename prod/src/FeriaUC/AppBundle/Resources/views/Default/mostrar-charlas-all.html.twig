@@ -1,0 +1,214 @@
+<style>
+
+	@media all and (orientation: landscape) {
+		#popup--normal .content {
+			width: 90%;
+			padding-bottom: 0;
+		}
+		#popup--menu{
+			width: 10%;
+		}
+
+	}@media only screen and (min-device-width : 320px) and (max-device-width : 480px){
+		.charlas .charla {
+			height: 97%;
+		}
+	}
+	/*#popup--menu {
+    	width: 30%!important;
+	}*/
+
+</style>
+<div class="content" style="">
+	<div class="loading--text" data-aria-hidden="true"><i class="fas fa-spinner fa-spin color--azul"></i><span class="h6">Cargando&hellip;</span></div>
+
+	<div class="content_in">
+
+
+		<div class="bloque charlas">
+			<div class="in">
+				<h3>Programa Charlas</h3>
+				{% for fecha, item in arrPresente %}
+					<div class="dia">
+						<h4>{{ fecha|date('d') }} de {{ fecha|date('F')|replace({
+														  'January'  : 'Enero',
+														  'February' : 'Febrero',
+														  'March'    : 'Marzo',
+														  'April'    :  'Abril',
+														  'May'      :  'Mayo',
+														  'June'     :  'Junio',
+														  'July'     :  'Julio',
+														  'August'   :  'Agosto',
+														  'September':  'Septiembre',
+														  'October'  :  'Octubre',
+														  'November' :  'Noviembre',
+														  'December' : 'Diciembre',
+														})  }}
+						</h4>
+						<div class="bloque-horario">
+							{# <div class="slider_holder slider--charlas"> #}
+							<div class="slider_holder">
+								<div class="slider">
+								{% for contenido in item %}
+									<div class="slide">
+									   <div class="hora">
+											<div>
+												<div class="numero get--bl-hora">{{ contenido.hora }}</div>
+											</div>
+										</div>
+										  <div class="charla {{ contenido.class_charla }}">
+										    <div class="dato">
+										    	<div class="titulo">{{ contenido.stand|upper }}</div>
+										    </div>
+											<div class="dato">
+												<div class="titulo">Charla</div>
+												<div class="explicacion"><span class="get--ch-nombre">{{ contenido.titulo }}</span></div>
+											</div>
+											<div class="dato">
+												<div class="titulo">Relator</div>
+												<div class="explicacion"><span class="get--ch-relator">{{ contenido.expositor }}</span></div>
+											</div>
+											{# <div class="dato">
+												<div class="titulo">Hora</div>
+												<div class="explicacion"><span class="get--ch-hora">12:15</span></div>
+											</div> #}
+											<div class="dato">
+											  <div class="titulo">Reseña</div>
+												<div class="explicacion"><span class="get--ch-lugar">
+												 {{ contenido.lugar|slice(0,  200) ~ '...' }}</span></div>
+											</div>
+											<div class="button">
+												<a href="{{ path('ver_video', {codigo_youtube: contenido.codigo_youtube}) }}"><span>{{ contenido.btn_texto }}</span></a>
+											</div><br><br>
+										</div>
+									</div>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+				{% for fecha, item in arrFuturo %}
+					<div class="dia">
+						<h4>{{ fecha|date('d') }} de {{ fecha|date('F')|replace({
+														  'January'  : 'Enero',
+														  'February' : 'Febrero',
+														  'March'    : 'Marzo',
+														  'April'    :  'Abril',
+														  'May'      :  'Mayo',
+														  'June'     :  'Junio',
+														  'July'     :  'Julio',
+														  'August'   :  'Agosto',
+														  'September':  'Septiembre',
+														  'October'  :  'Octubre',
+														  'November' :  'Noviembre',
+														  'December' : 'Diciembre',
+														})  }}
+						</h4>
+						<div class="bloque-horario">
+							{# <div class="slider_holder slider--charlas"> #}
+							<div class="slider_holder">
+								<div class="slider">
+								{% for contenido in item %}
+									<div class="slide">
+									   <div class="hora">
+											<div>
+												<div class="numero get--bl-hora">{{ contenido.hora }}</div>
+											</div>
+										</div>
+										  <div class="charla {{ contenido.class_charla }}">
+										    <div class="dato">
+										    	<div class="titulo">{{ contenido.stand|upper }}</div>
+										    </div>
+											<div class="dato">
+												<div class="titulo">Charla</div>
+												<div class="explicacion"><span class="get--ch-nombre">{{ contenido.titulo }}</span></div>
+											</div>
+											<div class="dato">
+												<div class="titulo">Relator</div>
+												<div class="explicacion"><span class="get--ch-relator">{{ contenido.expositor }}</span></div>
+											</div>
+											{# <div class="dato">
+												<div class="titulo">Hora</div>
+												<div class="explicacion"><span class="get--ch-hora">12:15</span></div>
+											</div> #}
+											<div class="dato">
+											  <div class="titulo">Reseña</div>
+												<div class="explicacion"><span class="get--ch-lugar">
+												 {{ contenido.lugar|slice(0,  200) ~ '...' }}</span></div>
+											</div>
+											<div class="button">
+												<a href="{{ path('ver_video', {codigo_youtube: contenido.codigo_youtube}) }}"><span>{{ contenido.btn_texto }}</span></a>
+											</div><br><br>
+										</div>
+									</div>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+				{% for fecha, item in arrPasado %}
+					<div class="dia">
+						<h4>{{ fecha|date('d') }} de {{ fecha|date('F')|replace({
+														  'January'  : 'Enero',
+														  'February' : 'Febrero',
+														  'March'    : 'Marzo',
+														  'April'    :  'Abril',
+														  'May'      :  'Mayo',
+														  'June'     :  'Junio',
+														  'July'     :  'Julio',
+														  'August'   :  'Agosto',
+														  'September':  'Septiembre',
+														  'October'  :  'Octubre',
+														  'November' :  'Noviembre',
+														  'December' : 'Diciembre',
+														})  }}
+						</h4>
+						<div class="bloque-horario">
+							{# <div class="slider_holder slider--charlas"> #}
+							<div class="slider_holder">
+								<div class="slider">
+								{% for contenido in item %}
+									<div class="slide">
+									   <div class="hora">
+											<div>
+												<div class="numero get--bl-hora">{{ contenido.hora }}</div>
+											</div>
+										</div>
+										  <div class="charla {{ contenido.class_charla }}">
+										    <div class="dato">
+										    	<div class="titulo">{{ contenido.stand|upper }}</div>
+										    </div>
+											<div class="dato">
+												<div class="titulo">Charla</div>
+												<div class="explicacion"><span class="get--ch-nombre">{{ contenido.titulo }}</span></div>
+											</div>
+											<div class="dato">
+												<div class="titulo">Relator</div>
+												<div class="explicacion"><span class="get--ch-relator">{{ contenido.expositor }}</span></div>
+											</div>
+											{# <div class="dato">
+												<div class="titulo">Hora</div>
+												<div class="explicacion"><span class="get--ch-hora">12:15</span></div>
+											</div> #}
+											<div class="dato">
+											  <div class="titulo">Reseña</div>
+												<div class="explicacion"><span class="get--ch-lugar">
+												 {{ contenido.lugar|slice(0,  200) ~ '...' }}</span></div>
+											</div>
+											<div class="button">
+												<a href="{{ path('ver_video', {codigo_youtube: contenido.codigo_youtube}) }}"><span>{{ contenido.btn_texto }}</span></a>
+											</div><br><br>
+										</div>
+									</div>
+								{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>

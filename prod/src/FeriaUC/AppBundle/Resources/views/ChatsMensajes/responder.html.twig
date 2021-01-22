@@ -1,0 +1,89 @@
+<link href="{{ asset('bundles/app/css/style-chat.css') }}" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+
+  chat = true;
+
+  var id_ultimo_json_mensaje = '';
+
+  $('#btn-enviar').on('click',  function() {
+	  chat = false;
+
+	  var texto      = $('#texto').val();
+	  var id_chat    = $('#id_chat').val();
+	  var path       = Routing.generate("chat_responder");
+
+	  $.ajax({
+		 url:  path,
+		 type: 'POST',
+		 data: {texto: texto, id_chat: id_chat},
+		 success: function (results) {
+			if(results.estado == 'OK'){
+
+			  var html = '<div class="media w-50 mb-3"><img src="https://res.cloudinary.com/mhmd/image/upload/v1564960395/avatar_usae7z.svg" alt="user" width="50" class="rounded-circle">';
+				html += '<div class="media-body ml-3">';
+				html += '<div class="bg-light rounded py-2 px-3 mb-2">';
+				html += '<p class="text-small mb-0 text-muted">'+results.html.texto+'</p>';
+				html += '</div>';
+				html += '<p class="small text-muted">'+results.html.fecha+'</p>';
+				html += '</div>';
+				html += '</div>';
+
+			  $('#chatArea').append(html);
+			  $('#texto').val('');
+		  }
+		  chat = true;
+		 }
+	  });
+  });
+
+  function loadChat() {
+	  if(chat){
+		var id_chat = $('#id_chat').val();
+		var path    = Routing.generate("load_chat");
+
+		 $.ajax({
+			 url:  path,
+			 type: 'POST',
+			 data: { id_chat: id_chat, id_ultimo_json_mensaje: id_ultimo_json_mensaje },
+			 success: function (results) {
+			 	id_ultimo_json_mensaje =  results.id_ultimo_json_mensaje;
+			 	if(results.estado == 'OK'){
+			 		var html = '<div class="media w-50 ml-auto mb-3">';
+					html += '<div class="media-body">';
+					html += '<div class="bg-primary rounded py-2 px-3 mb-2">';
+					html += '<p class="text-small mb-0 text-white">'+results.html.texto+'</p>';
+					html += '</div>';
+					html += '<p class="small text-muted">'+results.html.fecha+'</p>';
+					html += '</div>';
+					html += '</div>';
+
+				  $('#chatArea').append(html); 
+			 	}
+			 }
+		});
+	  }
+  }
+  setInterval("loadChat()", 15000);
+</script>
+
+
+<div class="container">
+	<div class="row overflow-hidden shadow">
+		<div class="col-12 chat-box bg-white">
+		  <div id="chatArea">
+			{{  include('AppBundle:ChatsMensajes:text.chat.html.twig', {arrChatsMensajes: arrChatsMensajes})  }}
+		  </div>
+		</div>
+	</div>
+	 <div class="col-12 mt-2">
+		<div class="input-group">
+			<input type="hidden" name="id_chat" id="id_chat" value="{{ id_chat }}">
+			<input type="text" placeholder="Type a message" aria-describedby="button-addon2" class="form-control bg-light" 
+			name="texto" id="texto">
+			<div class="input-group-append">
+			  <button id="btn-enviar" type="button" class="btn btn-primary"> <i class="fe-send"></i></button>
+			</div>
+	  </div>
+	</div>
+</div>

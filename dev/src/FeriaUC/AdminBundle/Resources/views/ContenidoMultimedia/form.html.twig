@@ -1,0 +1,35 @@
+<div class="form-group">
+	<label for="nombre">Nombre (*)</label>
+	<input type="text" id="nombre" name="nombre" class="form-control {% if errores.nombre %} is-invalid {% endif %}" 
+	 value="{{ valores.nombre }}" placeholder="Ingrese el nombre">
+	{% if errores.nombre %}
+		<div class="invalid-feedback">
+		  {{ errores.nombre }}
+		</div>
+	{% endif %}                    
+</div>
+<div class="form-group">
+	 <label for="tipo">Tipo de multimedia (*)</label>
+	 <select class="form-control {% if errores.id_tipo_multimedia %} is-invalid {% endif %}" id="id_tipo_multimedia" name="id_tipo_multimedia">
+		<option value="">Seleccionar</option>
+		{% for tipo in oTiposMultimedia %}
+			<option value="{{ tipo.id }}"{{ valores.id_tipo_multimedia == tipo.id ? "selected":"" }}>
+				{{ tipo.nombre }}
+			</option>
+		{% endfor %}
+	</select>
+	{% if errores.id_tipo_multimedia %}
+		<div class="invalid-feedback">
+		  {{ errores.id_tipo_multimedia }}
+		</div>
+   {% endif %}
+</div>
+<div class="form-group">
+  <label for="url">Ajuntar imagen</label>  
+  <input type="file" id="url" name="url" class="form-control">
+</div>
+<div class="form-group">
+	<label for="nombre">Codigo youtube </label>
+	<input type="text" id="codigo_youtube" name="codigo_youtube" class="form-control" 
+	 value="{{ valores.codigo_youtube }}" placeholder="Ingrese el nombre">                    
+</div>

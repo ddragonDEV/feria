@@ -1,0 +1,104 @@
+<script type="text/javascript">
+	
+	$('#id_tipo_multimedia').change(function() {
+
+		$('#div_img').attr('hidden', true);
+		$('#div_youtube').attr('hidden', true);
+
+		const url_img = document.querySelector('#url_img');
+		url_img.value = '';
+
+		const url_youtube = document.querySelector('#url_youtube');
+		url_youtube.value = '';
+
+		$('#codigo_youtube').val('');
+
+		var id_tipo_multimedia = $(this).val();
+		if(id_tipo_multimedia == 1){
+	        $('#div_img').attr('hidden', false);
+
+		}
+		else if(id_tipo_multimedia == 2){
+	       $('#div_youtube').attr('hidden', false);
+		}
+	});
+	// $('#url').bind('change', function() {
+	// 	const imagen = document.querySelector('#url');
+
+	// 	$('#url_error').text('');
+							 
+	// 	var imagenType = $(this)[0].files[0].type;
+	// 	var buscarType = imagenType.indexOf("image");
+	// 	if(buscarType == -1){
+	// 		 $('#url_error').text('Solo se permite extensiones de tipo imagen.');
+	// 		 imagen.value = '';
+	// 		 return false;
+	// 	}
+
+	// 	var imagenSize      =  $(this)[0].files[0].size;
+	// 	var sizekiloBytes   =  parseInt(imagenSize / 1024);
+	// 	var sizeMegaBytes   =  Math.round(parseInt(sizekiloBytes / 1024));
+	// 	if(sizeMegaBytes > 1){
+	// 		 $('#url_error').text('Lo maximo  que se puede subir es una imagen de 1MB.');
+	// 		 imagen.value = '';         
+	// 		 return false;
+	// 	}
+	// 	return false;
+ //     });
+</script>
+
+<div class="row">    
+	  <div class="col-md-12">
+		  <form id="form_admin"  method="POST">
+		  	   <input type="hidden" name="id_contenido_multimedia" 
+		  	   id="id_contenido_multimedia" value="{{ valores.id_contenido_multimedia }}">
+		  	   <input type="hidden" name="id_punto" id="id_punto" value="{{ valores.id_punto }}">
+		  	   <input type="hidden" name="id_stand" id="id_stand" value="{{ valores.id_stand }}">
+
+		  	   <div class="form-group">
+					<label for="nombre">Nombre (*)</label>
+					<input type="text" id="nombre" name="nombre" class="form-control {% if errores.nombre %} is-invalid {% endif %}" value="{{ valores.nombre }}" placeholder="Ingrese el nombre">
+					{% if errores.nombre %}
+						<div class="invalid-feedback">
+						  {{ errores.nombre }}
+						</div>
+					{% endif %}                    
+				</div>
+				<div class="form-group">
+					 <label for="tipo">Tipo de multimedia (*)</label>
+					 <select class="form-control {% if errores.id_tipo_multimedia %} is-invalid {% endif %}" id="id_tipo_multimedia" name="id_tipo_multimedia">
+						<option value="">Seleccionar</option>
+						{% for tipo in oTiposMultimedia %}
+							<option value="{{ tipo.id }}"{{ valores.id_tipo_multimedia == tipo.id ? "selected":"" }}>
+								{{ tipo.nombre }}
+							</option>
+						{% endfor %}
+					</select>
+					{% if errores.id_tipo_multimedia %}
+						<div class="invalid-feedback">
+						  {{ errores.id_tipo_multimedia }}
+						</div>
+				   {% endif %}
+				</div>
+				<div class="form-group" id="div_youtube" {{ valores.id_tipo_multimedia == 1 ? "hidden":"" }}>
+				     <div id="sections_multimedia_youtube">
+						 <div class="section_multimedia_youtube  mb-2">
+						 	<label for="url">Ajuntar imagen</label>  
+					        <input type="file" id="url_youtube" name="url_youtube" class="form-control mb-2" accept="image/*">
+						  	<label for="codigo_youtube">Código youtube </label>
+							<input type="text" id="codigo_youtube" name="codigo_youtube" class="form-control mb-1"  placeholder="Ingrese el codigo de youtube" value="{{ valores.codigo_youtube }}"> 		
+						 </div>
+					 </div>
+				</div>
+
+				<div class="form-group" id="div_img" {{ valores.id_tipo_multimedia == 2 ? "hidden":"" }}>
+				     <div id="sections_multimedia_img">
+						 <div class="section_multimedia_img  mb-2">
+						 	<label for="url">Ajuntar imagen</label>  
+					        <input type="file" id="url_img" name="url_img" class="form-control mb-2" accept="image/*">		
+						 </div>
+					 </div>
+				</div>   
+		  </form>
+	  </div>
+</div>

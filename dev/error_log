@@ -1,0 +1,60 @@
+[21-Oct-2020 18:40:09 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected 'rand' (T_STRING), expecting ')' in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php:382
+Stack trace:
+#0 [internal function]: Symfony\Component\Debug\DebugClassLoader->loadClass('FeriaUC\\AppBund...')
+#1 [internal function]: spl_autoload_call('FeriaUC\\AppBund...')
+#2 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(109): ReflectionClass->__construct('FeriaUC\\AppBund...')
+#3 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(48): Symfony\Component\Config\Resource\ReflectionClassResource->computeHash()
+#4 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/SelfCheckingResourceChecker.php(34): Symfony\Component\Config\Resource\ReflectionClassResource->isFresh(1603305235)
+#5 /home/devferiau in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 382
+[21-Oct-2020 18:40:37 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected 'rand' (T_STRING), expecting ')' in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php:382
+Stack trace:
+#0 [internal function]: Symfony\Component\Debug\DebugClassLoader->loadClass('FeriaUC\\AppBund...')
+#1 [internal function]: spl_autoload_call('FeriaUC\\AppBund...')
+#2 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(109): ReflectionClass->__construct('FeriaUC\\AppBund...')
+#3 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(48): Symfony\Component\Config\Resource\ReflectionClassResource->computeHash()
+#4 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/SelfCheckingResourceChecker.php(34): Symfony\Component\Config\Resource\ReflectionClassResource->isFresh(1603305235)
+#5 /home/devferiau in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 382
+[21-Oct-2020 19:14:43 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected '""' (T_CONSTANT_ENCAPSED_STRING), expecting ')' in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php:387
+Stack trace:
+#0 [internal function]: Symfony\Component\Debug\DebugClassLoader->loadClass('FeriaUC\\AppBund...')
+#1 [internal function]: spl_autoload_call('FeriaUC\\AppBund...')
+#2 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(109): ReflectionClass->__construct('FeriaUC\\AppBund...')
+#3 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(48): Symfony\Component\Config\Resource\ReflectionClassResource->computeHash()
+#4 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/SelfCheckingResourceChecker.php(34): Symfony\Component\Config\Resource\ReflectionClassResource->isFresh(1603305235)
+#5 in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 387
+[25-Oct-2020 21:34:58 UTC] PHP Fatal error:  Allowed memory size of 1610612736 bytes exhausted (tried to allocate 67108864 bytes) in phar:///opt/cpanel/composer/bin/composer/src/Composer/DependencyResolver/Solver.php on line 223
+[25-Oct-2020 22:33:55 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected 'use' (T_USE), expecting ',' or ';' in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Command/SocketCommand.php:17
+Stack trace:
+#0 [internal function]: Symfony\Component\Debug\DebugClassLoader->loadClass('FeriaUC\\AdminBu...')
+#1 [internal function]: spl_autoload_call('FeriaUC\\AdminBu...')
+#2 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(109): ReflectionClass->__construct('FeriaUC\\AdminBu...')
+#3 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ReflectionClassResource.php(48): Symfony\Component\Config\Resource\ReflectionClassResource->computeHash()
+#4 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/SelfCheckingResourceChecker.php(34): Symfony\Component\Config\Resource\ReflectionClassResource->isFresh(1603662066)
+#5 /home/devferiauclo in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Command/SocketCommand.php on line 17
+[30-Oct-2020 20:13:36 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected '<', expecting end of file in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/AdministradoresController.php:3
+Stack trace:
+#0 [internal function]: Symfony\Component\Debug\DebugClassLoader->loadClass('FeriaUC\\AdminBu...')
+#1 [internal function]: spl_autoload_call('FeriaUC\\AdminBu...')
+#2 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ClassExistenceResource.php(82): class_exists('FeriaUC\\AdminBu...')
+#3 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/ContainerBuilder.php(371): Symfony\Component\Config\Resource\ClassExistenceResource->isFresh(0)
+#4 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/Loader/FileLoader.php(150): Symfony\Component\DependencyInjection\ContainerBuilder->getReflectionClass('FeriaUC\\AdminBu...')
+#5 /home/devferiauclove/pu in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/AdministradoresController.php on line 3
+[30-Oct-2020 20:13:39 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected '<', expecting end of file in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/AdministradoresController.php:3
+Stack trace:
+#0 [internal function]: Symfony\Component\Debug\DebugClassLoader->loadClass('FeriaUC\\AdminBu...')
+#1 [internal function]: spl_autoload_call('FeriaUC\\AdminBu...')
+#2 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Resource/ClassExistenceResource.php(82): class_exists('FeriaUC\\AdminBu...')
+#3 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/ContainerBuilder.php(371): Symfony\Component\Config\Resource\ClassExistenceResource->isFresh(0)
+#4 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/DependencyInjection/Loader/FileLoader.php(150): Symfony\Component\DependencyInjection\ContainerBuilder->getReflectionClass('FeriaUC\\AdminBu...')
+#5 /home/devferiauclove/pu in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/AdministradoresController.php on line 3
+[30-Oct-2020 20:14:13 UTC] PHP Fatal error:  Cannot use Symfony\Bundle\FrameworkBundle\Controller\Controller as Controller because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/AdministradoresController.php on line 509
+[30-Oct-2020 20:14:19 UTC] PHP Fatal error:  Cannot use Symfony\Bundle\FrameworkBundle\Controller\Controller as Controller because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/AdministradoresController.php on line 509
+[03-Nov-2020 18:38:18 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 2621440 bytes) in /home/devferiauclove/public_html/vendor/doctrine/dbal/lib/Doctrine/DBAL/Schema/Table.php on line 338
+[17-Jan-2021 19:24:29 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/DefaultController.php on line 994
+[17-Jan-2021 19:29:08 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/DefaultController.php on line 994
+[17-Jan-2021 19:29:11 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/DefaultController.php on line 994
+[17-Jan-2021 19:29:12 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/DefaultController.php on line 994
+[17-Jan-2021 19:29:13 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/DefaultController.php on line 994
+[17-Jan-2021 19:29:14 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/DefaultController.php on line 994
+[17-Jan-2021 19:29:15 UTC] PHP Fatal error:  Cannot declare class FeriaUC\AppBundle\Controller\DefaultController, because the name is already in use in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Controller/DefaultController.php on line 994
+[17-Jan-2021 19:32:56 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 2621440 bytes) in /home/devferiauclove/public_html/vendor/doctrine/dbal/lib/Doctrine/DBAL/Platforms/Keywords/KeywordList.php on line 49

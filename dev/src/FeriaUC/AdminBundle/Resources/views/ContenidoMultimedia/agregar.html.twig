@@ -1,0 +1,117 @@
+<script type="text/javascript">
+   var template_youtube = $('#sections_multimedia_youtube  .section_multimedia_youtube:first').clone();
+   var template_img     = $('#sections_multimedia_img  .section_multimedia_img:first').clone();
+
+	$(document).ready(function() {
+
+		$('.addsection_multimedia_youtube').on('click', function() {
+			$('.addsection_multimedia_youtube').attr('disabled');
+			var section = template_youtube.clone().appendTo('#sections_multimedia_youtube');
+			$('.addsection_multimedia_youtube').removeAttr('disabled');
+		});
+
+		$('#sections_multimedia_youtube').on('click', '.remove', function() {
+			$(this).parent().fadeOut(300, function(){
+				$(this).parent().empty();
+				return false;
+			});
+			return false;
+		});
+
+		$('.addsection_multimedia_img').on('click', function() {
+			$('.addsection_multimedia_img').attr('disabled');
+
+			var section = template_img.clone().appendTo('#sections_multimedia_img');
+			$('.addsection_multimedia_img').removeAttr('disabled');
+		});
+
+		$('#sections_multimedia_img').on('click', '.remove', function() {
+			$(this).parent().fadeOut(300, function(){
+				$(this).parent().empty();
+				return false;
+			});
+			return false;
+		});
+	});
+
+	$('#id_tipo_multimedia').change(function() {
+
+		$('#div_img').attr('hidden', true);
+		$('#div_youtube').attr('hidden', true);
+
+		var id_tipo_multimedia = $(this).val();
+		if(id_tipo_multimedia == 1){
+		  $('#sections_multimedia_youtube').empty();
+			  template_youtube.clone().appendTo('#sections_multimedia_youtube');
+	          $('#div_img').attr('hidden', false);
+		}
+		else if(id_tipo_multimedia == 2){
+		  $('#sections_multimedia_img').empty();
+			  template_img.clone().appendTo('#sections_multimedia_img');
+	          $('#div_youtube').attr('hidden', false);
+		}
+	});
+
+</script>
+<div class="row">    
+	  <div class="col-md-12">
+		  <form id="form_admin"  method="POST">
+		  	   <input type="hidden" name="id_punto" id="id_punto" value="{{ id_punto }}">
+		  	   <input type="hidden" name="id_stand" id="id_stand" value="{{ id_stand }}">
+		  	   <div class="form-group">
+					<label for="nombre">Nombre (*)</label>
+					<input type="text" id="nombre" name="nombre" class="form-control {% if errores.nombre %} is-invalid {% endif %}" value="{{ valores.nombre }}" placeholder="Ingrese el nombre">
+					{% if errores.nombre %}
+						<div class="invalid-feedback">
+						  {{ errores.nombre }}
+						</div>
+					{% endif %}                    
+				</div>
+				<div class="form-group">
+					 <label for="tipo">Tipo de multimedia (*)</label>
+					 <select class="form-control {% if errores.id_tipo_multimedia %} is-invalid {% endif %}" id="id_tipo_multimedia" name="id_tipo_multimedia">
+						<option value="">Seleccionar</option>
+						{% for tipo in oTiposMultimedia %}
+							<option value="{{ tipo.id }}"{{ valores.id_tipo_multimedia == tipo.id ? "selected":"" }}>
+								{{ tipo.nombre }}
+							</option>
+						{% endfor %}
+					</select>
+					{% if errores.id_tipo_multimedia %}
+						<div class="invalid-feedback">
+						  {{ errores.id_tipo_multimedia }}
+						</div>
+				   {% endif %}
+				</div>
+				<div class="form-group" id="div_youtube" {{ valores.id_tipo_multimedia == 1 ? "hidden":"" }}>
+				     <div id="sections_multimedia_youtube">
+						 <div class="section_multimedia_youtube  mb-2">
+						 	<label for="url">Ajuntar imagen</label>  
+					        <input type="file" id="url" name="urls_youtube[][url]" class="form-control mb-2" accept="image/*">
+						  	<label for="codigo_youtube">Código youtube </label>
+							<input type="text" id="codigo_youtube" name="codigos_youtube[][codigo_youtube]" class="form-control mb-1"  placeholder="Ingrese el codigo de youtube"> 
+							<p><a href="#" class='remove'>Eliminar</a></p>		
+						 </div>
+					 </div>
+					 <div class="text-right">
+				    	<button  type="button" class="addsection_multimedia_youtube btn btn-sm  btn-link waves-effect waves-light">
+				        <i class='fas fa-plus' aria-hidden='true'></i> Agregar nuevo</button>
+				     </div>
+				</div>
+
+				<div class="form-group" id="div_img" {{ valores.id_tipo_multimedia == 2 ? "hidden":"" }}>
+				     <div id="sections_multimedia_img">
+						 <div class="section_multimedia_img  mb-2">
+						 	<label for="url">Ajuntar imagen</label>  
+					        <input type="file" id="url" name="urls_img[]" class="form-control mb-2" accept="image/*">
+							<p><a href="#" class='remove'>Eliminar</a></p>		
+						 </div>
+					 </div>
+					 <div class="text-right">
+				    	<button  type="button" class="addsection_multimedia_img btn btn-sm  btn-link waves-effect waves-light">
+				        <i class='fas fa-plus' aria-hidden='true'></i> Agregar nuevo</button>
+				     </div>
+				</div>
+		  </form>
+	  </div>
+</div>

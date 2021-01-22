@@ -1,0 +1,176 @@
+{% extends "::base_login.html.twig" %}
+{% block javascripts %}
+	<script>
+		const giro = 40;
+		var clockwise = false,
+			$w = window.innerWidth,
+			$h = window.innerHeight;
+
+		function resizable() {
+			if (window.innerWidth != $w || window.innerHeight != $h) {
+				if ($w > $h) {
+					$('#bg').css({
+						'width': ($w * .9) + 'px',
+						'height': ($w * .9) + 'px',
+						'padding-bottom': '0'
+					});
+				} else {
+					$('#bg').css({
+						'width': ($h * 1.05) + 'px',
+						'height': ($h * 1.05) + 'px',
+						'padding-bottom': '0'
+					});
+				}
+				$w = window.innerWidth;
+				$h = window.innerHeight;
+			}
+		}
+
+		$(document).ready(function() {
+			var spread = giro / $('.orbit.is_el').length;
+
+			$('.orbit.is_el').each(function() {
+				$('.rotating', this).css('animation-delay', '-' + (spread * $(this).parent().children('.orbit.is_el').index(this)) + 's');
+			});
+
+			$('.orbit.is_el.rotates').each(function() {
+				if (!clockwise) {
+					$('.el', this).addClass('reverse');
+					$('.el_inn.rotating', this).removeClass('reverse');
+					clockwise = true;
+				} else {
+					$('.el', this).removeClass('reverse');
+					$('.el_inn.rotating', this).addClass('reverse');
+					clockwise = false;
+				}
+			});
+
+			$('.app--loading').removeClass('app--loading');
+		});
+
+		$('#btn_guadar').on('click',  function() {
+			
+			let formulario   = $("#formulario_avatar").serialize();
+            let path         = Routing.generate("perfil");
+
+            $.ajax({
+                url: path,
+                type: 'POST',
+                data: formulario,
+                success: function (results) {
+                	//console.log(results);
+                	if(results.estado == 'OK') {
+
+                		Swal.fire({
+						  title: 'Éxito',
+						  icon:  'success',
+						  html:  results.mensaje,
+						  allowOutsideClick: false
+						}).then((result) => {
+							var d = new Date($.now());
+							
+                            var update_usuario = {id_usuario:results.datos.id_usuario, rut:results.datos.rut, nombre:results.datos.nombre, avatar: results.datos.avatar, habilitado:true, timestamp: d.getTime() };
+	                		firebase.database().ref('usuarios/usuario-'+results.datos.id_usuario).set(update_usuario).then(() => {
+								window.onbeforeunload = null;
+
+	                            let path_show = Routing.generate("inicio");
+	                            window.location.href = path_show;
+	                		}).catch((error) =>{		                			
+								window.onbeforeunload = null;
+
+	                            let path_show = Routing.generate("inicio");
+	                            window.location.href = path_show;
+							}); 
+						});
+                	}
+                	else if(results.estado == 'ERROR'){
+                		Swal.fire({
+						  title: 'Error',
+						  icon:  'error',
+						  html:  results.mensaje,
+						  allowOutsideClick: false
+						});
+                	}
+                }
+            });    
+		});
+
+		$("#btn_volver").on('click', function() {
+			let path_show = Routing.generate("inicio");
+            window.location.href = path_show;
+		});
+	</script>
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+		[type=radio] { 
+		  position: absolute;
+		  opacity: 0;
+		  width: 0;
+		  height: 0;
+		}
+
+		/* IMAGE STYLES */
+		[type=radio] + img {
+		  cursor: pointer;
+		}
+
+		/* CHECKED STYLES */
+		[type=radio]:checked + img {
+		  outline: 2px solid #0A77DF;
+		}
+	</style>
+{% endblock %}
+{% block body %}
+	<div class="app--loading">
+		<div id="bg">
+			<div id="bg_in">{{ bg_in|raw }}</div>
+		</div>
+		<div id="front">
+			<div id="puc">{{ puc|raw }}</div>
+			<div id="logo">{{ logo|raw }}</div>
+			<div id="formulario" class="col-md-8 offset-md-2">
+				<form id="formulario_avatar"  method="POST">
+					<h2 class="h3 text-center">Perfil</h2>
+					{% if app.user.numeroSesion == 1 %}
+						<div class="uc-form-group">
+							<label for="nombre"><i class="uc-icon">account_circle</i> Nombre (*)</label>
+							<input id="nombre" name="nombre" type="text" class="uc-input-style" value="{{ app.user.nombre }}">
+						</div>
+						<div class="uc-form-group">
+							<label for="apellidos"><i class="uc-icon">account_circle</i> Apellido (*)</label>
+							<input id="apellidos" name="apellidos" type="text" class="uc-input-style" value="{{ app.user.apellidos }}">
+						</div>
+						<div class="uc-form-group">
+							<label for="username"><i class="uc-icon">email</i> Email (*)</label>
+							<input id="username" name="username" type="text" class="uc-input-style" value="{{ app.user.username }}">
+						</div>
+					{% endif %}
+
+					<div class="form-group text-center">
+					   <label>Selecciona a tu avatar (*)</label>
+					   <div class="row">
+						   {% for i in 1..22 %}
+						        <div class="col-lg-4 col-md-6 mb-3">
+						     	<label>
+						     		<input class="avatar" type="radio" name="avatar" value="foto-perfil-{{ i }}.png"  
+						     		  {{ app.user.imagenPerfil == 'foto-perfil-'~i~'.png' ?  'checked': '' }}>
+							        <img class="img-fluid" src="{{ asset('bundles/app/novato/avatars/foto-perfil-'~i~'.png') }}">
+						     	</label>
+						     </div>
+						   {% endfor %}	
+					    </div>
+					</div>
+					{% if app.user.numeroSesion == 1 %}
+						   <button id="btn_volver" type="button" class="uc-btn btn-primary btn-inline" 
+						     style="cursor: pointer; top: 58px"><i class="uc-icon">arrow_back</i> volver al mapa</button>
+					{% endif %}
+					<div class="text-right">
+						<button id="btn_guadar" type="button" class="uc-btn btn-primary btn-inline" 
+					     style="cursor: pointer; top: 13px;"><i class="uc-icon">save</i> Guardar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

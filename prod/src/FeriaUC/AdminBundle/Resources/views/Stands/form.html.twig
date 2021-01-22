@@ -1,0 +1,134 @@
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		 $('#infoGeneral').summernote({
+	        height: 250,              
+	        minHeight: null,
+	        maxHeight: null,
+	        focus: false
+	     });
+	});
+	
+	$('#mallaCurricular').bind('change', function() {
+		const imagen = document.querySelector('#mallaCurricular');
+
+		$('#text_malla_error').text('');
+							 
+		let imagenType = $(this)[0].files[0].type;
+		if(imagenType != 'application/pdf'){
+			 $('#text_malla_error').text('Solo se permite PDF.');
+			 imagen.value = '';
+			 return false;
+		}
+		return false;
+	});
+</script>
+
+{# <div class="form-group">
+ <label for="punto">Punto (*)</label>
+	<select class="form-control {% if errores.id_punto %} is-invalid {% endif %}" name="id_punto" name="id_punto">
+		<option value="">Seleccionar</option>
+		{% for punto in oPuntos %}
+			<option value="{{ punto.id }}"{{ valores.id_punto == punto.id ? "selected":"" }}>
+				{{ punto.nombre }}
+			</option>
+		{% endfor %}
+	</select>
+	{% if errores.id_punto %}
+		<div class="invalid-feedback">
+				{{ errores.id_punto }}
+		</div>
+ {% endif %}
+</div>  #}
+
+{% if mensaje %}
+	<div class="alert alert-success" role="alert">
+	  <i class='fa fa-check' aria-hidden='true'></i> Los datos se han guardado correctamente
+	</div>
+{% endif %}
+
+<div class="text-right">
+  <a href="{{  path('admin_stands', {id_punto: valores.id_punto }) }}" class="btn btn-secondary" role="button" aria-disabled="true">
+  <i class="fe-arrow-left"></i> Volver</a>
+</div>
+
+<input type="hidden" name="id_punto" value="{{ valores.id_punto }}">
+<div class="form-group">
+	<label for="nombre">Nombre (*)</label>
+	<input type="text" id="nombre" name="nombre" class="form-control {% if errores.nombre %} is-invalid {% endif %}" 
+	 value="{{ valores.nombre }}" placeholder="Ingrese el nombre">
+	{% if errores.nombre %}
+			<div class="invalid-feedback">
+					{{ errores.nombre }}
+			</div>
+	{% endif %}                    
+</div>
+<div class="form-group">
+ <label for="categoria">Categoría</label>
+	<select class="form-control" name="id_categoria" 
+	name="id_categoria_stand">
+		<option value="">Seleccionar</option>
+		{% for categoria in oCategorias %}
+			<option value="{{ categoria.id }}"{{ valores.id_categoria == categoria.id ? "selected":"" }}>
+				{{ categoria.nombre }}
+			</option>
+		{% endfor %}
+	</select>
+</div>    
+<div class="form-group">
+	<label for="urlInstagram">Instagram</label>
+	<input type="text" id="urlInstagram" name="urlInstagram" class="form-control" value="{{ valores.urlInstagram }}" 
+	 placeholder="Ingrese el Instagram">                    
+</div>
+<div class="form-group">
+	<label for="urlFacebook">Facebook</label>
+	<input type="text" id="urlFacebook" name="urlFacebook" class="form-control" value="{{ valores.urlFacebook }}" 
+	 placeholder="Ingrese el Facebook">                    
+</div>
+<div class="form-group">
+	<label for="urlYoutube">Youtube</label>
+	<input type="text" id="urlYoutube" name="urlYoutube" class="form-control" value="{{ valores.urlYoutube }}" 
+	 placeholder="Ingrese el Youtube">                    
+</div>
+<div class="form-group">
+	<label for="urlYoutube">Web</label>
+	<input type="text" id="urlWeb" name="urlWeb" class="form-control" value="{{ valores.urlWeb }}" 
+	 placeholder="Ingrese web">                    
+</div>
+<div class="form-group">
+	<label for="mallaCurricular">Malla curricular</label>  
+	<input type="file" id="mallaCurricular" name="mallaCurricular" class="form-control"  accept="application/pdf">
+	<small  class="form-text text-muted">Solo se permiten PDF</small>
+	<small  class="form-text text-danger" id="text_malla_error"></small>
+</div>
+{% if valores.mallaCurricular %}
+	<div class="form-group">
+		<a href="{{ asset('uploads/stands/malla_curricular/' ~ valores.mallaCurricular) }}" download>
+		 <i class="fa fa-download" aria-hidden="true"> Descargar a aqui</i>    
+	   </a>
+	</div> 			
+{% endif %}
+
+<div class="form-group">
+	<label for="mallaCurricular">Imagen principal</label>  
+	<input type="file" id="imagen_principal" name="imagen_principal" class="form-control" accept="image/*">
+	<small  class="form-text text-muted">Solo se permiten imagenes</small>
+	<small  class="form-text text-muted">Tamaño maximo 1MB</small>
+    <small  class="form-text text-danger" id="imagen_principal_error"></small>
+</div>
+{% if valores.imagen_principal %}
+	<div class="form-group">
+	   <a href="{{ asset('uploads/stands/imagen_principal/' ~ valores.imagen_principal) }}" target="_blank">
+			 <img width="100" src="{{ asset('uploads/stands/imagen_principal/' ~ valores.imagen_principal) }}">
+	   </a> 
+	</div> 			
+{% endif %}
+
+<div class="form-group">
+	<label for="infoGeneral">Información general</label>
+	<textarea id="infoGeneral" name="infoGeneral" class="form-control" rows="4" cols="50">
+		{{ valores.infoGeneral }}
+	</textarea>                 
+</div>
+<button type="submit" class="btn btn-success mb-3"><i class='fa fa-save' aria-hidden='true'></i> Guardar</button>

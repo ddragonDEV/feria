@@ -1,0 +1,31 @@
+[15-Oct-2020 13:30:15 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 49152 bytes) in /home/devferiauclove/public_html/vendor/twig/twig/src/Compiler.php on line 162
+[15-Oct-2020 13:30:15 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 32768 bytes) in /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Debug/Exception/OutOfMemoryException.php on line 1
+[19-Oct-2020 14:32:09 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 9129984 bytes) in /home/devferiauclove/public_html/var/cache/dev/twig/c6/c6acb3de101befdadde4e4b50ae7564f667506f254c95c72b819d0264ee9d943.php on line 106
+[19-Oct-2020 14:32:09 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18305024 bytes) in Unknown on line 0
+[19-Oct-2020 14:32:15 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 3058996 bytes) in /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Extension/CodeExtension.php on line 105
+[19-Oct-2020 14:32:15 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20328448 bytes) in Unknown on line 0
+[19-Oct-2020 14:36:03 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 3058996 bytes) in /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Extension/CodeExtension.php on line 105
+[19-Oct-2020 14:36:03 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20328448 bytes) in Unknown on line 0
+[19-Oct-2020 14:36:27 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 3058996 bytes) in /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Extension/CodeExtension.php on line 105
+[19-Oct-2020 14:36:27 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20328448 bytes) in Unknown on line 0
+[19-Oct-2020 14:36:49 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 9129984 bytes) in /home/devferiauclove/public_html/var/cache/dev/twig/c6/c6acb3de101befdadde4e4b50ae7564f667506f254c95c72b819d0264ee9d943.php on line 106
+[19-Oct-2020 14:36:49 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18305024 bytes) in Unknown on line 0
+[19-Oct-2020 14:37:37 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 9129984 bytes) in /home/devferiauclove/public_html/var/cache/dev/twig/c6/c6acb3de101befdadde4e4b50ae7564f667506f254c95c72b819d0264ee9d943.php on line 106
+[19-Oct-2020 14:37:37 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 18305024 bytes) in Unknown on line 0
+[21-Oct-2020 13:12:44 UTC] PHP Fatal error:  Cannot redeclare FeriaUC\AppBundle\Controller\DefaultController::obtenerComunasAction() in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 302
+[21-Oct-2020 16:14:34 UTC] PHP Fatal error:  Namespace declaration statement has to be the very first statement or after any declare call in the script in /home/devferiauclove/public_html/src/FeriaUC/AdminBundle/Repository/CategoriasRepository.php on line 3
+[21-Oct-2020 21:22:51 UTC] PHP Warning:  Unterminated comment starting line 122 in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 122
+[21-Oct-2020 21:23:29 UTC] PHP Fatal error:  Uncaught Symfony\Component\Debug\Exception\FatalThrowableError: Parse error: syntax error, unexpected end of file in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php:155
+Stack trace:
+#0 /home/devferiauclove/public_html/vendor/composer/ClassLoader.php(322): Composer\Autoload\includeFile('/home/devferiau...')
+#1 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Debug/DebugClassLoader.php(159): Composer\Autoload\ClassLoader->loadClass('FeriaUC\\AppBund...')
+#2 [internal function]: Symfony\Component\Debug\DebugClassLoader->loadClass('FeriaUC\\AppBund...')
+#3 [internal function]: spl_autoload_call('FeriaUC\\AppBund...')
+#4 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Routing/Loader/AnnotationDirectoryLoader.php(62): ReflectionClass->__construct('FeriaUC\\AppBund...')
+#5 /home/devferiauclove/public_html/vendor/symfony/symfony/src/Symfony/Component/Config/Loader/FileLoader.php(153): Symfony\Component\Routing\Loader\An in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 155
+[21-Oct-2020 21:51:03 UTC] PHP Warning:  Unterminated comment starting line 295 in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 295
+[24-Oct-2020 05:04:55 UTC] PHP Fatal error:  Cannot redeclare FeriaUC\AppBundle\Controller\DefaultController::markerObtenerChatAction() in /home/devferiauclove/public_html/src/FeriaUC/AppBundle/Controller/DefaultController.php on line 426
+[26-Oct-2020 16:59:10 UTC] PHP Warning:  "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? in /home/devferiauclove/public_html/vendor/doctrine/orm/lib/Doctrine/ORM/UnitOfWork.php on line 2636
+[26-Oct-2020 16:59:10 UTC] PHP Warning:  "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? in /home/devferiauclove/public_html/vendor/doctrine/orm/lib/Doctrine/ORM/UnitOfWork.php on line 2665
+[26-Oct-2020 16:59:16 UTC] PHP Warning:  "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? in /home/devferiauclove/public_html/vendor/doctrine/orm/lib/Doctrine/ORM/UnitOfWork.php on line 2636
+[26-Oct-2020 16:59:16 UTC] PHP Warning:  "continue" targeting switch is equivalent to "break". Did you mean to use "continue 2"? in /home/devferiauclove/public_html/vendor/doctrine/orm/lib/Doctrine/ORM/UnitOfWork.php on line 2665

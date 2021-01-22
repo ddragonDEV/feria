@@ -1,0 +1,407 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script type="text/javascript">
+
+	  $(document).ready(function(){
+			var path   = Routing.generate("admin_puntos_datatables");
+
+			$("#puntos").DataTable({
+				"ajax": path,
+				"serverSide": true,
+				"processing": true,
+				"responsive": false,
+				"columns": [
+					{ "data": "titulo" },
+					{ "data": "tipo_punto" },
+					{ "data": "fecha_creacion" },
+					{ "data": "fecha_actualizacion" },
+					{ "data": "acciones", render: function (data, type, row, meta){
+							if(row.idEstado == 1){
+								var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-secondary" onclick="bloquear_punto('+row.id+')"><i class="fe-lock"></i> Bloquear</button>';
+							}
+							else if(row.idEstado == 2){
+								var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-success" onclick="activar_punto('+row.id+')"><i class="fe-unlock"></i> Activar</button>';
+							}
+							html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-warning" onclick="editar_punto('+row.id+')"><i class="fe-edit"></i> Editar</button>';
+
+							html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-danger" onclick="eliminar_punto('+row.id+')"> <i class="fe-trash-2"></i> Eliminar</button>';
+
+							if(row.idTipoPunto == 1){
+
+								html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-success" onclick="multimedias_punto('+row.id+')"> <i class="fe-file"></i> Multimedia</button>';
+
+								html += '<button type="button" class="btn btn-icon waves-effect waves-light btn-info" onclick="ver_punto('+row.id+')"><i class="fe-eye"></i> Ver</button>';
+							}
+							else if(row.idTipoPunto == 2){
+
+								html += '<button type="button" class="btn btn-icon waves-effect waves-light btn-success" onclick="stands_punto('+row.id+')"><i class="fe-file"></i> listar stands</button>';
+							}
+
+							return html;
+						}
+					},
+				],
+				"order": [[ 3, "desc" ]],
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+				}
+			});
+		});
+
+		let accion = "";
+		let title  = "";
+
+		function editar_punto(id_punto){
+            let path_show = Routing.generate("admin_puntos_editar", {id_punto: id_punto});
+			window.location.href = path_show; 
+		}
+
+		function eliminar_punto(id_punto){
+
+			let path  = Routing.generate("admin_puntos_eliminar");
+	
+			let messageSuccess = "<h5>¿ Seguro desea eliminar el punto ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_punto: id_punto },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_puntos");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});
+		}
+
+		function bloquear_punto(id_punto){
+
+			let path      = Routing.generate("admin_puntos_bloquear");
+
+			let messageSuccess = "<h5>¿ Seguro desea bloquear el punto ?</h5>";
+
+			let titulo = '<div class="titulo-bbx">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {          
+					success: {
+						label: "<i class='fas fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_punto: id_punto },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="titulo-bbx">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_puntos");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});
+		}
+
+		function activar_punto(id_punto){
+
+			let path      = Routing.generate("admin_puntos_activar");
+	
+			let messageSuccess = "<h5>¿ Seguro desea bloquear el punto ?</h5>";
+
+			let titulo = '<div class="titulo-bbx">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {          
+					success: {
+						label: "<i class='fas fa-ban' aria-hidden='true'></i> Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_punto: id_punto },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="titulo-bbx">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_puntos");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});
+		}
+
+		function multimedias_punto(id_punto){
+            let path_show = Routing.generate("admin_contenido_multimedias_punto", {id_punto: id_punto});
+			window.location.href = path_show; 
+		}
+
+		function ver_punto(id_punto){
+
+			let path  = Routing.generate("admin_puntos_ver");
+
+			$.ajax({
+				url: path,
+				type: 'POST',
+				data: { id_punto: id_punto },
+				success: function (results) {
+					bootbox.dialog({
+						size: "large",
+						closeButton: false,
+						title: 'Ver punto',
+						message: results,
+						buttons: {
+							success: {
+								label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+								className: "btn btn-sm btn-success",
+								callback: function () {    
+								}
+							}
+						}
+					});
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		}
+
+		function stands_punto(id_punto){
+            let path_show = Routing.generate("admin_stands", {id_punto: id_punto});
+			window.location.href = path_show; 
+		}
+
+		function generateBootboxForm(options){
+			bootbox.dialog({
+				size: "large",
+				closeButton: false,
+				title: options.title,
+				message: options.message,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "Guardar",
+						className: "btn btn-sm btn-success",
+						callback: function() {
+							
+							let form = $('#form_admin').serialize();
+
+							let path  = Routing.generate("admin_puntos_agregar");
+
+							if(accion == 'editar'){
+								path  = Routing.generate("admin_puntos_editar");
+							}
+
+							$.ajax({
+								url:  path,
+								type: 'POST',
+								data: form,
+								success: function (results) {
+									if(results['estado'] == "OK"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_puntos");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}else if(results['estado'] == "ERROR"){
+									}else{
+										let options = {
+											title:   title,
+											message: results,
+											accion: accion
+										}
+
+										generateBootboxForm(options);
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}                                       
+							});
+						}
+					}
+				}
+			});
+		}
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Puntos</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Puntos</h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="form-group text-right mb-2">
+			 <a href="{{ path('admin_puntos_agregar') }}" class="btn btn-success" role="button" aria-disabled="true"><i class="fe-plus"></i> Agregar  punto</a>
+			</div>
+			<div class="card-box table-responsive">    
+				<table id="puntos" class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Tipo punto</th>
+							<th>Fecha de creación</th>
+							<th>Fecha de actualización</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+				</table>                
+			</div>
+		</div>
+	</div>
+{% endblock %}	

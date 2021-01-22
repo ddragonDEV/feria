@@ -1,0 +1,71 @@
+{% extends "::base.html.twig" %}
+
+{% block javascripts %}
+	<script type="text/javascript">
+
+		let chat = false;
+
+		$('.responder_chat').on('click', function(event) {
+
+				let path          = Routing.generate("chat_responder");
+				let id_chat       = $(this).data('chat');
+
+				$.ajax({
+						url: path,
+						type: 'GET',
+						data: { id_chat: id_chat },
+						success: function (results) {
+								let options = {
+										title: "Mensaje",
+										message: results
+								}
+								bootbox.dialog({
+									closeButton: false,
+									title: options.title,
+									message: options.message,
+									buttons: {
+										success: {
+											label: "Cerrar",
+											className: "btn btn-sm btn-secondary",
+											callback: function () {
+												chat = false;
+											}
+										}
+									}
+								});
+						},
+						error: function (e) {
+								console.log(e);
+						}
+				});
+			});
+	</script>
+{% endblock %}
+
+{% block body %}
+	<h1>chat</h1><br>
+
+	<div class="container">
+
+		<div class="table-responsive">
+			 <table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">Chat</th>
+						<th scope="col">Accion</th>
+					</tr>
+				</thead>
+				<tbody>
+						{% for chat in oChats %}
+							<tr>
+								<td>{{ chat.nombre }}</td>
+								<td><button type="button" class="responder_chat btn btn-outline-success" data-chat="{{ chat.id }}">
+									Unirse al chat
+								</button></td>
+							</tr>
+						{% endfor %}
+				</tbody>
+			</table>
+		</div>
+</div>
+{% endblock %}

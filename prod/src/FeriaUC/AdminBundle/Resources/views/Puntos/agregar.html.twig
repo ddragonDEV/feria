@@ -1,0 +1,80 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+		 $('#infoGeneral').summernote({
+	         height: 650,              
+	         minHeight: null,
+	         maxHeight: null,
+	         
+	     });
+
+		 let tipo = "{{ valores.id_tipo_punto }}";
+		 if(tipo == 1){
+			$('#div_info').attr('hidden', false);
+		 } 
+	});
+	 
+	 $('#id_tipo_punto').on('change',  function() {
+			$('#div_info').attr('hidden', true);
+
+			let tipo = $(this).val();
+			if(tipo == 1){
+			 $('#div_info').attr('hidden', false);
+			}
+	 });
+	 
+	 $('#imagen_principal').bind('change', function() {
+		const imagen = document.querySelector('#imagen_principal');
+
+		$('#imagen_principal_error').text('');
+							 
+		let imagenType = $(this)[0].files[0].type;
+		let buscarType = imagenType.indexOf("image");
+		if(buscarType == -1){
+			 $('#imagen_principal_error').text('Solo se permite extensiones de tipo imagen.');
+			 imagen.value = '';
+			 return false;
+		}
+
+		let imagenSize      =  $(this)[0].files[0].size;
+		let sizekiloBytes   =  parseInt(imagenSize / 1024);
+		let sizeMegaBytes   =  Math.round(parseInt(sizekiloBytes / 1024));
+		if(sizeMegaBytes > 1){
+			 $('#imagen_principal_error').text('Lo maximo  que se puede subir es una imagen de 1MB.');
+			 imagen.value = '';         
+			 return false;
+		}
+		return false;
+     });
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Agregar punto</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Agregar Punto</h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+		 <div class="card-box">
+		 	<div class="row">    
+			  <div class="col-md-12">
+			      <form id="form_admin"  method="POST" enctype="multipart/form-data">
+			           {{  include('AdminBundle:Puntos:form.html.twig') }} 
+			      </form>
+			  </div>
+	         </div>
+		  </div>
+		</div>
+	</div>	
+{% endblock %}

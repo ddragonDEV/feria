@@ -1,0 +1,72 @@
+<div class="form-group">
+	<label for="nombre">Nombre (*)</label>
+	<input type="text" id="nombre" name="nombre" class="form-control {% if errores.nombre %} is-invalid {% endif %}" 
+	value="{{ valores.nombre }}" placeholder="Ingrese el nombre">
+	{% if errores.nombre %}
+			<div class="invalid-feedback">
+					{{ errores.nombre }}
+			</div>
+	{% endif %}                    
+</div>
+<div class="form-group">
+	<label for="apellidos">Apellidos</label>
+	<input type="text" id="apellidos" name="apellidos" class="form-control" value="{{ valores.apellidos }}" 
+	placeholder="Ingrese los apellidos">                    
+</div>
+<div class="form-group">
+	<label for="email">Email (*)</label>
+	<input type="text" id="email" name="username" class="form-control {% if errores.email %} is-invalid {% endif %}" value="{{ valores.email }}" placeholder="Ingrese el email" {{ readonly_email  ? "readonly": "" }}>
+	{% if errores.email %}
+			<div class="invalid-feedback">
+					{{ errores.email }}
+			</div>
+	{% endif %}  
+</div>
+<div class="form-group">
+	<label>Seleccionar perfi (*)</label>
+	 <select class="form-control {% if errores.roles %} is-invalid {% endif %}" name="roles" name="roles">
+				<option value="">Seleccionar</option>
+				{% if is_granted('ROLE_FERIA_UC_SUPER_ADMIN') %}
+					<option value="ROLE_FERIA_UC_SUPER_ADMIN" {{ valores.roles == 'ROLE_FERIA_UC_SUPER_ADMIN' ? "selected": ""}}> Super Administrador</option>
+				{% endif %}
+				<option value="ROLE_FERIA_UC_ADMIN" {{ valores.roles == 'ROLE_FERIA_UC_ADMIN' ? "selected": ""}}>Administrador</option>
+				<option value="ROLE_FERIA_UC_EMBAJADOR" {{ valores.roles == 'ROLE_FERIA_UC_EMBAJADOR' ? "selected": ""}}>Embajador</option>
+	 </select> 
+	{% if errores.roles %}
+			<div class="invalid-feedback">
+					{{ errores.roles }}
+			</div>
+	{% endif %}
+	 {# <div class="col-md-12">
+			<div class="custom-control custom-checkbox mr-sm-2">
+					<input type="checkbox" id="check_rol_ad" name="roles[]" class="custom-control-input roles" value="ROLE_FERIA_UC_ADMIN">
+					<label class="custom-control-label" for="check_rol_ad">Administrador</label>
+			</div>
+			<div class="custom-control custom-checkbox mr-sm-2">
+					<input type="checkbox" id="check_rol_embajador" name="roles[]" class="custom-control-input roles" value="ROLE_FERIA_UC_EMBAJADOR">
+					<label class="custom-control-label" for="check_rol_embajador">Embajador</label>
+			</div>
+				{% if errores.roles %}
+					<div id="error_roles">
+							{{ errores.roles }}
+					</div>
+			{% endif %}
+	</div> #}
+</div>
+<div class="form-group">
+	<label for="password">Contraseñas (*)</label>
+	<input type="password" name="password_first" class="form-control {% if errores.password %} is-invalid {% endif %}" placeholder="Contraseña (*)">
+	{% if errores.password %}
+			<div class="invalid-feedback">
+					{{ errores.password }}
+			</div>
+	{% endif %}
+</div>
+<div class="form-group">
+	<input type="password" name="password_second" class="form-control {% if errores.password %} is-invalid {% endif %}" placeholder="Repetir contraseña (*)">
+	{% if errores.password_second %}
+			<div class="invalid-feedback">
+					{{ errores.password_second }}
+			</div>
+	{% endif %}
+</div>

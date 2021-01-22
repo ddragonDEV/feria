@@ -1,0 +1,10 @@
+{
+	"chat-1":{
+		"nombre": "Chat actuación",
+		"habilitado": true
+	},
+	"chat-2":{
+		"nombre": "Chat agronomia",
+		"habilitado": true
+	}	
+}

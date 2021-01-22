@@ -1,0 +1,415 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script>
+		$(document).ready(function(){
+			$("#datatable").DataTable({
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+				},
+				responsive: false
+			});
+		});
+
+         let accion = "";
+         let title  = "";
+
+		 $('#agregar_administrador').on('click', function() {
+	            accion = 'agregar';
+	            title  = 'Agregar administrador';
+	            let path = Routing.generate("admin_administradores_agregar");
+
+	            $.ajax({
+	                url: path,
+	                type: 'GET',
+	                success: function (results) {
+	                    let options = {
+	                        title: title,
+	                        message: results,
+	                        accion: accion
+	                    }
+	                    generateBootboxForm(options);
+	                },
+	                error: function (e) {
+	                    console.log(e);
+	                }
+	            });
+        });
+
+		$('.editar_administrador').on('click', function() {
+			accion        = "editar";
+			title         = 'Editar administrador';
+
+			let path      = Routing.generate("admin_administradores_editar");
+			let id_administrador  = $(this).data('administrador');
+
+			$.ajax({
+				url: path,
+				type: 'GET',
+				data: { id_administrador: id_administrador },
+				success: function (results) {
+					let options = {
+						title: title,
+						message: results,
+						accion: accion
+					}
+					generateBootboxForm(options);
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		});
+
+		$('.eliminar_administrador').on('click', function() {
+			let path       = Routing.generate("admin_administradores_eliminar");
+			let id_administrador   = $(this).data('administrador');
+
+			let messageSuccess = "<h5>¿ Seguro desea eliminar el administrador ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_administrador: id_administrador },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_administradores");
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});			
+		});
+
+		$('.bloquear_administrador').on('click', function() {
+            let path       = Routing.generate("admin_administradores_bloquear");
+            let id_administrador   = $(this).data('administrador');
+
+            let messageSuccess = "<h5>¿ Seguro desea bloquear el administrador ?</h5>";
+
+            let titulo = '<div class="titulo-bbx">';
+            titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+            titulo += '</div>';
+
+            bootbox.dialog({
+                closeButton: false,
+                title: titulo,
+                message: messageSuccess,
+                buttons: {          
+                    success: {
+                        label: "<i class='fas fa-ban' aria-hidden='true'></i> Cancelar",
+                        className: "btn btn-sm btn-warning",
+                        callback: function () {
+                        }
+                    },
+                    main: {
+                        label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                        className: "btn btn-sm btn-success",
+                        callback: function () {
+                            $.ajax({
+                                url: path,
+                                type: 'POST',
+                                data: { id_administrador: id_administrador },
+                                success: function (results) {
+                                    if(results['estado'] == "success"){
+                                        let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+                                        let titulo = '<div class="titulo-bbx">';
+                                        titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+                                        titulo += '</div>';
+
+                                        bootbox.dialog({
+                                            closeButton: false,
+                                            title: titulo,
+                                            message: messageSuccess,
+                                            buttons: {
+                                                success: {
+                                                    label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                                    className: "btn btn-sm btn-success",
+                                                    callback: function () {    
+                                                        window.onbeforeunload = null;
+
+                                                        let path_show = Routing.generate("admin_administradores");
+                                                        window.location.href = path_show;    
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        });
+
+       $('.activar_administrador').on('click', function() {
+            let path                = Routing.generate("admin_administradores_activar");
+            let id_administrador    = $(this).data('administrador');
+
+            let messageSuccess = "<h5>¿ Seguro desea activar el administrador ?</h5>";
+
+            let titulo = '<div class="titulo-bbx">';
+            titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+            titulo += '</div>';
+
+            bootbox.dialog({
+                closeButton: false,
+                title: titulo,
+                message: messageSuccess,
+                buttons: {              
+                    success: {
+                        label: "<i class='fa fa-ban' aria-hidden='true'></i> Cancelar",
+                        className: "btn btn-sm btn-warning",
+                        callback: function () {
+                        }
+                    },
+                    main: {
+                        label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                        className: "btn btn-sm btn-success",
+                        callback: function () {
+                            $.ajax({
+                                url: path,
+                                type: 'POST',
+                                data: { id_administrador: id_administrador },
+                                success: function (results) {
+                                    if(results['estado'] == "success"){
+                                        let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+                                        let titulo = '<div class="titulo-bbx">';
+                                        titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+                                        titulo += '</div>';
+
+                                        bootbox.dialog({
+                                            closeButton: false,
+                                            title: titulo,
+                                            message: messageSuccess,
+                                            buttons: {
+                                                success: {
+                                                    label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                                    className: "btn btn-sm btn-success",
+                                                    callback: function () {    
+                                                        window.onbeforeunload = null;
+
+                                                        let path_show = Routing.generate("admin_administradores");
+                                                        window.location.href = path_show;    
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    }
+                }
+            });         
+        });
+
+		function generateBootboxForm(options){
+			bootbox.dialog({
+				closeButton: false,
+				title: options.title,
+				message: options.message,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "Guardar",
+						className: "btn btn-sm btn-success",
+						callback: function() {
+							
+							let form  = $('#form_admin')[0];
+							form      = new FormData(form);
+
+							let path  = Routing.generate("admin_administradores_agregar");
+
+							if(accion == 'editar'){
+								path  = Routing.generate("admin_administradores_editar");
+							}
+
+							$.ajax({
+								url: path,
+                                type: 'POST',
+                                enctype: 'multipart/form-data',
+                                data: form,
+                                processData: false,
+                                contentType: false,
+								success: function (results) {
+									if(results['estado'] == "OK"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {
+														var d = new Date($.now());	
+																										
+														var update_embajadores = {id_embajador:results.datos.id_embajador, nombre:$.trim(results.datos.nombre), avatar: results.datos.avatar, timestamp: d.getTime() };
+								                		firebase.database().ref('embajadores/embajador-'+results.datos.id_embajador).set(update_embajadores).then(() => {
+															window.onbeforeunload = null;
+
+							                            	let path_show = Routing.generate("admin_administradores");
+							                            	window.location.href = path_show;
+								                		}).catch((error) =>{		                			
+															window.onbeforeunload = null;
+
+								                            let path_show = Routing.generate("admin_administradores");
+								                            window.location.href = path_show;
+														}); 
+													}
+												}
+											}
+										});
+									}else if(results['estado'] == "ERROR"){
+									}else{
+										let options = {
+											title: title,
+											message: results,
+											accion: accion
+										}
+
+										generateBootboxForm(options);
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}                                       
+							});
+						}
+					}
+				}
+			});
+		}
+
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Administradores</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Administradores</h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="form-group text-right mb-2">   
+               <button type="button" id="agregar_administrador" class="btn btn-success"><i class="fe-user-plus"></i> Agregar administrador</button>
+            </div>
+			<div class="card-box table-responsive">    
+				<table id="datatable" class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Email</th>
+							<th>Perfil</th>
+							<th>Fecha de creación</th>
+							<th>Fecha de actualización</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for administrador in aAdministradores %}							
+	                        <tr>
+	                            <td>{{ administrador.nombre }} {{ administrador.apellidos }}</td>
+	                            <td>{{ administrador.username }}</td>
+	                            <td>
+	                            	 <ul>
+	                                   {% for rol in administrador.roles %}
+		                                   	 {% if rol == 'ROLE_FERIA_UC_SUPER_ADMIN' %}<li> Super Administrador</li>
+		                                     {% elseif rol == 'ROLE_FERIA_UC_ADMIN' %}<li>Administrador</li>
+		                                     {% elseif rol == 'ROLE_FERIA_UC_EMBAJADOR' %}<li>Embajador</li>   
+		                                    {% endif %}
+	                                   {% endfor %}
+	                                  </ul>
+	                            </td>
+	                            <td>{{ administrador.createdAt|date('d-m-Y H:i') }}</td>
+                             	<td>{% if administrador.updatedAt is empty  %} - {% else %} {{ administrador.updatedAt|date('d-m-Y H:i') }} {% endif %}</td>
+	                            <td>
+	                            	{% if administrador.idEstadoUsuario == 1 %}
+                                        <button type="button" class="bloquear_administrador  btn btn-icon waves-effect waves-light btn-secondary" data-administrador="{{ administrador.id }}"><i class="fe-lock"></i> Bloquear</button>
+                                    {% elseif  administrador.idEstadoUsuario == 2 %}
+                                        <button type="button" class="activar_administrador  btn btn-icon waves-effect waves-light btn-success" data-administrador="{{ administrador.id }}"><i class="fe-unlock"></i> Activar</button>
+                                    {% endif %}
+	                            	<button type="button" class="editar_administrador btn btn-icon waves-effect waves-light btn-warning" data-administrador="{{ administrador.id }}"><i class="fe-edit"></i> Editar</button>
+	                            	<button type="button" class="eliminar_administrador btn btn-icon waves-effect waves-light btn-danger" data-administrador="{{ administrador.id }}"> <i class="fe-trash-2"></i> Eliminar</button>
+	                            </td>
+	                        </tr>
+						{% endfor %}
+					</tbody>
+				</table>                
+			</div>
+		</div>
+	</div>
+{% endblock %}

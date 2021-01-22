@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;">
+<!-- Head -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1, shrink-to-fit=no">
+	<title>Messenger - Responsive Bootstrap Application</title>
+	<!-- Template core CSS -->        
+	<link href="{{ asset('bundles/app/chat/css/template.min.css') }}" rel="stylesheet">
+	{# <link href="{{ asset('bundles/app/chat/css/template.dark.min.css') }}" rel="stylesheet" media="(prefers-color-scheme: dark)">           #}
+
+	<script src="https://kit.fontawesome.com/b21743e745.js" crossorigin="anonymous"></script>
+	<style>
+		:root {
+			--duration_chat: .25s;
+		}
+
+		@keyframes pulse {
+			from {
+				opacity: .3;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+		body.loading--interior #popup--normal .content_in,
+		body:not(.loading--interior) #popup--normal .loading--text {
+			display: none;
+		}
+		.loading--text{
+			color: #0176DE;
+		    padding: 20px;
+		}
+		.loading--text span {			
+			color: #0176DE;
+			display: inline-block;
+			vertical-align: middle;
+			margin-left: 1em;
+			animation: pulse var(--duration_chat) alternate infinite;
+		}
+	</style>
+</head>
+<!-- Head -->
+<body>	
+	<div class="loading--text" data-aria-hidden="true" style="display: none;">
+		<i class="fas fa-spinner fa-spin color--azul" aria-hidden="true"></i><span class="h6">Cargando…</span>
+	</div>
+	<div class="layout">
+		{% block body %}{% endblock %}
+	</div>
+	<!-- Layout -->
+
+	<!-- DropzoneJS: Template -->
+	{# <div id="dropzone-template-js">
+		<div class="col-lg-4 my-3">
+			<div class="card bg-light">
+				<div class="card-body p-3">
+					<div class="media align-items-center">
+
+						<div class="dropzone-file-preview">
+							<div class="avatar avatar rounded bg-secondary text-basic-inverse d-block mr-5">
+								<i class="fe-paperclip"></i>
+							</div>
+						</div>
+
+						<div class="dropzone-image-preview">
+							<div class="avatar avatar mr-5">
+								<img src="#" class="avatar-img rounded" data-dz-thumbnail="" alt="">
+							</div>
+						</div>
+
+						<div class="media-body overflow-hidden">
+							<h6 class="text-truncate small mb-0" data-dz-name></h6>
+							<p class="extra-small" data-dz-size></p>
+						</div>
+
+						<div class="ml-5">
+							<a href="#" class="btn btn-sm btn-link text-decoration-none text-muted" data-dz-remove>
+								<i class="fe-x"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> #}
+	<!-- DropzoneJS: Template -->
+
+	<!-- Scripts -->
+	<script src="{{ asset('bundles/app/chat/js/libs/jquery.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/chat/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
+	<script src="{{ asset('bundles/app/chat/js/plugins/plugins.bundle.js') }}"></script>
+	<script src="{{ asset('bundles/app/chat/js/template.js') }}"></script>
+	<script src="{{ asset('bundles/app/chat/js/timeago.js') }}"></script>
+
+	<script src="{{ asset('bundles/admin/js/bootbox.min.js') }}"></script>
+
+	<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+	<script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+	{# firebase #}
+	<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-database.js"></script>
+	<script>
+		 jQuery.timeago.settings.strings = {
+		     prefixAgo: "hace",
+		     prefixFromNow: "dentro de",
+		     suffixAgo: "",
+		     suffixFromNow: "",
+		     seconds: "menos de un minuto",
+		     minute: "un minuto",
+		     minutes: "unos %d minutos",
+		     hour: "una hora",
+		     hours: "%d horas",
+		     day: "un día",
+		     days: "%d días",
+		     month: "un mes",
+		     months: "%d meses",
+		     year: "un año",
+		     years: "%d años"
+		  };
+		  
+		// Your web app's Firebase configuration
+		var firebaseConfig = {
+		    apiKey: "AIzaSyC1P-tZNdCnU-kjf_WVDKEeBX-mNXxLHTI",
+		    authDomain: "feriauc-1c24a.firebaseapp.com",
+		    databaseURL: "https://feriauc-1c24a.firebaseio.com",
+		    projectId: "feriauc-1c24a",
+		    storageBucket: "feriauc-1c24a.appspot.com",
+		    messagingSenderId: "973914428245",
+		    appId: "1:973914428245:web:defd014f60e2d832c815dc",
+		    measurementId: "G-D1KWSL4FC6"
+	  	};
+		// Initialize Firebase
+		firebase.initializeApp(firebaseConfig);
+
+		function obtenerUltimaHora(obj, id_usuario){
+			var time = '';
+			$.each(obj, function(index, val) {
+				if(val.tipo=='novato'){					
+					var dt = new Date(val.timestamp);
+					time = dt.getHours() + ":" + dt.getMinutes();
+				}
+			});
+			return time;
+		}
+		
+		function formaterTiempo(timestamp){
+			var new_timestamp = new Date(timestamp);
+			// console.log(new_timestamp.toISOString());
+			return new_timestamp.toISOString();
+		}
+
+		function formaterFechaCorta(timestamp){
+			var new_timestamp = new Date(timestamp);
+
+			const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+			return monthNames[new_timestamp.getMonth()] + ", " + new_timestamp.getFullYear();
+		}
+
+		function formateaRut(rut) {
+
+		    var actual = rut.replace(/^0+/, "");
+		    if (actual != '' && actual.length > 1) {
+		        var sinPuntos = actual.replace(/\./g, "");
+		        var actualLimpio = sinPuntos.replace(/-/g, "");
+		        var inicio = actualLimpio.substring(0, actualLimpio.length - 1);
+		        var rutPuntos = "";
+		        var i = 0;
+		        var j = 1;
+		        for (i = inicio.length - 1; i >= 0; i--) {
+		            var letra = inicio.charAt(i);
+		            rutPuntos = letra + rutPuntos;
+		            if (j % 3 == 0 && j <= inicio.length - 1) {
+		                rutPuntos = "." + rutPuntos;
+		            }
+		            j++;
+		        }
+		        var dv = actualLimpio.substring(actualLimpio.length - 1);
+		        rutPuntos = rutPuntos + "-" + dv;
+		    }
+		    return rutPuntos;
+		}
+
+		var usuarios={};
+		firebase.database().ref('usuarios').on('child_added', function(snapshot) {
+			if(!usuarios[snapshot.key]){
+				usuarios[snapshot.key]={id_usuario:snapshot.val().id_usuario, nombre:snapshot.val().nombre, avatar:snapshot.val().avatar, rut:snapshot.val().rut};		
+			}
+		});
+
+		firebase.database().ref('usuarios').on('child_changed', function(snapshot) {
+			usuarios[snapshot.key]={id_usuario:snapshot.val().id_usuario, nombre:snapshot.val().nombre, avatar:snapshot.val().avatar, rut:snapshot.val().rut};
+		});
+
+		var embajadores={};
+		firebase.database().ref('embajadores').once('value').then(function(snapshot) {
+			snapshot.forEach(function(record) {					
+				embajadores[record.key]={nombre:record.val().nombre, avatar:record.val().avatar};
+			});
+		});
+
+		
+	</script>
+	{# firebase #}
+	
+	<!-- Scripts -->
+	{% block javascripts %}{% endblock %}
+</body>
+</html>

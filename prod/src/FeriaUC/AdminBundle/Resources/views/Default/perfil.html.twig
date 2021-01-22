@@ -1,0 +1,122 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script type="text/javascript">
+		$('#btn_guardar').on('click', function() {
+			let form   = $('#form_admin').serialize();
+			let path   = Routing.generate("admin_perfil");
+
+			$.ajax({
+                url: path,
+                type: 'POST',
+                data: form,
+                success: function (results) { 
+                	console.log(results);
+
+                	let messageSuccess = "<h5>"+results.mensaje+"</h5>";
+
+                	if(results.estado == 'OK'){
+
+                		let titulo = '<div class="text-center" style="padding: 0 200px;">';
+						titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+						titulo += '</div>';
+
+                		bootbox.dialog({
+							closeButton: false,
+							title: titulo,
+							message: messageSuccess,
+							buttons: {
+								success: {
+									label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+									className: "btn btn-sm btn-success",
+									callback: function () {    
+										window.onbeforeunload = null;
+
+										let path_show = Routing.generate("admin");
+										window.location.href = path_show;    
+									}
+								}
+							}
+						});
+
+                	}
+                	else if(results.estado == 'ERROR'){
+
+                		let titulo = '<div class="text-center" style="padding: 0 200px;">';
+						titulo += '<i class="fa fa-minus-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+						titulo += '</div>';
+
+                		bootbox.dialog({
+							closeButton: false,
+							title: titulo,
+							message: messageSuccess,
+							buttons: {
+								success: {
+									label: "<i class='fa fa-minus-circle' aria-hidden='true'></i> Aceptar",
+									className: "btn btn-sm btn-danger",
+									callback: function () {       
+									}
+								}
+							}
+						});
+                        
+                	}
+                }
+            });
+		});
+	</script>
+{% endblock %}
+
+{% block body %}
+	<style type="text/css">
+		[type=radio] { 
+		  position: absolute;
+		  opacity: 0;
+		  width: 0;
+		  height: 0;
+		}
+
+		/* IMAGE STYLES */
+		[type=radio] + img {
+		  cursor: pointer;
+		}
+
+		/* CHECKED STYLES */
+		[type=radio]:checked + img {
+		  outline: 2px solid #0A77DF;
+		}
+	</style>
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Perfil</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Perfil</h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+		 <div class="card-box">
+		 	<div class="row">    
+			  <div class="col-md-12">
+			      <form id="form_admin"  method="POST">
+			           <div class="form-group">
+							<label for="nombre">Nombre (*)</label>
+							<input type="text" id="nombre" name="nombre" class="form-control" value="{{ app.user.nombre }}" placeholder="Ingrese el nombre">                    
+						</div>
+						<div class="form-group">
+							<label for="apellidos">Apellidos (*)</label>
+							<input type="text" id="apellidos" name="apellidos" class="form-control" value="{{ app.user.apellidos }}" 
+							 placeholder="Ingrese el apellidos">                    
+						</div>
+						<button id="btn_guardar" type="button" class="btn btn-success mb-3"><i class='fa fa-save' aria-hidden='true'></i> Guardar</button>
+			      </form>
+			  </div>
+	         </div>
+		  </div>
+		</div>
+</div>
+{% endblock %}	

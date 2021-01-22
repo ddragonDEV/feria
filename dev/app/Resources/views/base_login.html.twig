@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% block title %}Futuro Novato UC 2021{% endblock %}</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+		<title>Futuro Novato UC 2021</title>
+
+		<meta property="og:type" content="website" />
+		<link rel="canonical" href="" />
+		<meta property="og:url" content="" />
+		<meta name="twitter:card" content="summary_large_image">
+		<meta property="fb:app_id" content="" />
+		<meta property="og:site_name" content="" />
+		<meta property="og:title" content="" />
+		<meta name="twitter:title" content="">
+		<meta name="title" content="">
+		<meta name="description" content="" />
+		<meta property="og:description" content="" />
+		<meta name="twitter:description" content="">
+		<link rel="image_src" href="" />
+		<meta property="og:image" content="" />
+		<meta name="twitter:image" content="">
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="628" />
+
+		<link rel="stylesheet" href="https://kit-digital-uc-prod.s3.amazonaws.com/uc-kitdigital/css/uc-kitdigital.css">
+
+		<link rel="stylesheet" href="{{ asset('bundles/app/novato/css/style.css') }}" type="text/css" media="all" />
+
+		<link href="{{ asset('bundles/admin/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+
+		<style type="text/css">
+
+		   .preloader-backdrop {
+			  display: none;
+			  position: fixed;
+			  top: 0;
+			  left: 0;
+			  z-index: 1040;
+			  width: 100vw;
+			  height: 100vh;
+			  background-color: #000;
+			 }
+
+			 .preloader-backdrop.show {
+			   opacity: .5;
+			  }
+			   
+			#loader {
+			  display: none;
+			  position: absolute;
+			  left: 50%;
+			  top: 150%;
+			  z-index: 1050;
+			  width: 150px;
+			  height: 150px;
+			  margin: -75px 0 0 -75px;
+			  border: 10px solid #f3f3f3;
+			  border-radius: 50%;
+			  border-top: 11px solid #0675de;
+			  width: 120px;
+			  height: 120px;
+			  -webkit-animation: spin 2s linear infinite;
+			  animation: spin 2s linear infinite;
+			}
+
+			@-webkit-keyframes spin {
+			  0% { -webkit-transform: rotate(0deg); }
+			  100% { -webkit-transform: rotate(360deg); }
+			}
+
+			@keyframes spin {
+			  0% { transform: rotate(0deg); }
+			  100% { transform: rotate(360deg); }
+			}
+		</style>
+
+		{% block stylesheets %}{% endblock %}
+	</head>
+	<body>
+		<div class="container">			
+      		{% block body %}{% endblock %}
+		</div>
+
+		<script type="text/javascript" src="{{ asset('bundles/app/novato/js/modernizr.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('bundles/app/novato/js/jquery.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('bundles/app/novato/js/jquery.ba-throttle-debounce.min.js') }}"></script>
+
+		<script src="{{ asset('bundles/admin/libs/select2/select2.min.js') }}"></script>
+		<script src="{{ asset('bundles/admin/js/jquery.mask.js') }}"></script>
+		<script src="{{ asset('bundles/admin/js/jquery.rut.js') }}"></script>
+		<script src="{{ asset('bundles/admin/js/sweetalert2.js') }}"></script>
+
+		<script src="https://kit-digital-uc-prod.s3.amazonaws.com/uc-kitdigital/js/uc-kitdigital.js"></script>
+
+		<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+		<script type="text/javascript" src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+
+		{# firebase #}
+		<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-database.js"></script>
+		<script>
+			// Your web app's Firebase configuration
+                  var firebaseConfig = {
+                    apiKey: "AIzaSyDXv7oVKf0UerEEmeGeN1MJOomrTO1iqRE",
+                    authDomain: "feriauc-4d3f5.firebaseapp.com",
+                    projectId: "feriauc-4d3f5",
+                    storageBucket: "feriauc-4d3f5.appspot.com",
+                    messagingSenderId: "518022982831",
+                    appId: "1:518022982831:web:666237321136363579f85a"
+                  };
+			// Initialize Firebase
+			firebase.initializeApp(firebaseConfig);
+		</script>
+		{# firebase #}
+	
+		<script type="text/javascript">
+			function showpreloader(){
+		  		$('.preloader').css('display', 'block');
+			}
+
+			function hidepreloader(){
+		   		$('.preloader').css('display', 'none');	
+			}
+		</script> 
+
+		{% block javascripts %}{% endblock %}
+		<div class="preloader"  id="loader"></div>
+		<div class="preloader preloader-backdrop show"></div>
+	</body>
+</html>

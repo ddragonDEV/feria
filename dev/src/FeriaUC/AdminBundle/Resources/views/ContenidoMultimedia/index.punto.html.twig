@@ -1,0 +1,420 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script type="text/javascript">
+	  $(document).ready(function(){
+			$("#datatable").DataTable({
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+				},
+				responsive: false
+			});
+		});
+
+		let accion   = "";
+		let title    = "";
+
+		let id_punto = "{{ id_punto }}";
+ 
+		$('#agregar_multimedia').on('click', function() {
+
+			accion = 'agregar';
+            title  = 'Agregar multimedia';
+            let path          = Routing.generate("admin_contenido_multimedias_agregar");
+       
+            $.ajax({
+                url: path,
+                type: 'GET',
+                data: { id_punto: id_punto},
+                success: function (results) {
+                    let options = {
+                        title: title,
+                        message: results,
+                        accion: accion
+                    }
+                    generateBootboxForm(options);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+			
+		});
+
+		$('.editar_multimedias').on('click', function() {
+
+			accion = 'editar';
+            title  = 'Editar multimedia';
+            let path                    = Routing.generate("admin_contenido_multimedias_editar");
+            let id_contenido_multimedia = $(this).data('multimedia');
+
+            $.ajax({
+                url: path,
+                type: 'GET',
+                data: { id_contenido_multimedia: id_contenido_multimedia, id_punto: id_punto },
+                success: function (results) {
+                    let options = {
+                        title: title,
+                        message: results,
+                        accion: accion
+                    }
+                    generateBootboxForm(options);
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+			
+		});
+
+		$('.eliminar_multimedias').on('click', function() {
+
+			let path                    = Routing.generate("admin_contenido_multimedias_eliminar");
+            let id_contenido_multimedia = $(this).data('multimedia');
+
+			let messageSuccess = "<h5>¿ Seguro desea eliminar la multimedia ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_contenido_multimedia: id_contenido_multimedia, id_punto: id_punto  },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_contenido_multimedias_punto", {id_punto: id_punto});
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});			
+		});
+
+		$('.bloquear_multimedias').on('click', function() {
+
+			let path                    = Routing.generate("admin_contenido_multimedias_bloquear");
+            let id_contenido_multimedia = $(this).data('multimedia');
+
+			let messageSuccess = "<h5>¿ Seguro desea bloquear la multimedia ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_contenido_multimedia: id_contenido_multimedia },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_contenido_multimedias_punto", {id_punto: id_punto});
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});			
+		});
+
+		$('.activar_multimedias').on('click', function() {
+
+			let path                    = Routing.generate("admin_contenido_multimedias_activar");
+            let id_contenido_multimedia = $(this).data('multimedia');
+
+			let messageSuccess = "<h5>¿ Seguro desea activar la multimedia ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_contenido_multimedia: id_contenido_multimedia },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_contenido_multimedias_punto", {id_punto: id_punto});
+														window.location.href = path_show;
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});			
+		});
+
+		function generateBootboxForm(options){
+			bootbox.dialog({
+				closeButton: false,
+				title: options.title,
+				message: options.message,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "Guardar",
+						className: "btn_guardar btn btn-sm btn-success",
+						callback: function() {
+							
+							let form  = $('#form_admin')[0];
+							form      = new FormData(form);
+
+							let path  = Routing.generate("admin_contenido_multimedias_agregar");
+
+							if(accion == 'editar'){
+								path  = Routing.generate("admin_contenido_multimedias_editar");
+							}
+
+							$.ajax({
+								url: path,
+                                type: 'POST',
+                                enctype: 'multipart/form-data',
+                                data: form,
+                                processData: false,
+                                contentType: false,
+								success: function (results) {
+									if(results['estado'] == "OK"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let path_show = Routing.generate("admin_contenido_multimedias_punto", {id_punto: id_punto});
+														window.location.href = path_show;   
+													}
+												}
+											}
+										});
+									}else if(results['estado'] == "ERROR"){
+									}else{
+										let options = {
+											title: title,
+											message: results,
+											accion: accion
+										}
+
+										generateBootboxForm(options);
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}                                       
+							});
+						}
+					}
+				}
+			});
+		}
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Multimedia de {{ oPuntos.titulo }} </a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Multimedia de {{ oPuntos.titulo }} </h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="form-group mb-3">
+			 <a href="{{ path('admin_puntos') }}" class="btn btn-secondary" role="button" aria-disabled="true"><i class="fe-arrow-left"></i> Volver a los puntos</a>
+			 <div class="float-md-right">
+			 	<button type="button" id="agregar_multimedia"  class="btn btn-success"><i class="fe-plus"></i> Agregar  multimedia</button>
+			 </div>
+		    </div>
+		    <div class="card-box table-responsive">
+		    	<table id="datatable" class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+		    		<thead>
+		    			<tr>
+		    			  <th>Nombre</th>
+		    			  <th>Tipo</th>
+		    			  <th>Imagen</th>
+		    			  <th>Video</th>
+		    			  <th>Fecha de creación</th>
+						  <th>Fecha de actualización</th>
+						  <th>Acciones</th>
+		    			</tr>
+		    		</thead>
+		    		<tbody>
+		    			{% for multimedia in oRelPuntoMultimedia %}
+		    				<tr>
+		    					<td>{{ multimedia.nombre }}</td>
+		    					<td>{{ multimedia.tipoMultimedia }}</td>
+		    					<td>
+		    					  {% if multimedia.url %}
+		    					   <a href="{{asset(url_img ~ multimedia.url) }}" target="_blank">
+									<center><img width="100" src="{{asset(url_img ~ multimedia.url) }}"></center></a>
+									{% else %} Sin imagen disponible
+								  {% endif %}
+								  </td>
+								  <td>
+								   {% if multimedia.codigoYoutube %}
+									<center><iframe width="50%" src="https://www.youtube.com/embed/{{ multimedia.codigoYoutube }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+									{% else %} Sin video disponible
+								  {% endif %}	 	
+		    					</td>
+		    					<td>{{ multimedia.createdAt|date('d-m-Y H:i') }}</td>
+		    					<td>{% if multimedia.updatedAt is empty  %} - {% else %} {{ multimedia.updatedAt|date('d-m-Y H:i') }} {% endif %}</td>
+		    					<td>
+		    						{% if multimedia.idEstadoMultimedia == 1 %}
+										<button type="button" class="bloquear_multimedias btn btn-icon waves-effect waves-light btn-secondary" data-multimedia="{{ multimedia.idContenidoMultimedia }}"><i class="fe-lock"></i> Bloquear</button>
+									{% elseif  multimedia.idEstadoMultimedia == 2 %}
+										<button type="button" class="activar_multimedias btn btn-icon waves-effect waves-light btn-success" data-multimedia="{{ multimedia.idContenidoMultimedia }}"><i class="fe-unlock"></i> Activar</button>
+									{% endif %}
+									<button type="button" class="editar_multimedias btn btn-icon waves-effect waves-light btn-warning" data-multimedia="{{ multimedia.idContenidoMultimedia }}"><i class="fe-edit"></i> Editar</button>
+									<button type="button" class="eliminar_multimedias btn btn-icon waves-effect waves-light btn-danger" data-multimedia="{{ multimedia.idContenidoMultimedia }}"> <i class="fe-trash-2"></i> Eliminar</button>
+		    					</td>
+		    				</tr>
+		    			{% endfor %}
+		    		</tbody>
+		    	</table>
+		    </div>
+		</div>
+	</div>
+{% endblock %}

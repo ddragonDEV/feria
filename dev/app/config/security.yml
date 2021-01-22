@@ -1,0 +1,60 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    encoders:
+        FeriaUC\AdminBundle\Entity\Administradores:
+            algorithm: bcrypt
+        FeriaUC\AdminBundle\Entity\Usuarios:
+            algorithm: bcrypt    
+
+    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:        
+       admin:
+           entity: { class: AdminBundle:Administradores, property: username }
+       users:
+           entity: { class: AdminBundle:Usuarios, property: rut }
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        admin_secured_area:
+            pattern: ^/admin
+            anonymous: ~
+            provider: admin
+            form_login:
+                login_path: admin_login
+                check_path: admin_login
+                default_target_path: admin
+                always_use_default_target_path: true
+            logout:
+                path: admin_logout
+                target: admin_login
+
+        user_secured_area:
+            pattern:   ^/
+            anonymous: ~
+            provider: users
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: inicio
+                always_use_default_target_path: true
+            logout:
+                path: logout
+                target: login
+
+    role_hierarchy:
+        ROLE_FERIA_UC_SUPER_ADMIN : [ROLE_FERIA_UC_SUPER_ADMIN]
+        ROLE_FERIA_UC_ADMIN: [ROLE_FERIA_UC_ADMIN]
+        ROLE_FERIA_UC_EMBAJADOR: [ROLE_FERIA_UC_EMBAJADOR]
+        ROLE_FERIA_UC_NOVATO: [ROLE_FERIA_UC_NOVATO]
+
+    access_control:
+        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/*, roles: [ROLE_FERIA_UC_SUPER_ADMIN, ROLE_FERIA_UC_ADMIN, ROLE_FERIA_UC_EMBAJADOR] }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/formulario-registro, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/*, roles: [ROLE_FERIA_UC_SUPER_ADMIN, ROLE_FERIA_UC_ADMIN, ROLE_FERIA_UC_EMBAJADOR, ROLE_FERIA_UC_NOVATO] }

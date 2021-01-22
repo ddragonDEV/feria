@@ -1,0 +1,128 @@
+<div class="menu">
+	<h3><span class="carrera--name">{{ titulo }} </span></h3>
+	<nav>
+		<ul>
+			<li class="active">
+				<button data-id="{{ id }}" data-tipo="carreras">
+					<div><span>Información<br />general</span><i class="uc-icon">arrow_right_alt</i></div>
+				</button>
+			</li>
+			<li>
+				<button data-id="{{ id }}" data-tipo="charlas">
+					<div><span>Cronograma<br />charlas</span><i class="uc-icon">arrow_right_alt</i></div>
+				</button>
+			</li>
+			<li>
+				{# <a href="{{ path('mapa_marker_cargar_chat') }}" target="_blank"> #}
+				{# <a href="{{ path('mapa_marker_cargar_chat') }}"> #}
+					{# <div><span>Chat</span><i class="uc-icon">open_in_new</i></div> #}
+				{# </a> #}
+				<button data-id="{{ id }}" data-tipo="chat" hidden>
+					<div><span>Chat</span><i class="uc-icon">open_in_new</i></div>
+				</button>
+			</li>
+		</ul>
+	</nav>
+</div>
+<div id="{{ titulo }}" class="content">
+	<div class="loading--text" data-aria-hidden="true"><i class="fas fa-spinner fa-spin color--azul"></i><span class="h6">Cargando&hellip;</span></div>
+	<div class="content_in">
+		<!-- AQUI VA A CARGAR EL AJAX -->
+
+		<div class="bloque media imagen">
+			<div class="in">
+				<figure>
+					<img src="{{ asset(imagen_principal) }}" alt="" />
+				</figure>
+			</div>
+		</div>
+		{% if tipo=='carreras' %}
+			{# <div class="bloque texto requisitos"> #}
+				{# <div class="in"> #}
+					{{ contenido|raw }}
+				{# </div> #}
+			{# </div> #}
+		{% else %}
+			<div class="bloque texto requisitos">
+				<div class="in">
+					{{ contenido|raw }}
+				</div>
+			</div>
+		{% endif %}
+
+         {% if  malla_curricular %}
+		      <div class="bloque">
+		      	<h3>Malla Curricular</h3>
+		      	   <a  href="{{ asset('uploads/stands/malla_curricular/' ~ malla_curricular) }}" download> 
+		      	     <img src="{{ asset('bundles/app/mapa/svg/icon-pdf.svg') }}" style="width: 5em">
+		      	   </a>
+		      </div>
+        {% endif %}
+
+		{%  if arrGaleria %}
+			<div class="bloque media galeria">
+				<div class="in">
+					<h3>Galería</h3>
+					<div class="slider_holder slider--galeria">
+						<div class="slider">
+						  {%  for  galeria in arrGaleria %}
+							<div class="slide">
+								<figure>
+									<img src="{{ asset(galeria.img) }}" alt="" />
+								</figure>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				  </div>
+			  </div>
+		{% endif %}
+
+		{%  if arrVideios %}
+			<div class="bloque media videos">
+				<div class="in">
+					<h3>Videos</h3>
+					<div class="video_holder"></div>
+					<ul>
+					{%  for  video in arrVideios %}
+						<li>
+							<div><button data-youtube="{{ video.codigo_youtube }}"><img src="{{ asset(video.img) }}" alt="" /></button></div>
+						</li>
+					{% endfor %}	
+					</ul>
+				</div>
+		   </div>
+		{%  endif %}
+
+		{% if  facebook or  instagram or  youtube or web %}
+				<div class="bloque texto social">
+					<div class="in">
+						<h3>Síguenos</h3>
+						<ul>
+						  {% if facebook  %}
+						  	  <li><a href="{{ facebook }}" target="_blank"><i class="fab fa-facebook"></i></a></li>
+						  {% endif %}
+						  {% if instagram  %}
+						  	<li><a href="{{ instagram }}" target="_blank"><i class="fab fa-instagram"></i></a></li>
+						  {% endif %}
+						   {% if youtube  %}
+							<li><a href="{{ youtube }}" target="_blank"><i class="fab fa-youtube"></i></a></li>
+							{% endif %}
+							{% if web  %}
+							<li><a href="{{ web }}" target="_blank"><i class="fas fa-globe"></i></a></li>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+		{% endif %}
+	</div>
+</div>
+{# <script>
+	// resizable();
+</script> #}
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		setVideos();
+	});
+</script>

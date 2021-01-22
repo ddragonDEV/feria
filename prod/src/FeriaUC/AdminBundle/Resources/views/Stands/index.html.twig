@@ -1,0 +1,328 @@
+{% extends "::base_admin.html.twig" %}
+{% block javascripts %}
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+			var path   = Routing.generate("admin_stands_datatables");
+
+			$("#stands").DataTable({
+				"ajax": {
+					"url": path,
+					"data": function (d){
+						d.id_punto = {{ id_punto }}
+					}
+				},
+				"serverSide": true,
+				"processing": true,
+				"responsive": false,
+				"columns": [
+					{ "data": "nombre" },
+					{ "data": "punto" },
+                    { "data": "categoria" },
+					{ "data": "fecha_creacion" },
+					{ "data": "acciones", render: function (data, type, row, meta){
+							if(row.idEstado == 1){
+								var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-secondary" onclick="bloquear_stand('+row.id+')"><i class="fe-lock"></i> Bloquear</button>';
+							}
+							else if(row.idEstado == 2){
+								var html = '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-success" onclick="activar_stand('+row.id+')"><i class="fe-unlock"></i> Activar</button>';
+							}
+							var path = Routing.generate("admin_stands_editar", { id_stand:row.id });
+							html += '<a href="'+path+'" target="_blank" class="mr-1 btn btn-icon waves-effect waves-light btn-warning"><i class="fe-edit"></i> Editar</a>';
+
+							html += '<button type="button" class="mr-1 btn btn-icon waves-effect waves-light btn-danger" onclick="eliminar_stand('+row.id+')"> <i class="fe-trash-2"></i> Eliminar</button>';
+
+							var path = Routing.generate("admin_contenido_multimedias_stand", { id_stand:row.id });
+							html += '<a href="'+path+'" target="_blank" class="mr-1 btn btn-icon waves-effect waves-light btn-success"> <i class="fe-file"></i> Multimedia</a>';
+
+							html += '<button type="button" class="btn btn-icon waves-effect waves-light btn-info" onclick="ver_stand('+row.id+')"><i class="fe-eye"></i> Ver</button>';
+							
+							return html;
+						}
+					},
+				],
+				"order": [[ 1, "asc" ]],
+				"language": {
+					"url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+				}
+			});
+		});
+
+
+	    let accion = "";
+	    let title  = "";
+
+      function eliminar_stand(id_stand){
+
+      	    let path  = Routing.generate("admin_stands_eliminar");
+
+			let messageSuccess = "<h5>¿ Seguro desea eliminar el stand ?</h5>";
+
+			let titulo = '<div class="text-center" style="padding: 0 200px;">';
+			titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+			titulo += '</div>';
+
+			bootbox.dialog({
+				closeButton: false,
+				title: titulo,
+				message: messageSuccess,
+				buttons: {
+					success: {
+						label: "Cancelar",
+						className: "btn btn-sm btn-warning",
+						callback: function () {
+						}
+					},
+					main: {
+						label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+						className: "btn btn-sm btn-success",
+						callback: function () {
+							$.ajax({
+								url: path,
+								type: 'POST',
+								data: { id_stand: id_stand },
+								success: function (results) {
+									if(results['estado'] == "success"){
+										let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+										let titulo = '<div class="text-center" style="padding: 0 200px;">';
+										titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+										titulo += '</div>';
+
+										bootbox.dialog({
+											closeButton: false,
+											title: titulo,
+											message: messageSuccess,
+											buttons: {
+												success: {
+													label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+													className: "btn btn-sm btn-success",
+													callback: function () {    
+														window.onbeforeunload = null;
+
+														let id_punto = "{{ id_punto }}";
+
+														let path_show = Routing.generate("admin_stands", {id_punto:id_punto});
+														window.location.href = path_show;    
+													}
+												}
+											}
+										});
+									}
+								},
+								error: function (e) {
+									console.log(e);
+								}
+							});
+						}
+					}
+				}
+			});
+       }
+
+       function bloquear_stand(id_stand){
+
+       	    let path  = Routing.generate("admin_stands_bloquear");
+         
+            let messageSuccess = "<h5>¿ Seguro desea bloquear el stand ?</h5>";
+
+            let titulo = '<div class="titulo-bbx">';
+            titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+            titulo += '</div>';
+
+            bootbox.dialog({
+                closeButton: false,
+                title: titulo,
+                message: messageSuccess,
+                buttons: {          
+                    success: {
+                        label: "<i class='fas fa-ban' aria-hidden='true'></i> Cancelar",
+                        className: "btn btn-sm btn-warning",
+                        callback: function () {
+                        }
+                    },
+                    main: {
+                        label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                        className: "btn btn-sm btn-success",
+                        callback: function () {
+                            $.ajax({
+                                url: path,
+                                type: 'POST',
+                                data: { id_stand: id_stand },
+                                success: function (results) {
+                                    if(results['estado'] == "success"){
+                                        let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+                                        let titulo = '<div class="titulo-bbx">';
+                                        titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+                                        titulo += '</div>';
+
+                                        bootbox.dialog({
+                                            closeButton: false,
+                                            title: titulo,
+                                            message: messageSuccess,
+                                            buttons: {
+                                                success: {
+                                                    label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                                    className: "btn btn-sm btn-success",
+                                                    callback: function () {    
+                                                        window.onbeforeunload = null;
+
+                                                        let id_punto = "{{ id_punto }}";
+
+                                                        let path_show = Routing.generate("admin_stands", {id_punto:id_punto});
+                                                        window.location.href = path_show;    
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+       }
+
+       function activar_stand(id_stand){
+
+       	    let path = Routing.generate("admin_stands_activar");
+            
+            let messageSuccess = "<h5>¿ Seguro desea activar el stand ?</h5>";
+
+            let titulo = '<div class="titulo-bbx">';
+            titulo += '<i class="fa fa-question-circle" aria-hidden="true" style="font-size: 50px;"></i>';
+            titulo += '</div>';
+
+            bootbox.dialog({
+                closeButton: false,
+                title: titulo,
+                message: messageSuccess,
+                buttons: {              
+                    success: {
+                        label: "<i class='fa fa-ban' aria-hidden='true'></i> Cancelar",
+                        className: "btn btn-sm btn-warning",
+                        callback: function () {
+                        }
+                    },
+                    main: {
+                        label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                        className: "btn btn-sm btn-success",
+                        callback: function () {
+                            $.ajax({
+                                url: path,
+                                type: 'POST',
+                                data: { id_stand: id_stand },
+                                success: function (results) {
+                                    if(results['estado'] == "success"){
+                                        let messageSuccess = "<h5>"+results['mensaje']+"</h5>";
+
+                                        let titulo = '<div class="titulo-bbx">';
+                                        titulo += '<i class="fa fa-check" aria-hidden="true" style="font-size: 50px;"></i>';
+                                        titulo += '</div>';
+
+                                        bootbox.dialog({
+                                            closeButton: false,
+                                            title: titulo,
+                                            message: messageSuccess,
+                                            buttons: {
+                                                success: {
+                                                    label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                                    className: "btn btn-sm btn-success",
+                                                    callback: function () {    
+                                                        window.onbeforeunload = null;
+
+                                                        let id_punto = "{{ id_punto }}";
+
+                                                        let path_show = Routing.generate("admin_stands", {id_punto:id_punto});
+                                                        window.location.href = path_show;    
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    }
+                }
+            }); 
+       }
+
+      function ver_stand(id_stand){
+
+      	let path  = Routing.generate("admin_stands_ver");
+
+            $.ajax({
+                url: path,
+                type: 'POST',
+                data: { id_stand: id_stand },
+                success: function (results) {
+                    bootbox.dialog({
+                        size: "large",
+                        closeButton: false,
+                        title: 'Ver stand',
+                        message: results,
+                        buttons: {
+                            success: {
+                                label: "<i class='fa fa-check' aria-hidden='true'></i> Aceptar",
+                                className: "btn btn-sm btn-success",
+                                callback: function () {    
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+      }
+	</script>
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div class="col-12">
+			<div class="page-title-box">
+				<div class="page-title-right">
+					<ol class="breadcrumb m-0">
+						<li class="breadcrumb-item"><a href="javascript: void(0);">Stands</a></li>
+					</ol>
+				</div>
+				<h4 class="page-title">Stands</h4>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="form-group  mb-2">
+
+			 <a href="{{ path('admin_puntos') }}" class="btn btn-secondary" role="button" aria-disabled="true"><i class="fe-arrow-left"></i> Volver a los puntos</a>
+			 <div class="float-md-right">
+			 	<a href="{{ path('admin_stands_agregar', { id_punto:id_punto}) }}" class="btn btn-success" role="button" aria-disabled="true"><i class="fe-plus"></i> Agregar  stand</a>
+			 </div>
+            </div>
+			<div class="card-box table-responsive">    
+				<table id="stands" class="table table-bordered  dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+					<thead>
+						<tr>
+							<th>Nombre</th>
+							<th>Punto</th>
+                            <th>Categoría</th>
+							<th>Fecha de creación</th>
+							{# <th>Fecha de actualización</th> #}
+							<th>Acciones</th>
+						</tr>
+					</thead>
+				</table>                
+			</div>
+		</div>
+	</div>
+{% endblock %}	

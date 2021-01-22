@@ -1,0 +1,176 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+	 	$('#fecha').daterangepicker({
+		 	ignoreReadonly: true,
+	    	singleDatePicker: true,
+	    	timePicker: true,
+		    showDropdowns: true,
+			useCurrent: false,
+			defaultDate: new Date(),
+			timePicker24Hour: true,
+		    "locale": {
+            	"format": "DD-MM-YYYY HH:mm",
+	            "separator": " - ",
+	            "applyLabel": "Guardar",
+	            "cancelLabel": "Cancelar",
+	            "fromLabel": "Desde",
+	            "toLabel": "Hasta",
+	            "customRangeLabel": "Personalizar",
+	            "daysOfWeek": [
+	                "Do",
+	                "Lu",
+	                "Ma",
+	                "Mi",
+	                "Ju",
+	                "Vi",
+	                "Sa"
+	            ],
+	            "monthNames": [
+	                "Enero",
+	                "Febrero",
+	                "Marzo",
+	                "Abril",
+	                "Mayo",
+	                "Junio",
+	                "Julio",
+	                "Agosto",
+	                "Setiembre",
+	                "Octubre",
+	                "Noviembre",
+	                "Diciembre"
+	            ],
+	            "firstDay": 1
+	        }
+	  	}, function(chosen_date) {
+		  	$('#fecha').val(chosen_date.format('DD-MM-YYYY HH:mm'));
+		});
+
+		$('#fecha_termino').daterangepicker({
+		 	ignoreReadonly: true,
+	    	singleDatePicker: true,
+	    	timePicker: true,
+		    showDropdowns: true,
+			useCurrent: false,
+			defaultDate: new Date(),
+			timePicker24Hour: true,
+		    "locale": {
+            	"format": "DD-MM-YYYY HH:mm",
+	            "separator": " - ",
+	            "applyLabel": "Guardar",
+	            "cancelLabel": "Cancelar",
+	            "fromLabel": "Desde",
+	            "toLabel": "Hasta",
+	            "customRangeLabel": "Personalizar",
+	            "daysOfWeek": [
+	                "Do",
+	                "Lu",
+	                "Ma",
+	                "Mi",
+	                "Ju",
+	                "Vi",
+	                "Sa"
+	            ],
+	            "monthNames": [
+	                "Enero",
+	                "Febrero",
+	                "Marzo",
+	                "Abril",
+	                "Mayo",
+	                "Junio",
+	                "Julio",
+	                "Agosto",
+	                "Setiembre",
+	                "Octubre",
+	                "Noviembre",
+	                "Diciembre"
+	            ],
+	            "firstDay": 1
+	        }
+	  	}, function(chosen_date) {
+		  	$('#fecha_termino').val(chosen_date.format('DD-MM-YYYY HH:mm'));
+		});
+	});
+</script>
+
+<div class="form-group">
+	<label for="titulo">Nombre charla (*)</label>
+	<input type="text" id="titulo" name="titulo" class="form-control {% if errores.titulo %} is-invalid {% endif %}" 
+	 value="{{ valores.titulo }}" placeholder="Ingrese el titulo">
+	{% if errores.titulo %}
+		<div class="invalid-feedback">
+		  {{ errores.titulo }}
+		</div>
+	{% endif %}                    
+</div>
+
+<div class="form-group">
+	<label for="expositor">Expositor (*)</label>
+	<input type="text" id="expositor" name="expositor" class="form-control {% if errores.expositor %} is-invalid {% endif %}" 
+	 value="{{ valores.expositor }}" placeholder="Ingrese el expositor">
+	{% if errores.expositor %}
+		<div class="invalid-feedback">
+		  {{ errores.expositor }}
+		</div>
+	{% endif %}                    
+</div>
+
+<div class="form-group">
+	<label for="expositor">Reseña (*)</label>
+	<input type="text" id="lugar" name="lugar" class="form-control {% if errores.lugar %} is-invalid {% endif %}" 
+	 value="{{ valores.lugar }}" placeholder="Ingrese el expositor">
+	{% if errores.lugar %}
+		<div class="invalid-feedback">
+		  {{ errores.lugar }}
+		</div>
+	{% endif %}                    
+</div>
+
+<div class="form-group">
+	 <label for="fecha">Fecha de publicación (*)</label>
+	  <div class="input-group">
+			<input type="text" id="fecha" name="fecha" class="timepicker form-control {% if errores.fecha %} is-invalid {% endif %}" value="{{ valores.fecha }}">
+		    <div class="input-group-append">
+			   <span class="input-group-text"><i class="fe-calendar"></i></i></span>
+		    </div>
+		</div>
+		{% if errores.fecha %}
+			<div class="invalid-feedback">
+			   {{ errores.fecha }}
+			</div>
+		{% endif %}
+</div>
+<div class="form-group">
+	 <label for="fecha_termino">Fecha de termino (*)</label>
+	  <div class="input-group">
+			<input type="text" id="fecha_termino" name="fecha_termino" class="timepicker form-control {% if errores.fecha_termino %} is-invalid {% endif %}" value="{{ valores.fecha_termino }}">
+		    <div class="input-group-append">
+			   <span class="input-group-text"><i class="fe-calendar"></i></i></span>
+		    </div>
+		</div>
+		{% if errores.fecha_termino %}
+			<div class="invalid-feedback">
+			   {{ errores.fecha_termino }}
+			</div>
+		{% endif %}
+</div>
+<div class="form-group">
+	<label for="nombre">Código de youtube (*)</label>
+	<input type="text" id="codigoYoutube" name="codigoYoutube" class="form-control {% if errores.codigoYoutube %} is-invalid {% endif %}" 
+	 value="{{ valores.codigoYoutube }}" placeholder="Ingrese el código">
+	{% if errores.codigoYoutube %}
+		<div class="invalid-feedback">
+		  {{ errores.codigoYoutube }}
+		</div>
+	{% endif %}                    
+</div>
+<div class="form-group">
+	<label for="id_stand">Stand </label>
+	<select class="form-control" id="id_stand" name="id_stand">
+		<option value="">Seleccionar</option>
+		{% for stand in oStands %}
+			<option value="{{ stand.id }}"{{ valores.id_stand == stand.id ? "selected":"" }}>
+				{{ stand.nombre }}
+			</option>
+		{% endfor %}
+	</select>  
+</div>

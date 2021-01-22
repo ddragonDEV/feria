@@ -1,0 +1,274 @@
+{% extends "::base_login.html.twig" %}
+{% block javascripts %}
+	<script>
+		const giro = 40;
+		var clockwise = false,
+			$w = window.innerWidth,
+			$h = window.innerHeight;
+
+		function resizable() {
+			if (window.innerWidth != $w || window.innerHeight != $h) {
+				if ($w > $h) {
+					$('#bg').css({
+						'width': ($w * .9) + 'px',
+						'height': ($w * .9) + 'px',
+						'padding-bottom': '0'
+					});
+				} else {
+					$('#bg').css({
+						'width': ($h * 1.05) + 'px',
+						'height': ($h * 1.05) + 'px',
+						'padding-bottom': '0'
+					});
+				}
+				$w = window.innerWidth;
+				$h = window.innerHeight;
+			}
+		}
+
+		$(document).ready(function() {
+			var spread = giro / $('.orbit.is_el').length;
+
+			$('.orbit.is_el').each(function() {
+				$('.rotating', this).css('animation-delay', '-' + (spread * $(this).parent().children('.orbit.is_el').index(this)) + 's');
+			});
+
+			$('.orbit.is_el.rotates').each(function() {
+				if (!clockwise) {
+					$('.el', this).addClass('reverse');
+					$('.el_inn.rotating', this).removeClass('reverse');
+					clockwise = true;
+				} else {
+					$('.el', this).removeClass('reverse');
+					$('.el_inn.rotating', this).addClass('reverse');
+					clockwise = false;
+				}
+			});
+
+			$('.app--loading').removeClass('app--loading');
+
+			$('#id_colegio').select2();
+
+			$('#carreras').select2({
+			 	placeholder: "Seleccionar carreras"
+			});
+
+			$('#telefono').mask('(+56) 0 0000-0000');
+
+			$('#rut').rut().on('rutInvalido', function() {
+		    	$(this).val('');
+		        $('#text_rut_invalido').attr('hidden', false);
+		    }).on('rutValido', function(){ 
+		       $('#text_rut_invalido').attr('hidden', true);
+		    });
+		});
+
+        $('#id_visitante').change(function() {
+        	$('#div_option_visitante').attr('hidden', true);
+        	$('#option_visitante').val('');
+
+        	let id_visitante = $(this).val();
+        	if(id_visitante == '12'){
+               $('#div_option_visitante').attr('hidden', false);
+        	}
+        });
+
+        $('#id_region').change(function() {
+        	let  path       = Routing.generate("obtener_comunas");
+            let  id_region  = $(this).val();
+
+            $.ajax({
+	            url: path,
+	            type: 'POST',
+	            data: {id_region: id_region},
+	        }).done(function(result) {
+	        	$('#id_comuna').attr('disabled', true);
+        		$('#id_comuna').html('<option value="">Seleccionar comuna (*)</option>');
+        		$.each(result, function(index, val) {
+        			$('#id_comuna').append('<option value="'+val.id+'">'+val.nombre+'</option>');
+        		});
+        		$('#id_comuna').attr('disabled', false);
+	        });
+        });
+
+        $('#id_colegio').change(function() {
+        	$('#div_option_colegio').attr('hidden', true);
+        	$('#option_colegio').val('');
+
+        	let id_colegio = $(this).val();
+        	if(id_colegio == '3623'){
+               $('#div_option_colegio').attr('hidden', false);
+        	}
+        });
+
+        $('.radio_ensayo').change(function() {
+        	$('#text_ensayo').attr('hidden', true);
+        	let ensayo = $(this).val();
+        	if(ensayo == 'si'){
+               $('#text_ensayo').attr('hidden', false);
+        	}
+        });
+
+        $('#btn_enviar').on('click',  function() {
+        	showpreloader();
+
+        	let formulario = $("#formulario_registro").serialize();
+            let path       = Routing.generate("formulario_registro_agregar");
+
+            $.ajax({
+                url: path,
+                type: 'POST',
+                data: formulario,
+                success: function (results) {
+                	hidepreloader()
+
+                	$('#text_error_enviar').text('');
+                	if(results.estado == 'OK'){
+                		Swal.fire({
+						  title: 'Éxito',
+						  icon:  'success',
+						  html:  results.mensaje,
+						  allowOutsideClick: false
+						}).then((result) => {
+							var update_usuario = {id_usuario:results.datos.id_usuario, rut:results.datos.rut, nombre:results.datos.nombre, avatar: results.datos.avatar, habilitado:true,timestamp: '{{ "now"|date("U")}}' };
+	                		firebase.database().ref('usuarios/usuario-'+results.datos.id_usuario).set(update_usuario).then(() => {
+								window.onbeforeunload = null;
+
+                            	let path_show = Routing.generate("login");
+                            	window.location.href = path_show;
+	                		}).catch((error) =>{		                			
+								window.onbeforeunload = null;
+
+	                            let path_show = Routing.generate("login");
+	                            window.location.href = path_show;
+	                            const correo = document.getElementById('username').value
+	                            console.log(correo)
+	                            
+	     							});
+						});
+                	}
+                	else if(results.estado == 'ERROR'){
+                      $('#text_error_enviar').text(results.mensaje);
+                	}
+                }
+            });
+        });
+	</script>
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+		.select2-container .select2-selection--single {
+		    height: 39px;
+		}
+		.select2-container--default .select2-selection--single .select2-selection__rendered {
+	 		line-height: 37px;
+		}
+	</style>
+{% endblock %}
+{% block body %}
+	<div class="app--loading">
+		<div id="bg">
+			{# <div id="bg_in">{{ bg_in|raw }}</div> #}
+		</div>
+		<div id="front">
+			<div id="puc">{{ puc|raw }}</div>
+			<div id="logo">{{ logo|raw }}</div>
+			<div id="formulario">
+				<form id="formulario_registro">
+					<h2 class="h3">Formulario de inscripción</h2>
+					<div class="uc-form-group">
+						<label for="nombre"><i class="uc-icon">account_circle</i> Nombre (*)</label>
+						<input id="nombre" name="nombre" type="text" class="uc-input-style">
+					</div>
+					<div class="uc-form-group">
+						<label for="apellidos"><i class="uc-icon">account_circle</i> Apellido (*)</label>
+						<input id="apellidos" name="apellidos" type="text" class="uc-input-style">
+					</div>
+					<div class="uc-form-group">
+						<label for="rut"><i class="uc-icon">admin_panel_settings</i> RUT (*)</label>
+						<input id="rut" name="rut" type="text" class="uc-input-style" placeholder="">
+						<small  class="form-text text-danger" id="text_rut_invalido" style="color:red" hidden>El rut es inválido</small>
+					</div>
+					<div class="uc-form-group">
+						<label for="username"><i class="uc-icon">email</i> Email (*)</label>
+						<input id="username" name="username" type="text" class="uc-input-style">
+					</div>
+					<div class="uc-form-group">
+						<label for="telefono"><i class="uc-icon">phone</i> Celular de contacto (*)</label>
+						<input id="telefono" name="telefono" type="text" class="uc-input-style">
+					</div>
+					<div class="uc-form-group">
+						<label for="id_visitante"><i class="uc-icon">label</i> ¿Qué visitante eres? (*)</label>
+						<select class="uc-input-style" name="id_visitante" id="id_visitante">
+							<option value="">Seleccionar</option>
+							{% for visitente in oVisitantes  %}
+								<option value="{{ visitente.id }}">{{ visitente.nombre }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="uc-form-group" id="div_option_visitante" hidden>
+						<label for="option_visitante"><i class="uc-icon">label</i> Otra Opción</label>
+						<input id="option_visitante" name="option_visitante" type="text" class="uc-input-style" placeholder="">
+					</div>
+					<div class="uc-form-group">
+						<label for="id_region"><i class="uc-icon">label</i> Región (*)</label>
+						<select class="uc-input-style" name="id_region" id="id_region">
+							<option value="">Seleccionar región</option>
+							{% for region in oRegiones  %}
+								<option value="{{ region.id }}">{{ region.nombre }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="uc-form-group">
+						<label for="id_comuna"><i class="uc-icon">label</i> Comuna (*)</label>
+						<select class="uc-input-style" name="id_comuna" id="id_comuna" disabled>
+						</select>
+					</div>
+					<div class="uc-form-group">
+						<label for="id_colegio"><i class="uc-icon">label</i> Colegio (*)</label>
+						<select  name="id_colegio" id="id_colegio" class="uc-input-style">
+							<option value="">Seleccionar colegio</option>
+							{% for colegio in oColegios  %}
+								<option value="{{ colegio.id }}">{{ colegio.nombre }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="uc-form-group" id="div_option_colegio" hidden>
+						<label for="option_colegio"><i class="uc-icon">label</i> En caso de no encontrar tu colegio, ingrésalo aquí</label>
+						<input id="option_colegio" name="option_colegio" type="text" class="uc-input-style" placeholder="">
+					</div>
+					<div class="uc-form-group">
+						<label for="carreras"><i class="uc-icon">label</i> ¿Qué carreras te interesan? (*)</label>
+						<select name="carreras[]" id="carreras" class="uc-input-style" multiple>
+							{% for carrera in oCarreras  %}
+								<option value="{{ carrera.id }}">{{ carrera.nombre }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="uc-form-group">
+						<label for="ucinput">Dentro de la Expo tendrás acceso a un ensayo de la Prueba de Transición, ¿Deseas rendirla ? (*)</label>
+							<div class="form-check-inline">
+							  <label class="form-check-label">
+							    <input type="radio" class="radio_ensayo form-check-input" name="ensayo" value="si"> Si
+							    <input type="radio" class="radio_ensayo form-check-input" name="ensayo" value="no"> No
+							  </label>
+							</div>
+							<small class="form-text" id="text_ensayo" hidden>Para ingresar al ensayo, tu usuario es el RUT y tu contraseña son los 4 primeros dígitos del RUT.</small>
+					</div>
+					<div class="uc-form-group">
+						<label for="ucinput">Importante(*)</label>
+						<div class="form-check-inline">
+						  <label class="form-check-label">
+						    <input name="condicion" id="condicion" type="checkbox" class="form-check-input" value="1"> Acepto recibir información sobre la Pontificia Universidad Católica de Chile. Conforme a la Ley 19.628, la Universidad no divulgará, ni transferirá esta información.
+						  </label>
+						</div>
+					</div>		
+					<div class="text-right mb-2">
+						<a  id="btn_enviar" class="uc-btn btn-primary btn-inline" style="cursor: pointer;">Inscribirme <i class="uc-icon">launch</i></a>
+					</div>
+					<p id="text_error_enviar" class="text-left" style="color:red"></p>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

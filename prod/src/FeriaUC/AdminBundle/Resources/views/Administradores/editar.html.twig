@@ -1,0 +1,8 @@
+<div class="row">    
+	<div class="col-md-12">
+		<form id="form_admin"  method="POST">
+				<input type="hidden" name="id_administrador" value="{{ valores.id_administrador }}">
+				{{  include('AdminBundle:Administradores:form.html.twig', { readonly_email: true })  }}
+		</form>
+	</div>
+</div>
